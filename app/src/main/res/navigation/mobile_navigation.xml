@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_breath">
+
+    <fragment
+        android:id="@+id/navigation_breath"
+        android:name="com.alternative.cap.restmindv3.ui.breath.BreathFragment"
+        android:label="Breath"
+        tools:layout="@layout/fragment_breath" />
+
+    <fragment
+        android:id="@+id/navigation_background"
+        android:name="com.alternative.cap.restmindv3.ui.background.BackgroundFragment"
+        android:label="Background"
+        tools:layout="@layout/fragment_background" />
+
+    <fragment
+        android:id="@+id/navigation_narration"
+        android:name="com.alternative.cap.restmindv3.ui.narration.NarrationFragment"
+        android:label="Narration"
+        tools:layout="@layout/fragment_narration" />
+
+    <fragment
+        android:id="@+id/navigation_music"
+        android:name="com.alternative.cap.restmindv3.ui.music.MusicFragment"
+        android:label="Music"
+        tools:layout="@layout/fragment_music" />
+
+    <fragment
+        android:id="@+id/navigation_setting"
+        android:name="com.alternative.cap.restmindv3.ui.setting.SettingFragment"
+        android:label="Setting"
+        tools:layout="@layout/fragment_setting" />
+</navigation>

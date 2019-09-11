@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.single.TutorialActivity"
+    android:background="@drawable/image_bg">
+
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/tutorialRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.lwj.widget.viewpagerindicator.ViewPagerIndicator
+        android:id="@+id/tutorialIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#efefef"
+        app:vpi_default_color="#cdcdcd"
+        app:vpi_distance="400dp"
+        app:vpi_distanceType="BY_LAYOUT"
+        app:vpi_indicatorType="SPRING"
+        app:vpi_length="24dp"
+        app:vpi_radius="8dp"
+        app:vpi_selected_color="#FF23EEF5"
+        />
+
+
+
+</RelativeLayout>

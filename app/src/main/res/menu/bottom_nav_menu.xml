@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/navigation_breath"
+        android:icon="@drawable/ic_breathe"
+        android:title="Breath"
+        android:enabled="true"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/navigation_background"
+        android:icon="@drawable/ic_background"
+        android:title="Background"
+        android:enabled="true"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/navigation_narration"
+        android:icon="@drawable/ic_narration"
+        android:title="Narration"
+        android:enabled="true"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/navigation_music"
+        android:icon="@drawable/ic_music"
+        android:title="Music"
+        android:enabled="true"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/navigation_setting"
+        android:icon="@drawable/ic_settings"
+        android:title="Setting"
+        android:enabled="true"
+        app:showAsAction="ifRoom"/>
+
+</menu>

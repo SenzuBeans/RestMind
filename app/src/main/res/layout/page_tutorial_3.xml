@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.tutorial.Page3Tutorial">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/tutorial3_footage"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/tutorial3_footage">
+
+    </ImageView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tutorial3_footage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="adjust your breath step"
+        android:textSize="20dp">
+
+    </TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tutorial3_footage"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:text="inhale        hold        exhale"
+            android:textSize="20dp">
+
+        </TextView>
+    </RelativeLayout>
+</RelativeLayout>
