@@ -18,7 +18,6 @@
             android:name=".activity.multi.NavigationHomePageActivity"
             android:label="@string/title_activity_navigation_home_page"
             android:theme="@style/NoAtionAppTheme"></activity>
-        <activity android:name=".activity.multi.HomePageActivity" />
         <activity android:name=".activity.multi.MemberActivity" />
         <activity android:name=".activity.single.TutorialActivity" />
         <activity android:name=".activity.single.PhoneAuthActivity" />

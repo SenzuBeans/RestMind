@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
@@ -15,10 +16,22 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.fragment.RegisterFragment;
 import com.alternative.cap.restmindv3.activity.single.PhoneAuthActivity;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -45,11 +58,12 @@ public class MemberActivity extends AppCompatActivity implements RegisterFragmen
     private FirebaseUser currentUser;
     private DatabaseReference databaseReference;
     private DatabaseReference reference;
+    private CallbackManager fbCallback;
 
     private EditText phoneNumberEditText;
     private Spinner countyDataSpinner;
     private CustomToggleButton loginBtn;
-    private CustomToggleButton fbLoginBtn;
+    private LoginButton fbLoginBtn;
     private FrameLayout contentContainerMemberFragment;
 
     private String json;
@@ -76,6 +90,7 @@ public class MemberActivity extends AppCompatActivity implements RegisterFragmen
         phoneCountyNameList = new ArrayList<>();
         phoneCountyCodeList = new ArrayList<>();
         databaseReference = FirebaseDatabase.getInstance().getReference();
+        fbCallback = CallbackManager.Factory.create();
     }
 
     private void workbench(Bundle savedInstanceState) {
@@ -83,9 +98,20 @@ public class MemberActivity extends AppCompatActivity implements RegisterFragmen
 
         phoneAuth();
 
-        fbLoginBtn.setOnClickListener(new View.OnClickListener() {
+        fbLoginBtn.setPermissions("email", "public_profile");
+        fbLoginBtn.registerCallback(fbCallback, new FacebookCallback<LoginResult>() {
             @Override
-            public void onClick(View view) {
+            public void onSuccess(LoginResult loginResult) {
+                handleFacebookAccessToken(loginResult.getAccessToken());
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
 
             }
         });
@@ -139,9 +165,28 @@ public class MemberActivity extends AppCompatActivity implements RegisterFragmen
         });
     }
 
+    private void handleFacebookAccessToken(AccessToken token) {
+
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = mAuth.getCurrentUser();
+                        } else {
+                            Toast.makeText(MemberActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        fbCallback.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUIRE_CODE) {
             if (resultCode == RESULT_OK) {
                 currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -170,7 +215,7 @@ public class MemberActivity extends AppCompatActivity implements RegisterFragmen
             }
         }
         if (userCheck == 1) {
-            Intent intent = new Intent(MemberActivity.this, HomePageActivity.class);
+            Intent intent = new Intent(MemberActivity.this, NavigationHomePageActivity.class);
             startActivity(intent);
             finish();
         } else {
@@ -200,7 +245,7 @@ public class MemberActivity extends AppCompatActivity implements RegisterFragmen
 
     @Override
     public void onRegisterClicked(Intent inputData) {
-        Intent intent = new Intent(MemberActivity.this, HomePageActivity.class);
+        Intent intent = new Intent(MemberActivity.this, NavigationHomePageActivity.class);
         intent.putExtra("userPhoneNumber", inputData.getExtras().getString("userPhoneNumber"));
         startActivity(intent);
         finish();

@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.view.FeatureView;
 
-import static com.alternative.cap.restmindv3.activity.multi.HomePageActivity.TAG_DODO;
 
 public class FeatureFragmentAdapter extends RecyclerView.Adapter<FeatureFragmentAdapter.FeatureFragmentViewHolder> {
 
@@ -53,13 +52,11 @@ public class FeatureFragmentAdapter extends RecyclerView.Adapter<FeatureFragment
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        Log.d(TAG_DODO, "onTouch: down here");
                         touchingPoint = motionEvent.getY();
                         clicked = true;
                         break;
                     case MotionEvent.ACTION_MOVE:
                         if (motionEvent.getY() < touchingPoint && Math.abs(motionEvent.getY() - touchingPoint) > 23f) {
-                            Log.d(TAG_DODO, "onTouch: move here : " + motionEvent.getY());
                             //TODO : add activity move up here;
                             touchingPoint = motionEvent.getY();
                             clicked = false;
@@ -69,9 +66,7 @@ public class FeatureFragmentAdapter extends RecyclerView.Adapter<FeatureFragment
                         }
                         break;
                     case MotionEvent.ACTION_UP:
-                        Log.d(TAG_DODO, "onTouch: up here");
                         if (clicked) {
-                            Log.d(TAG_DODO, "onTouch: clicked" + position);
                             FeatureListener listener = (FeatureListener) mActivity;
                             listener.onFeatureClick(position);
                         }

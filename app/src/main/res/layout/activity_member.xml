@@ -69,29 +69,13 @@
 
         </me.rishabhkhanna.customtogglebutton.CustomToggleButton>
 
-        <me.rishabhkhanna.customtogglebutton.CustomToggleButton
+        <com.facebook.login.widget.LoginButton
             android:id="@+id/fbLoginBtn"
-            android:layout_width="232dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textOff="login with facebook"
-            android:textOn="Pending"
-            app:uncheckedColor="#454DFF"
-            android:layout_marginTop="20dp">
-
-        </me.rishabhkhanna.customtogglebutton.CustomToggleButton>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-
-
-
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp" />
 
     </LinearLayout>
 
