@@ -29,7 +29,7 @@ public class BackgroundFragment extends Fragment {
 
     private void workbench(View root, Bundle savedInstanceState) {
         backgroundVideo = root.findViewById(R.id.backgroundVideoView);
-        backgroundVideo.setVideoURI(Uri.parse("android.resource://" + getContext().getPackageName() + "/"));
+        backgroundVideo.setVideoURI(Uri.parse("android.resource://" + getContext().getPackageName() + "/" + R.raw.relax_video));
 
         backgroundVideo.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
