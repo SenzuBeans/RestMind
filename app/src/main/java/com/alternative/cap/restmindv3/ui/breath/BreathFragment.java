@@ -112,12 +112,14 @@ public class BreathFragment extends Fragment {
     }
 
     private void stopRunningBreath() {
-        breathStatusTextView.setText("Ready");
-        breathSongPlayer.stop();
-        breathSongPlayer.release();
-        animationPlayer(false);
-        playerBtn.setText("Play");
-        isSongPlaying = false;
+        if(isSongPlaying) {
+            breathStatusTextView.setText("Ready");
+            breathSongPlayer.stop();
+            breathSongPlayer.release();
+            animationPlayer(false);
+            playerBtn.setText("Play");
+            isSongPlaying = false;
+        }
     }
 
     private void recallBreathData() {

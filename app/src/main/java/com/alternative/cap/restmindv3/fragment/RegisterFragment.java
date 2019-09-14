@@ -4,19 +4,26 @@ package com.alternative.cap.restmindv3.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.alternative.cap.restmindv3.R;
+import com.alternative.cap.restmindv3.activity.multi.MemberActivity;
 import com.alternative.cap.restmindv3.util.UserDetails;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -88,6 +95,19 @@ public class RegisterFragment extends Fragment {
                 userDetails = new UserDetails(userName, email);
                 reference.child(user.getUid()).setValue(userDetails);
 
+
+                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                        .setDisplayName(userName).build();
+
+                user.updateProfile(profileUpdates)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d("dodo", "onComplete: "+ user.getDisplayName());
+                                }
+                            }
+                        });
                 RegisterBtnClickListener listener = (RegisterBtnClickListener) getActivity();
                 listener.onRegisterClicked(data);
             }

@@ -46,21 +46,22 @@ public class SettingFragment extends Fragment {
         databaseReference = FirebaseDatabase.getInstance().getReference().child("users");
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = databaseReference.child(user.getUid());
-        reference.child("last-login").setValue(format);
+//        reference.child("last-login").setValue(format);
 
         userName =  root.findViewById(R.id.userNameTv);
+        userName.setText(user.getDisplayName());
 
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                userName.setText(dataSnapshot.child("name").getValue().toString());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+//        reference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                userName.setText(dataSnapshot.child("name").getValue().toString());
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
         root.findViewById(R.id.logoutBtn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,4 +75,6 @@ public class SettingFragment extends Fragment {
         });
 
     }
+
+    
 }

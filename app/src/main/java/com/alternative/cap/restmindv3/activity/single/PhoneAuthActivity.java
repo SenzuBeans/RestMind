@@ -110,7 +110,7 @@ public class PhoneAuthActivity extends AppCompatActivity {
         Toast.makeText(PhoneAuthActivity.this, number, Toast.LENGTH_LONG).show();
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 number,
-                15,
+                45,
                 TimeUnit.SECONDS,
                 TaskExecutors.MAIN_THREAD,
                 mCallBack
