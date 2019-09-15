@@ -9,9 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_margin="3dp"
         android:background="@drawable/layout_border"
-
+        android:padding="5dp"
         >
 
         <RelativeLayout
@@ -28,7 +27,7 @@
                 android:src="@drawable/dark_bg" />
 
             <com.mikhaellopez.circularimageview.CircularImageView
-                android:id="@+id/mediaListCover"
+                android:id="@+id/musicCover"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_centerHorizontal="true"
@@ -46,19 +45,19 @@
             android:layout_marginLeft="30dp">
 
             <TextView
-                android:id="@+id/nameMediaListTv"
+                android:id="@+id/nameMusicTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="song name"
-                android:textSize="20dp"
+                android:textSize="12dp"
                 android:layout_margin="5dp"/>
             <TextView
-                android:id="@+id/nameArtistMediaListTv"
+                android:id="@+id/nameArtistMusicTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="artist name"
                 android:layout_margin="5dp"
-                android:textSize="15dp"/>
+                android:textSize="10dp"/>
         </LinearLayout>
 
     </LinearLayout>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.HomePage.Feature.MediaPlayerFragment"
+    tools:context=".ui.music.MusicPlayerFragment"
     android:background="#fff"
     android:elevation="24dp"
     app:layout_insetEdge="none"

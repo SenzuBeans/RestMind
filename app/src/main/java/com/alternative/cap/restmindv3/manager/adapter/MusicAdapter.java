@@ -1,8 +1,5 @@
 package com.alternative.cap.restmindv3.manager.adapter;
 
-import android.content.Context;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +13,14 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.ArrayList;
 
-public class MediaListAdapter extends RecyclerView.Adapter<MediaListAdapter.MediaListViewHolder> {
+public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MediaListViewHolder> {
 
     MediaListAdapterListener listener;
     private ArrayList<String> nameMediaList;
     private ArrayList<String> artistMediaList;
     private ArrayList<String> uriMediaList;
 
-    public MediaListAdapter(MediaListAdapterListener passingListener,ArrayList<String> nameMediaList, ArrayList<String> artistMediaList, ArrayList<String> uriMediaList) {
+    public MusicAdapter(MediaListAdapterListener passingListener, ArrayList<String> nameMediaList, ArrayList<String> artistMediaList, ArrayList<String> uriMediaList) {
         this.listener = passingListener;
 
         this.nameMediaList = nameMediaList;
@@ -32,13 +29,13 @@ public class MediaListAdapter extends RecyclerView.Adapter<MediaListAdapter.Medi
     }
 
     @Override
-    public MediaListAdapter.MediaListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View root = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_media_list, parent, false);
+    public MusicAdapter.MediaListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View root = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_music, parent, false);
         return new MediaListViewHolder(root);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MediaListAdapter.MediaListViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MusicAdapter.MediaListViewHolder holder, int position) {
        if (position < nameMediaList.size()) {
            holder.nameMediaListTv.setText(nameMediaList.get(position));
            holder.nameArtistMediaListTv.setText(artistMediaList.get(position));
@@ -68,9 +65,9 @@ public class MediaListAdapter extends RecyclerView.Adapter<MediaListAdapter.Medi
         public MediaListViewHolder(@NonNull View itemView) {
             super(itemView);
             mediaItem = itemView;
-            mediaListCover = mediaItem.findViewById(R.id.mediaListCover);
-            nameMediaListTv = mediaItem.findViewById(R.id.nameMediaListTv);
-            nameArtistMediaListTv = mediaItem.findViewById(R.id.nameArtistMediaListTv);
+            mediaListCover = mediaItem.findViewById(R.id.musicCover);
+            nameMediaListTv = mediaItem.findViewById(R.id.nameMusicTv);
+            nameArtistMediaListTv = mediaItem.findViewById(R.id.nameArtistMusicTv);
         }
     }
 
