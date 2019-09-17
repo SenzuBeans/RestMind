@@ -1,18 +1,15 @@
 package com.alternative.cap.restmindv3.ui.music;
 
 import android.Manifest;
-import android.content.ContentResolver;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,9 +24,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.manager.adapter.MusicAdapter;
+import com.alternative.cap.restmindv3.util.MusicItem;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MusicFragment extends Fragment implements MusicAdapter.MediaListAdapterListener {
 
@@ -49,6 +56,11 @@ public class MusicFragment extends Fragment implements MusicAdapter.MediaListAda
     private RelativeLayout layout;
 
     private MediaPlayer player;
+    private FirebaseStorage storage;
+    private StorageReference storageRef;
+    private FirebaseDatabase database;
+    private DatabaseReference musicRef;
+    private Task<Void> tempRef;
 
     private boolean isSongPlay = false;
 
@@ -93,6 +105,10 @@ public class MusicFragment extends Fragment implements MusicAdapter.MediaListAda
         pauseMediaBtn = rootView.findViewById(R.id.pauseMediaBtn);
         coverMediaCircularImageView = rootView.findViewById(R.id.coverMediaCircularImageView);
         layout = rootView.findViewById(R.id.musicLayout);
+
+        storage = FirebaseStorage.getInstance();
+        database = FirebaseDatabase.getInstance();
+        musicRef = database.getReference().child("music");
     }
 
     private void workbench(View rootView, Bundle savedInstanceState) {
@@ -107,22 +123,18 @@ public class MusicFragment extends Fragment implements MusicAdapter.MediaListAda
         playMediaBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (player != null){
+                if (player != null) {
                     player.start();
-                }else{
-                    player = MediaPlayer.create(getContext(), Uri.parse(uriArrayList.get(8)));
-                    isSongPlay = true;
                 }
 
                 playMediaBtn.setVisibility(View.GONE);
                 pauseMediaBtn.setVisibility(View.VISIBLE);
             }
         });
-
         pauseMediaBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (player != null){
+                if (player != null) {
                     player.pause();
                     isSongPlay = false;
                 }
@@ -145,36 +157,63 @@ public class MusicFragment extends Fragment implements MusicAdapter.MediaListAda
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST);
             }
         } else {
-            doStuff();
+            getMusic(0);
+
         }
     }
 
     public void doStuff() {
-        getMusic();
         musicAdapter = new MusicAdapter(MusicFragment.this, nameArrayList, artistArrayList, uriArrayList);
         mediaListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mediaListRecyclerView.setAdapter(musicAdapter);
     }
 
-    public void getMusic() {
-        ContentResolver contentResolver = getActivity().getContentResolver();
-        Uri songUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        Cursor songCursor = contentResolver.query(songUri, null, null, null, null);
+    public void getMusic(int i) {
+//        ContentResolver contentResolver = getActivity().getContentResolver();
+//        Uri songUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+//        Cursor songCursor = contentResolver.query(songUri, null, null, null, null);
+//
+//        if (songCursor != null && songCursor.moveToFirst()) {
+//            int songTitle = songCursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
+//            int songArtist = songCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
+//            int songLocation = songCursor.getColumnIndex(MediaStore.Audio.Media.DATA);
+//
+//            do {
+//                String curentTitle = songCursor.getString(songTitle);
+//                String currentArtist = songCursor.getString(songArtist);
+//                String currentLocation = songCursor.getString(songLocation);
+//                nameArrayList.add(curentTitle);
+//                artistArrayList.add(currentArtist);
+//                uriArrayList.add(currentLocation);
+//            } while (songCursor.moveToNext());
+//        }
 
-        if (songCursor != null && songCursor.moveToFirst()) {
-            int songTitle = songCursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
-            int songArtist = songCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
-            int songLocation = songCursor.getColumnIndex(MediaStore.Audio.Media.DATA);
+        Random random = new Random();
+        int x = random.nextInt(1000);
+        tempRef = musicRef.child("" + i).child("temp_steam").setValue(x);
 
-            do {
-                String curentTitle = songCursor.getString(songTitle);
-                String currentArtist = songCursor.getString(songArtist);
-                String currentLocation = songCursor.getString(songLocation);
-                nameArrayList.add(curentTitle);
-                artistArrayList.add(currentArtist);
-                uriArrayList.add(currentLocation);
-            } while (songCursor.moveToNext());
-        }
+        musicRef.child("" + i).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                MusicItem item = dataSnapshot.getValue(MusicItem.class);
+
+                Log.d("dodo", "onDataChange: " + item.link);
+                nameArrayList.add(item.name);
+                artistArrayList.add(item.artist);
+                uriArrayList.add(item.link);
+
+//                    player = new MediaPlayer();
+//                    player.setDataSource("link");
+                doStuff();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -186,7 +225,8 @@ public class MusicFragment extends Fragment implements MusicAdapter.MediaListAda
                             Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         Toast.makeText(getContext(), "Permission granted!", Toast.LENGTH_SHORT).show();
 
-                        doStuff();
+                        getMusic(0);
+
                     }
                 } else {
                     Toast.makeText(getContext(), "No permission granted!", Toast.LENGTH_SHORT).show();
@@ -198,9 +238,26 @@ public class MusicFragment extends Fragment implements MusicAdapter.MediaListAda
     }
 
     @Override
+    public void onStop() {
+        if (player != null) {
+            player.pause();
+            isSongPlay = false;
+        }
+
+        playMediaBtn.setVisibility(View.VISIBLE);
+        pauseMediaBtn.setVisibility(View.GONE);
+        super.onStop();
+    }
+
+    @Override
     public void onDestroy() {
-        MediaListListener listener = (MediaListListener) getActivity();
-        listener.onMediaListDestroy();
+        if (player != null) {
+            player.pause();
+            isSongPlay = false;
+        }
+
+        playMediaBtn.setVisibility(View.VISIBLE);
+        pauseMediaBtn.setVisibility(View.GONE);
         super.onDestroy();
     }
 
@@ -218,7 +275,7 @@ public class MusicFragment extends Fragment implements MusicAdapter.MediaListAda
             pauseMediaBtn.setVisibility(View.VISIBLE);
             player.start();
             isSongPlay = true;
-        }else{
+        } else {
             player.stop();
             player.release();
 
@@ -232,9 +289,4 @@ public class MusicFragment extends Fragment implements MusicAdapter.MediaListAda
         }
         layout.setVisibility(View.VISIBLE);
     }
-
-    public interface MediaListListener {
-        void onMediaListDestroy();
-    }
-
 }
