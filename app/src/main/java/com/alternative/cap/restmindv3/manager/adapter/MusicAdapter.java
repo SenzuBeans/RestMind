@@ -58,14 +58,14 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MediaListVie
     public class MediaListViewHolder extends RecyclerView.ViewHolder {
 
         private View mediaItem;
-        private CircularImageView mediaListCover;
+//        private CircularImageView mediaListCover;
         private TextView nameMediaListTv;
         private TextView nameArtistMediaListTv;
 
         public MediaListViewHolder(@NonNull View itemView) {
             super(itemView);
             mediaItem = itemView;
-            mediaListCover = mediaItem.findViewById(R.id.musicCover);
+//            mediaListCover = mediaItem.findViewById(R.id.musicCover);
             nameMediaListTv = mediaItem.findViewById(R.id.nameMusicTv);
             nameArtistMediaListTv = mediaItem.findViewById(R.id.nameArtistMusicTv);
         }
