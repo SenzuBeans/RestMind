@@ -49,9 +49,10 @@ dependencies {
 //    implementation 'com.google.android.exoplayer:exoplayer-core:2.10.2'
 //    implementation 'com.google.android.exoplayer:exoplayer-dash:2.10.2'
 //    implementation 'com.google.android.exoplayer:exoplayer-ui:2.10.2'
-    implementation 'com.google.firebase:firebase-auth:18.0.0'
+    implementation 'com.google.firebase:firebase-auth:19.0.0'
     implementation 'com.google.firebase:firebase-database:18.0.0'
     implementation 'com.google.firebase:firebase-storage:18.1.1'
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'com.firebaseui:firebase-ui-storage:4.3.1'
 
     // from custom
@@ -69,7 +70,7 @@ dependencies {
     implementation 'com.github.iwgang:countdownview:2.1.6'
     implementation 'com.github.DeweyReed:ScrollHmsPicker:2.0.1'
     implementation 'com.ultramegasoft.radarchart:radar-chart:0.1.5'
-    implementation 'com.facebook.android:facebook-login:[5,6)'
+    implementation 'com.github.chahine:pageindicator:0.2.8'
 
 
 }

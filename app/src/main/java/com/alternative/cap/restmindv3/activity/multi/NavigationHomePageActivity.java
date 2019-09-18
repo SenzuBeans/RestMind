@@ -22,13 +22,12 @@ public class NavigationHomePageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_home_page);
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_breath, R.id.navigation_background, R.id.navigation_narration
-                , R.id.navigation_music, R.id.navigation_setting)
-                .build();
+//        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+//                R.id.navigation_breath, R.id.navigation_background, R.id.navigation_narration
+//                , R.id.navigation_music, R.id.navigation_setting)
+//                .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(navView, navController);
-
         workbench();
     }
 

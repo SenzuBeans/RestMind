@@ -1,6 +1,5 @@
-package com.alternative.cap.restmindv3.fragment.HomePage.Feature;
+package com.alternative.cap.restmindv3.ui.music;
 
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,16 +11,16 @@ import androidx.fragment.app.Fragment;
 
 import com.alternative.cap.restmindv3.R;
 
-public class MediaPlayerFragment extends Fragment {
+public class MusicPlayerFragment extends Fragment {
 
-    public MediaPlayerFragment() {
+    public MusicPlayerFragment() {
     }
 
-    public static MediaPlayerFragment newInstance() {
+    public static MusicPlayerFragment newInstance() {
 
         Bundle args = new Bundle();
 
-        MediaPlayerFragment fragment = new MediaPlayerFragment();
+        MusicPlayerFragment fragment = new MusicPlayerFragment();
         fragment.setArguments(args);
         return fragment;
     }
