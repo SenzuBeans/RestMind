@@ -20,7 +20,7 @@ public class CheckBoxSettingsObject extends BooleanSettingsObject implements Ser
 	@Override
 	public int getLayout()
 	{
-		return R.layout.checkbox_settings_object;
+		return R.layout.settings_checkbox_object;
 	}
 
 	/////////////////////////////////////////////////////////////

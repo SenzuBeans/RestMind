@@ -37,7 +37,7 @@ public class BasicSettingsObject extends SettingsObject<Void> implements Seriali
 	@Override
 	public int getLayout()
 	{
-		return R.layout.basic_settings_object;
+		return R.layout.settings_basic_object;
 	}
 
 	@Override

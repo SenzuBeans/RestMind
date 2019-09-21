@@ -20,7 +20,7 @@ public class SwitchSettingsObject extends BooleanSettingsObject implements Seria
 	@Override
 	public int getLayout()
 	{
-		return R.layout.switch_settings_object;
+		return R.layout.settings_switch_object;
 	}
 
 	/////////////////////////////////////////////////////////////
