@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_layout"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,6 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         android:layout_margin="10dp"
         android:orientation="vertical">
 
@@ -69,31 +71,54 @@
 
         </me.rishabhkhanna.customtogglebutton.CustomToggleButton>
 
-        <me.rishabhkhanna.customtogglebutton.CustomToggleButton
-            android:id="@+id/fbLoginBtn"
-            android:layout_width="232dp"
+<!--        <com.facebook.login.widget.LoginButton-->
+<!--            android:id="@+id/fbLoginBtn"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center_horizontal"-->
+<!--            android:layout_marginTop="30dp" />-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textOff="login with facebook"
-            android:textOn="Pending"
-            app:uncheckedColor="#454DFF"
-            android:layout_marginTop="20dp">
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp">
 
-        </me.rishabhkhanna.customtogglebutton.CustomToggleButton>
+
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/loginGoogleBtn"
+                android:layout_weight="0.5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textOff="Continue"
+                android:textOn="Pending"
+                app:uncheckedColor="#FD6B84"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"/>
+
+            <me.rishabhkhanna.customtogglebutton.CustomToggleButton
+                android:id="@+id/loginGuestBtn"
+                android:layout_weight="0.5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textOff="Guest"
+                android:textOn="Pending"
+                app:uncheckedColor="#3E8EF1"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">
+
+            </me.rishabhkhanna.customtogglebutton.CustomToggleButton>
+        </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-
-
-
-
-    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/contentContainerMemberFragment"

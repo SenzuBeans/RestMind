@@ -14,13 +14,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="417946862185409" />
         <activity
             android:name=".activity.multi.NavigationHomePageActivity"
             android:label="@string/title_activity_navigation_home_page"
             android:theme="@style/NoAtionAppTheme"></activity>
-        <activity android:name=".activity.multi.HomePageActivity" />
-        <activity android:name=".activity.multi.MemberActivity" />
-        <activity android:name=".activity.single.TutorialActivity" />
+        <activity android:name=".activity.multi.MemberActivity"
+            android:theme="@style/NoAtionAppTheme"/>
+        <activity android:name=".activity.single.TutorialActivity"
+            android:theme="@style/NoAtionAppTheme"/>
         <activity android:name=".activity.single.PhoneAuthActivity" />
         <activity
             android:name=".activity.single.SplashScreenActivity"

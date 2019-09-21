@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.activity.multi.MemberActivity;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 
 public class SettingFragment extends Fragment {
 
@@ -41,26 +43,15 @@ public class SettingFragment extends Fragment {
     }
 
     private void workbench(View root, Bundle savedInstanceState) {
-        SimpleDateFormat s = new SimpleDateFormat("dd/MM/yy hh:mm:ss");
-        String format = s.format(new Date());
         databaseReference = FirebaseDatabase.getInstance().getReference().child("users");
+
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = databaseReference.child(user.getUid());
-        reference.child("last-login").setValue(format);
+
+//                reference.child("last-login").setValue(format);
 
         userName =  root.findViewById(R.id.userNameTv);
-
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                userName.setText(dataSnapshot.child("name").getValue().toString());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        userName.setText(user.getDisplayName());
 
         root.findViewById(R.id.logoutBtn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,4 +65,6 @@ public class SettingFragment extends Fragment {
         });
 
     }
+
+    
 }
