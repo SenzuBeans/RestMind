@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -36,9 +37,11 @@ public class SettingFragment extends Fragment {
     private DatabaseReference databaseReference;
     private DatabaseReference reference;
 
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_setting, container, false);
         workbench(root, savedInstanceState);
+
         return root;
     }
 
@@ -52,6 +55,8 @@ public class SettingFragment extends Fragment {
 
         userName =  root.findViewById(R.id.userNameTv);
         userName.setText(user.getDisplayName());
+
+
 
         root.findViewById(R.id.logoutBtn).setOnClickListener(new View.OnClickListener() {
             @Override
