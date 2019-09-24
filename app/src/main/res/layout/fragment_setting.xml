@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_regtangle_outer">
+
+    <FrameLayout
+        android:id="@+id/settingContainerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
     <LinearLayout
+        android:id="@+id/settingMainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:visibility="visible">
 
 
         <TextView
@@ -18,13 +28,69 @@
             android:gravity="center"
             android:textSize="30dp"
             android:text="User Test"
-            android:layout_marginBottom="50dp"/>
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="-50dp"/>
+
+        <ImageView
+            android:id="@+id/imageProfileView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:srcCompat="@tools:sample/avatars"
+            android:layout_marginBottom="5dp"/>
 
         <Button
-            android:id="@+id/logoutBtn"
-            android:layout_width="wrap_content"
+            android:id="@+id/profileBtn"
+            android:layout_width="416dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_button"
+            android:text="Profile"
+            android:layout_marginBottom="5dp"
+            />
+        <Button
+            android:id="@+id/changePasswordBtn"
+            android:layout_width="416dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_button"
+            android:text="Change Password"
+            android:layout_marginBottom="5dp"/>
+        <Button
+            android:id="@+id/notificationsBtn"
+            android:layout_width="416dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_button"
+            android:text="Notifications"
+            android:layout_marginBottom="5dp"/>
+        <Button
+            android:id="@+id/contactBtn"
+            android:layout_width="416dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_button"
+            android:text="Contact Support"
+            android:layout_marginBottom="5dp"/>
+        <Button
+            android:id="@+id/shareBtn"
+            android:layout_width="416dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_button"
+            android:text="Share with friends"
+            android:layout_marginBottom="5dp"/>
+        <Button
+            android:id="@+id/logoutBtn"
+            android:layout_width="416dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_button"
             android:text="logout"
-            android:layout_gravity="center"/>
+            android:layout_marginBottom="5dp"/>
+
+
+
+
+
     </LinearLayout>
 </RelativeLayout>

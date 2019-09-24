@@ -238,7 +238,6 @@ public class MusicFragment extends Fragment implements MusicAdapter.MediaListAda
         pauseMediaBtn.setVisibility(View.GONE);
     }
 
-
     @Override
     public void onItemClicked(String passName, String passArtist, String passUri) {
         if (!isSongPlay) {

@@ -2,56 +2,65 @@ package com.alternative.cap.restmindv3.ui.setting;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.activity.multi.MemberActivity;
-import com.google.android.gms.tasks.Task;
+import com.alternative.cap.restmindv3.ui.setting.sub_setting.ContactSupport;
+import com.alternative.cap.restmindv3.util.SettingListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Random;
+public class SettingFragment extends Fragment
+    implements SettingListener {
 
-public class SettingFragment extends Fragment {
+    private int SHOW = 0,
+        HIDE = 1;
 
-    private TextView userName;
     private FirebaseUser user;
     private DatabaseReference databaseReference;
     private DatabaseReference reference;
 
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    private TextView userName;
+
+    private Button contactBtn;
+    private FrameLayout settingContainerLayout;
+    private LinearLayout settingMainLayout;
+
+
+    public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_setting, container, false);
+        initInstance(root, savedInstanceState);
         workbench(root, savedInstanceState);
         return root;
     }
 
-    private void workbench(View root, Bundle savedInstanceState) {
+    private void initInstance(View root, Bundle savedInstanceState) {
         databaseReference = FirebaseDatabase.getInstance().getReference().child("users");
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = databaseReference.child(user.getUid());
 
-//                reference.child("last-login").setValue(format);
-
         userName =  root.findViewById(R.id.userNameTv);
         userName.setText(user.getDisplayName());
+
+        settingContainerLayout = root.findViewById( R.id.settingContainerLayout );
+        settingMainLayout = root.findViewById( R.id.settingMainLayout );
+
+        contactBtn = root.findViewById( R.id.contactBtn );
+    }
+
+    private void workbench(View root, Bundle savedInstanceState) {
+
 
         root.findViewById(R.id.logoutBtn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,7 +73,32 @@ public class SettingFragment extends Fragment {
             }
         });
 
+        contactBtn.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                swapContent(SHOW);
+                getChildFragmentManager().beginTransaction()
+                        .add( R.id.settingContainerLayout, ContactSupport.newInstance(SettingFragment.this) )
+                        .addToBackStack( null )
+                        .commit();
+            }
+        } );
+
     }
 
-    
+    private void swapContent(int status) {
+        if (status == SHOW) {
+            settingMainLayout.setVisibility( View.GONE );
+            settingContainerLayout.setVisibility( View.VISIBLE );
+        }else{
+            settingMainLayout.setVisibility( View.VISIBLE );
+            settingContainerLayout.setVisibility( View.GONE );
+        }
+    }
+
+
+    @Override
+    public void onClickedDestroy() {
+        swapContent( HIDE );
+    }
 }
