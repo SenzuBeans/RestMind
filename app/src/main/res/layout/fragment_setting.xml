@@ -6,11 +6,19 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_regtangle_outer">
 
+    <FrameLayout
+        android:id="@+id/settingContainerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
     <LinearLayout
+        android:id="@+id/settingMainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:visibility="visible">
 
 
         <TextView
