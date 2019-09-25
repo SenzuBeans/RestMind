@@ -1,5 +1,6 @@
 package com.alternative.cap.restmindv3.ui.narration.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,16 +11,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alternative.cap.restmindv3.R;
+import com.alternative.cap.restmindv3.util.MusicItem;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 
 import java.util.ArrayList;
 
 public class NarrationSubAdapter extends RecyclerView.Adapter<NarrationSubAdapter.NarrationSubViewHolder> {
 
-    private String[] dataList;
-    private int[] coverImageTest = new int[]{R.drawable.cover1,R.drawable.cover2, R.drawable.cover3};
+    private Context cons;
+    private ArrayList<MusicItem>  dataList;
 
-    public NarrationSubAdapter(String[] data) {
+    public NarrationSubAdapter(Context context, ArrayList<MusicItem> data) {
+        cons = context;
         this.dataList = data;
     }
 
@@ -32,12 +37,12 @@ public class NarrationSubAdapter extends RecyclerView.Adapter<NarrationSubAdapte
 
     @Override
     public void onBindViewHolder(@NonNull NarrationSubViewHolder holder, int position) {
-        holder.setDetail(coverImageTest[position%3], dataList[position]);
+        holder.setDetail(dataList.get(position).image_link, dataList.get(position).name);
     }
 
     @Override
     public int getItemCount() {
-        return dataList.length;
+        return dataList.size();
     }
 
     public class NarrationSubViewHolder extends RecyclerView.ViewHolder {
@@ -55,8 +60,12 @@ public class NarrationSubAdapter extends RecyclerView.Adapter<NarrationSubAdapte
             artistMedia = itemView.findViewById(R.id.narrationMediaArtist);
         }
 
-        public void setDetail(int imageId, String name){
-            coverImage.setImageResource(imageId);
+        public void setDetail(String imageLink, String name){
+            Glide.with(cons)
+                    .load(imageLink)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(coverImage);
+
             nameNarration.setText(name);
         }
     }

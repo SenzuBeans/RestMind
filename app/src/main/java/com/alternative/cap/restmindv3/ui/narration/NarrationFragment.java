@@ -1,38 +1,125 @@
 package com.alternative.cap.restmindv3.ui.narration;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.ui.narration.adapter.NarrationAdapter;
+import com.alternative.cap.restmindv3.util.MusicItem;
+import com.alternative.cap.restmindv3.util.NarrationItem;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
 
 public class NarrationFragment extends Fragment {
 
     private RecyclerView narrationRecyclerView;
     private NarrationAdapter adapter;
-    private String[] headerMedia = new String[]{"test 1", "test 2"};
-    private String[][] nameMedia = new String[][]{{"Song 1", "Song 2", "Song 3", "Song 4", "Song 5"},{"Song 6", "Song 7", "Song 8", "Song 9", "Song 10"}};
+
+    private FirebaseUser user;
+    private FirebaseDatabase database;
+    private DatabaseReference narrationRef;
+    private DatabaseReference musicRef;
+
+    private ArrayList<String> header;// = new String[]{"test 1", "test 2"};
+    private ArrayList<String> mediaId;// = new String[][]{{"Song 1", "Song 2", "Song 3", "Song 4", "Song 5"},{"Song 6", "Song 7", "Song 8", "Song 9", "Song 10"}};
+    private ArrayList<MusicItem> tempMediaList;
+    private ArrayList<ArrayList<MusicItem>> mediaList;
+
+    Random random = new Random();
+    int x = random.nextInt(1000);
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        init(savedInstanceState);
+    }
+
+    private void init(Bundle savedInstanceState) {
+        header = new ArrayList<>();
+        mediaList = new ArrayList<ArrayList<MusicItem>>();
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_narration, container, false);
-        workbench(root,savedInstanceState);
+        initInstance(root, savedInstanceState);
+        workbench(root, savedInstanceState);
         return root;
     }
 
+    private void initInstance(View root, Bundle savedInstanceState) {
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        database = FirebaseDatabase.getInstance();
+        narrationRef = database.getReference().child("narration");
+        musicRef = database.getReference().child("sound");
+
+        database.getReference().child("users").child(user.getUid()).child("temp_steam").setValue(x);
+    }
+
     private void workbench(View root, Bundle savedInstanceState) {
+
+        database.getReference().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.child("narration").getChildren()) {
+                    Log.d("dodo", "onDataChange: "+ ds.getKey());
+                    header.add(ds.getKey());
+                    NarrationItem item = ds.getValue(NarrationItem.class);
+
+                    mediaId = new ArrayList(Arrays.asList(item.rawId.split(",")));
+
+                    tempMediaList = new ArrayList<>();
+
+                    for (String s : mediaId){
+                        tempMediaList.add(dataSnapshot.child("sound").child(s).getValue(MusicItem.class));
+                    }
+
+//                    for (DataSnapshot data : dataSnapshot.child("sound").getChildren()) {
+//                        for (String s : mediaId) {
+//                            if (s.equals(data.getKey())) {
+//                                tempMediaList.add(data.getValue(MusicItem.class));
+//                                Log.d("dodo", "add: " + tempMediaList.get(tempMediaList.size()-1).name);
+//
+//                                break;
+//                            }
+////                            Log.d("dodo", "onDataChange: " + s + " : ds" + data.getKey());
+//                        }
+//                    }
+                    mediaList.add(tempMediaList);
+                    Log.d("dodo", "add end: " + mediaList.get(mediaList.size()-1).get(tempMediaList.size()-1).name);
+                }
+                updateAdapter(root);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void updateAdapter(View root) {
         narrationRecyclerView = root.findViewById(R.id.narrationRecyclerView);
         narrationRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        adapter = new NarrationAdapter(getContext(), headerMedia, nameMedia);
+        adapter = new NarrationAdapter(getContext(), header, mediaList);
 
         narrationRecyclerView.setAdapter(adapter);
     }

@@ -62,8 +62,6 @@ public class BackgroundFragment extends Fragment {
         database = FirebaseDatabase.getInstance();
         videoRef = database.getReference().child("video");
 
-//        backgroundRecyclerView = root.findViewById(R.id.backgroundViewPager);
-//        backgroundIndicator = root.findViewById(R.id.backgroundIndicator);
         backgroundVideo = root.findViewById(R.id.backgroundVideoView);
         backgroundId = root.findViewById(R.id.backgroundID);
 
@@ -94,12 +92,7 @@ public class BackgroundFragment extends Fragment {
     }
 
     private void doStuff() {
-//        adapter = new BackgroundAdapter(listLink, listId);
         setUri(listLink.get(currentVideo));
-//        backgroundRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-//        backgroundRecyclerView.setAdapter(adapter);
-//
-//        backgroundIndicator.attachTo(backgroundRecyclerView);
         backgroundVideo.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
