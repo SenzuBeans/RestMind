@@ -5,30 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/grey_500">
+    android:background="#002E2E">
 
-    <androidx.appcompat.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Narration"
-                android:textSize="30dp"
-                android:fontFamily="?attr/actionBarTheme"
-                android:textColor="@android:color/white"
-                android:gravity="center|left"
-                android:layout_weight="0.9"/>
-
-        </LinearLayout>
-    </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/narrationRecyclerView"

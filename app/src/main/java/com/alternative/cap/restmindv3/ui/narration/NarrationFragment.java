@@ -29,11 +29,24 @@ public class NarrationFragment extends Fragment {
     }
 
     private void workbench(View root, Bundle savedInstanceState) {
+        hideNavigationBar();
         narrationRecyclerView = root.findViewById(R.id.narrationRecyclerView);
         narrationRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         adapter = new NarrationAdapter(getContext(), headerMedia, nameMedia);
 
         narrationRecyclerView.setAdapter(adapter);
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        hideNavigationBar();
+    }
+
+    private void hideNavigationBar() {
+        this.getActivity().getWindow().getDecorView()
+                .setSystemUiVisibility( View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN |
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
     }
 }

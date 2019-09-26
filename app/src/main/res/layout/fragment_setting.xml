@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_regtangle_outer">
+    android:background="#A101A6">
 
     <FrameLayout
         android:id="@+id/settingContainerLayout"
@@ -20,73 +20,103 @@
         android:gravity="center"
         android:visibility="visible">
 
+        <TextView
+            android:id="@+id/hi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-20dp"
+            android:gravity="center"
+            android:text="Hi!.."
+            android:textSize="30dp"
+            android:textColor="#FFF"
+            />
 
         <TextView
             android:id="@+id/userNameTv"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="30dp"
-            android:text="User Test"
             android:layout_marginBottom="20dp"
-            android:layout_marginTop="-50dp"/>
+            android:gravity="center"
+            android:text="User Test"
+            android:textSize="30dp"
+            android:textColor="#FFF"/>
 
         <ImageView
             android:id="@+id/imageProfileView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:srcCompat="@tools:sample/avatars"
-            android:layout_marginBottom="5dp"/>
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/user_profile_image"
+            tools:srcCompat="@tools:sample/avatars[6]" />
+
+            <Button
+                android:id="@+id/profileBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_gravity="center"
+                android:background="@drawable/btn_rounded3"
+                android:text="Profile"
+                android:textColor="#fff"
+                android:layout_marginBottom="10dp"
+                />
 
         <Button
-            android:id="@+id/profileBtn"
-            android:layout_width="416dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/bg_button"
-            android:text="Profile"
-            android:layout_marginBottom="5dp"
-            />
-        <Button
             android:id="@+id/changePasswordBtn"
-            android:layout_width="416dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:layout_gravity="center"
-            android:background="@drawable/bg_button"
+            android:background="@drawable/btn_rounded3"
             android:text="Change Password"
-            android:layout_marginBottom="5dp"/>
+            android:textColor="#fff"
+            android:layout_marginBottom="10dp"/>
         <Button
             android:id="@+id/notificationsBtn"
-            android:layout_width="416dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:layout_gravity="center"
-            android:background="@drawable/bg_button"
+            android:background="@drawable/btn_rounded3"
             android:text="Notifications"
-            android:layout_marginBottom="5dp"/>
+            android:textColor="#fff"
+            android:layout_marginBottom="10dp"/>
         <Button
             android:id="@+id/contactBtn"
-            android:layout_width="416dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:layout_gravity="center"
-            android:background="@drawable/bg_button"
+            android:background="@drawable/btn_rounded3"
             android:text="Contact Support"
-            android:layout_marginBottom="5dp"/>
+            android:textColor="#fff"
+            android:layout_marginBottom="10dp"/>
         <Button
             android:id="@+id/shareBtn"
-            android:layout_width="416dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:layout_gravity="center"
-            android:background="@drawable/bg_button"
+            android:background="@drawable/btn_rounded3"
             android:text="Share with friends"
-            android:layout_marginBottom="5dp"/>
+            android:textColor="#fff"
+            android:layout_marginBottom="10dp"/>
         <Button
             android:id="@+id/logoutBtn"
-            android:layout_width="416dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:layout_gravity="center"
-            android:background="@drawable/bg_button"
+            android:textColor="#fff"
+            android:background="@drawable/btn_rounded3"
             android:text="logout"
-            android:layout_marginBottom="5dp"/>
+            android:layout_marginBottom="10dp"/>
 
 
 

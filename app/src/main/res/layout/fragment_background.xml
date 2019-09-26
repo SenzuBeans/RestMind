@@ -22,7 +22,7 @@
         android:gravity="left|top"
         android:textSize="30dp"
         android:text="video id"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/transparent"
         android:background="@color/colorTransparent" />
 
 <!--    <androidx.recyclerview.widget.RecyclerView-->
