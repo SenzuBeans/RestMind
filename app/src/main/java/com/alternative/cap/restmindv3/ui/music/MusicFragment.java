@@ -99,7 +99,7 @@ public class MusicFragment extends Fragment implements MusicAdapter.MediaListAda
     }
 
     private void initInstance(View rootView, Bundle savedInstanceState) {
-
+        hideNavigationBar();
         mediaListRecyclerView = rootView.findViewById(R.id.mediaListRecyclerView);
 
         nameMediaTv = rootView.findViewById(R.id.nameMediaTv);
@@ -141,6 +141,19 @@ public class MusicFragment extends Fragment implements MusicAdapter.MediaListAda
                 stopMusic();
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        hideNavigationBar();
+    }
+
+    private void hideNavigationBar() {
+        this.getActivity().getWindow().getDecorView()
+                .setSystemUiVisibility( View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN |
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
     }
 
 
