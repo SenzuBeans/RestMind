@@ -54,7 +54,7 @@ public class VideoView extends FrameLayout {
 
     public void setUri(String link) {
         Log.d(TAG, "setUri: "+ link);
-        backgroundVideo.setVideoPath("https://firebasestorage.googleapis.com/v0/b/restmind-c2b82.appspot.com/o/video_background%2Frestmind_background_01.mp4?alt=media&token=24d76f2c-71a0-418b-8672-d650e6830273");
+        backgroundVideo.setVideoPath(link);
         backgroundVideo.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
