@@ -5,28 +5,34 @@
     android:layout_height="match_parent"
     tools:context=".fragment.RegisterFragment"
     android:orientation="vertical"
-    android:gravity="center">
+    android:gravity="center"
+    android:background="#FF6A00">
 
     <EditText
         android:id="@+id/userNameEditText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="user name"
+        android:layout_height="40dp"
+        android:hint="User name"
         android:gravity="center"
-        android:layout_margin="20dp"/>
+        android:textColor="#FFF"
+        android:layout_margin="20dp"
+        android:background="@drawable/btn_rounded5"/>
 
     <EditText
         android:id="@+id/emailEditText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:inputType="textEmailAddress"
-        android:hint="E - mail"
+        android:hint="E-mail"
+        android:textColor="#FFF"
         android:gravity="center"
-        android:layout_margin="20dp"/>
+        android:layout_margin="20dp"
+        android:background="@drawable/btn_rounded5"/>
 
     <Button
         android:id="@+id/registerBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="register"/>
+        android:text="register"
+        android:background="@drawable/btn_rounded6"/>
 </LinearLayout>
