@@ -10,6 +10,7 @@
         android:layout_height="125px"
         android:layout_margin="5dp"
 
+
         />
 
     <TextView
@@ -18,14 +19,18 @@
         android:layout_height="wrap_content"
         android:text="Name"
         android:textSize="15dp"
-        android:layout_marginTop="10dp"/>
+        android:textColor="#FFF"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/btn_rounded4"/>
     <TextView
         android:id="@+id/narrationMediaArtist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Artist"
         android:textSize="15dp"
-        android:layout_marginTop="10dp"/>
+        android:textColor="#FFF"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/btn_rounded4"/>
 
 
 </LinearLayout>

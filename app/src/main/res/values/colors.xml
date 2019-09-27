@@ -16,4 +16,6 @@
 
     <color name="transparent01">#80000000</color>
 
+    <color name="headbar">#a3a7ad</color>
+
 </resources>

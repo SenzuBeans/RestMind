@@ -2,6 +2,7 @@ package com.alternative.cap.restmindv3.ui.music;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.icu.util.TimeZone;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.manager.adapter.MusicAdapter;
 import com.alternative.cap.restmindv3.util.MusicItem;
+import com.alternative.cap.restmindv3.util.VideoItem;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -97,6 +99,7 @@ public class MusicFragment extends Fragment implements MusicAdapter.MediaListAda
     }
 
     private void initInstance(View rootView, Bundle savedInstanceState) {
+
         mediaListRecyclerView = rootView.findViewById(R.id.mediaListRecyclerView);
 
         nameMediaTv = rootView.findViewById(R.id.nameMediaTv);
@@ -109,6 +112,7 @@ public class MusicFragment extends Fragment implements MusicAdapter.MediaListAda
         user = FirebaseAuth.getInstance().getCurrentUser();
         database = FirebaseDatabase.getInstance();
         musicRef = database.getReference().child("sound");
+        
     }
 
     private void workbench(View rootView, Bundle savedInstanceState) {
@@ -138,6 +142,8 @@ public class MusicFragment extends Fragment implements MusicAdapter.MediaListAda
             }
         });
     }
+
+
 
     private void checkPermissioon() {
         if (ContextCompat.checkSelfPermission(getContext(),

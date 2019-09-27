@@ -126,6 +126,7 @@ public class MemberActivity extends AppCompatActivity implements RegisterFragmen
 
     }
 
+
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
