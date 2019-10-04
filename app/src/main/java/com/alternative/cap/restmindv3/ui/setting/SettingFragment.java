@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment;
 import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.activity.multi.MemberActivity;
 import com.alternative.cap.restmindv3.ui.setting.sub_setting.ContactSupport;
+import com.alternative.cap.restmindv3.ui.setting.sub_setting.ProfileFragment;
+import com.alternative.cap.restmindv3.ui.setting.sub_setting.ProfileFragment;
 import com.alternative.cap.restmindv3.util.SettingListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -32,8 +34,8 @@ public class SettingFragment extends Fragment
 
     private TextView userName;
 
-    private Button contactBtn;
-    private FrameLayout settingContainerLayout;
+    private Button contactBtn, profileBtn;
+    private FrameLayout settingContainerLayout, profileSettingLayout;
     private LinearLayout settingMainLayout;
 
 
@@ -55,9 +57,11 @@ public class SettingFragment extends Fragment
         userName.setText(user.getDisplayName());
 
         settingContainerLayout = root.findViewById( R.id.settingContainerLayout );
+        profileSettingLayout = root.findViewById( R.id.profileSettingLayout );
         settingMainLayout = root.findViewById( R.id.settingMainLayout );
 
         contactBtn = root.findViewById( R.id.contactBtn );
+        profileBtn = root.findViewById( R.id.profileBtn );
     }
 
     private void workbench(View root, Bundle savedInstanceState) {
@@ -80,6 +84,17 @@ public class SettingFragment extends Fragment
                 swapContent(SHOW);
                 getChildFragmentManager().beginTransaction()
                         .add( R.id.settingContainerLayout, ContactSupport.newInstance(SettingFragment.this) )
+                        .addToBackStack( null )
+                        .commit();
+            }
+        } );
+
+        profileBtn.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                swapContent(SHOW);
+                getChildFragmentManager().beginTransaction()
+                        .add( R.id.profileSettingLayout, ProfileFragment.newInstance(SettingFragment.this) )
                         .addToBackStack( null )
                         .commit();
             }

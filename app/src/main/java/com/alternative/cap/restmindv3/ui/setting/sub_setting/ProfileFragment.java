@@ -11,19 +11,24 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.alternative.cap.restmindv3.R;
+import com.alternative.cap.restmindv3.util.SettingListener;
 
-public class ProfileFlagment extends Fragment {
+
+public class ProfileFragment extends Fragment {
 
 
-    public ProfileFlagment() {
+    static SettingListener listener;
+
+    public ProfileFragment() {
         // Required empty public constructor
     }
 
-    public static ProfileFlagment newInstance() {
+
+    public static ProfileFragment newInstance(SettingListener passingListener) {
 
         Bundle args = new Bundle();
-
-        ProfileFlagment fragment = new ProfileFlagment();
+        listener = passingListener;
+        ProfileFragment fragment = new ProfileFragment();
         fragment.setArguments( args );
         return fragment;
     }
@@ -35,17 +40,19 @@ public class ProfileFlagment extends Fragment {
     }
 
     private void init(Bundle savedInstanceState) {
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate( R.layout.fragment_profile__flagment, container, false );
+        // Inflate the layout for this fragment
+        View rootView = inflater.inflate( R.layout.profile__flagment, container, false );
         initInsance(rootView, savedInstanceState);
         workbench(rootView, savedInstanceState);
+
         return rootView;
     }
+
 
     private void initInsance(View rootView, Bundle savedInstanceState) {
 
@@ -53,7 +60,17 @@ public class ProfileFlagment extends Fragment {
 
     private void workbench(View rootView, Bundle savedInstanceState) {
 
+        rootView.findViewById( R.id.settingListBackBtn ).setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getFragmentManager().popBackStack();
+            }
+        } );
     }
 
-
+    @Override
+    public void onDestroy() {
+        listener.onClickedDestroy();
+        super.onDestroy();
+    }
 }
