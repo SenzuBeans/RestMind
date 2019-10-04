@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.setting.sub_setting.ContactSupport">
+    tools:context=".ui.setting.sub_setting.ProfileFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -15,7 +15,7 @@
         tools:ignore="MissingConstraints">
 
         <ImageButton
-            android:id="@+id/settingContentBackBtn"
+            android:id="@+id/settingProfileBackBtn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@color/colorTransparent"

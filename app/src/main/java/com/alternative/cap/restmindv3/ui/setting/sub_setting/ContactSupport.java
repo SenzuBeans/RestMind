@@ -55,7 +55,7 @@ public class ContactSupport extends Fragment {
 
     private void workbench(View rootView, Bundle savedInstanceState) {
 
-        rootView.findViewById( R.id.settingListBackBtn ).setOnClickListener( new View.OnClickListener() {
+        rootView.findViewById( R.id.settingContentBackBtn ).setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getFragmentManager().popBackStack();

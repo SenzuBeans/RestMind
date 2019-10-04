@@ -1,7 +1,5 @@
 package com.alternative.cap.restmindv3.ui.setting.sub_setting;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -23,7 +21,6 @@ public class ProfileFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     public static ProfileFragment newInstance(SettingListener passingListener) {
 
         Bundle args = new Bundle();
@@ -42,11 +39,11 @@ public class ProfileFragment extends Fragment {
     private void init(Bundle savedInstanceState) {
     }
 
+    //กดเทสหนอย
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View rootView = inflater.inflate( R.layout.profile__flagment, container, false );
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+        View rootView = inflater.inflate( R.layout.flagment_profile, container, false );
         initInsance(rootView, savedInstanceState);
         workbench(rootView, savedInstanceState);
 
@@ -60,7 +57,7 @@ public class ProfileFragment extends Fragment {
 
     private void workbench(View rootView, Bundle savedInstanceState) {
 
-        rootView.findViewById( R.id.settingListBackBtn ).setOnClickListener( new View.OnClickListener() {
+        rootView.findViewById( R.id.settingProfileBackBtn ).setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getFragmentManager().popBackStack();

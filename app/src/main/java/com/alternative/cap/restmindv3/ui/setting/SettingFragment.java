@@ -15,7 +15,6 @@ import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.activity.multi.MemberActivity;
 import com.alternative.cap.restmindv3.ui.setting.sub_setting.ContactSupport;
 import com.alternative.cap.restmindv3.ui.setting.sub_setting.ProfileFragment;
-import com.alternative.cap.restmindv3.ui.setting.sub_setting.ProfileFragment;
 import com.alternative.cap.restmindv3.util.SettingListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,7 +34,7 @@ public class SettingFragment extends Fragment
     private TextView userName;
 
     private Button contactBtn, profileBtn;
-    private FrameLayout settingContainerLayout, profileSettingLayout;
+    private FrameLayout settingContainerLayout;
     private LinearLayout settingMainLayout;
 
 
@@ -57,7 +56,6 @@ public class SettingFragment extends Fragment
         userName.setText(user.getDisplayName());
 
         settingContainerLayout = root.findViewById( R.id.settingContainerLayout );
-        profileSettingLayout = root.findViewById( R.id.profileSettingLayout );
         settingMainLayout = root.findViewById( R.id.settingMainLayout );
 
         contactBtn = root.findViewById( R.id.contactBtn );
@@ -88,13 +86,13 @@ public class SettingFragment extends Fragment
                         .commit();
             }
         } );
-
+        //ทุกอันที่ต่อใช้ R.id.settingContainerLayout อันเดียว ไม่ต้องสร้างเพิ่ม วางซ้ำไปเลย อย่างอื่นถูกล่ะ
         profileBtn.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 swapContent(SHOW);
                 getChildFragmentManager().beginTransaction()
-                        .add( R.id.profileSettingLayout, ProfileFragment.newInstance(SettingFragment.this) )
+                        .add( R.id.settingContainerLayout, ProfileFragment.newInstance(SettingFragment.this) )
                         .addToBackStack( null )
                         .commit();
             }

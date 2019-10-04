@@ -6,8 +6,8 @@
 
     <ImageView
         android:id="@+id/narrationMediaCoverImage"
-        android:layout_width="125px"
-        android:layout_height="125px"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
         android:layout_margin="5dp"
 
 
