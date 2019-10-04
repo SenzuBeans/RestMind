@@ -1,5 +1,7 @@
 package com.alternative.cap.restmindv3.ui.setting.sub_setting;
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,21 +13,21 @@ import android.view.ViewGroup;
 import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.util.SettingListener;
 
-
-public class ProfileFragment extends Fragment {
+public class NotificationsFragment extends Fragment {
 
 
     static SettingListener listener;
 
-    public ProfileFragment() {
+    public NotificationsFragment() {
         // Required empty public constructor
     }
 
-    public static ProfileFragment newInstance(SettingListener passingListener) {
+
+    public static NotificationsFragment newInstance(SettingListener passingListener) {
 
         Bundle args = new Bundle();
         listener = passingListener;
-        ProfileFragment fragment = new ProfileFragment();
+        NotificationsFragment fragment = new NotificationsFragment();
         fragment.setArguments( args );
         return fragment;
     }
@@ -42,7 +44,7 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-        View rootView = inflater.inflate( R.layout.fragment_profile, container, false );
+        View rootView = inflater.inflate( R.layout.fragment_notifications, container, false );
         initInsance(rootView, savedInstanceState);
         workbench(rootView, savedInstanceState);
 
@@ -56,7 +58,7 @@ public class ProfileFragment extends Fragment {
 
     private void workbench(View rootView, Bundle savedInstanceState) {
 
-        rootView.findViewById( R.id.settingProfileBackBtn ).setOnClickListener( new View.OnClickListener() {
+        rootView.findViewById( R.id.settingNotificationBackBtn ).setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getFragmentManager().popBackStack();

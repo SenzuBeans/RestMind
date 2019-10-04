@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#002E2E">
+    android:background="#141414">
 
 
 
@@ -13,6 +13,7 @@
         android:id="@+id/narrationRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
         android:padding="5dp"/>
 
 

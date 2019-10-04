@@ -1,5 +1,7 @@
 package com.alternative.cap.restmindv3.ui.setting.sub_setting;
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,20 +14,19 @@ import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.util.SettingListener;
 
 
-public class ProfileFragment extends Fragment {
-
+public class ShareWithFriends extends Fragment {
 
     static SettingListener listener;
 
-    public ProfileFragment() {
+    public ShareWithFriends() {
         // Required empty public constructor
     }
 
-    public static ProfileFragment newInstance(SettingListener passingListener) {
+    public static ShareWithFriends newInstance(SettingListener passingListener) {
 
         Bundle args = new Bundle();
         listener = passingListener;
-        ProfileFragment fragment = new ProfileFragment();
+        ShareWithFriends fragment = new ShareWithFriends();
         fragment.setArguments( args );
         return fragment;
     }
@@ -42,7 +43,7 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-        View rootView = inflater.inflate( R.layout.fragment_profile, container, false );
+        View rootView = inflater.inflate( R.layout.fragment_share_with_friends, container, false );
         initInsance(rootView, savedInstanceState);
         workbench(rootView, savedInstanceState);
 
@@ -56,7 +57,7 @@ public class ProfileFragment extends Fragment {
 
     private void workbench(View rootView, Bundle savedInstanceState) {
 
-        rootView.findViewById( R.id.settingProfileBackBtn ).setOnClickListener( new View.OnClickListener() {
+        rootView.findViewById( R.id.settingShareBackBtn ).setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getFragmentManager().popBackStack();
