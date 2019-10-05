@@ -196,11 +196,16 @@ public class BreathFragment extends Fragment {
             }
         });
 
+        Animation a = new ScaleAnimation(1.25f,1.25f, 1.25f,1.25f,
+                breathStatusTextView.getWidth()/2, breathStatusTextView.getHeight()/2);
+        a.setDuration(hold);
         holdInAnimation.setDuration(hold);
         holdInAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
                 breathStatusTextView.setText(STATE[1]);
+                breathStatusTextView.startAnimation(a);
+
             }
 
             @Override
