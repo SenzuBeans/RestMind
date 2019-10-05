@@ -163,7 +163,7 @@ public class MusicPlayerFragment extends Fragment {
             }
         });
     }
-
+    //AAAA
     private void updateDataList(ArrayList<MusicItem> dataList) {
         for (MusicItem item : dataList) {
             soundMediaSource = new ProgressiveMediaSource.Factory(soundDataSourceFactory)
