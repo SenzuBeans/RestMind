@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,6 +35,7 @@ import java.util.ArrayList;
 public class MusicPlayerFragment extends Fragment {
 
     private CircularImageView soundPlayerCover;
+    private Animation anim;
     private SimpleExoPlayer soundPlayer;
     private MediaSource soundMediaSource;
     private ConcatenatingMediaSource soundConcatenatingMediaSource;
@@ -96,7 +100,7 @@ public class MusicPlayerFragment extends Fragment {
             updateDataList(dataList);
         }
 
-        if (soundPlayer != null){
+        if (soundPlayer != null) {
             soundPlayer.seekTo(CURRENT_SOUND, 0);
             soundPlayer.setPlayWhenReady(true);
         }
@@ -107,16 +111,52 @@ public class MusicPlayerFragment extends Fragment {
                 soundController.show();
             }
         });
+        soundPlayer.addListener(new Player.EventListener() {
+            @Override
+            public void onIsPlayingChanged(boolean isPlaying) {
+                if (!isPlaying){
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            soundPlayerCover.getAnimation().cancel();
+                        }
+                    });
+                }
+            }
+        });
 
         soundPlayer.addListener(new Player.EventListener() {
             @Override
             public void onIsPlayingChanged(boolean isPlaying) {
-                if (isPlaying){
+                if (isPlaying) {
                     Glide.with(cons)
                             .load(dataList.get(soundPlayer.getCurrentWindowIndex()).image_link)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(soundPlayerCover);
+
+                    anim = new RotateAnimation(0, 360, 250, 250);
+                    anim.setInterpolator(new LinearInterpolator());
+                    anim.setDuration(15000);
+                    anim.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            if (soundPlayer.isPlaying()) {
+                                soundPlayerCover.startAnimation(anim);
+                            }
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                    soundPlayerCover.startAnimation(anim);
                 }
+
             }
         });
     }
@@ -137,7 +177,7 @@ public class MusicPlayerFragment extends Fragment {
             soundPlayer.release();
             soundPlayer = null;
         }
-        getFragmentManager().popBackStack();
+//        getFragmentManager().popBackStack();
         listener.onDestory();
         super.onStop();
     }
@@ -149,12 +189,12 @@ public class MusicPlayerFragment extends Fragment {
             soundPlayer.release();
             soundPlayer = null;
         }
-        getFragmentManager().popBackStack();
+//        getFragmentManager().popBackStack();
         listener.onDestory();
         super.onDestroy();
     }
 
-    public interface MusicListener{
+    public interface MusicListener {
         void onDestory();
     }
 }

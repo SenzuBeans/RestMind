@@ -52,7 +52,7 @@ import java.util.ArrayList;
 
 import me.rishabhkhanna.customtogglebutton.CustomToggleButton;
 
-public class MemberActivity extends AppCompatActivity implements RegisterFragment.RegisterBtnClickListener {
+public class MemberActivity extends AppCompatActivity {
 
     public static final int REQUIRE_CODE = 1152;
     private static final int RC_SIGN_IN = 9001;
@@ -88,7 +88,6 @@ public class MemberActivity extends AppCompatActivity implements RegisterFragmen
         loginBtn = findViewById(R.id.loginBtn);
         phoneNumberEditText = findViewById(R.id.phoneNumberEditText);
         countyDataSpinner = findViewById(R.id.countyDataSpinner);
-        contentContainerMemberFragment = findViewById(R.id.contentContainerMemberFragment);
         mAuth = FirebaseAuth.getInstance();
         phoneCountyNameList = new ArrayList<>();
         phoneCountyCodeList = new ArrayList<>();
@@ -202,6 +201,7 @@ public class MemberActivity extends AppCompatActivity implements RegisterFragmen
         if (requestCode == REQUIRE_CODE) {
             if (resultCode == RESULT_OK) {
                 currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                Toast.makeText(MemberActivity.this, "user : " + currentUser.getDisplayName(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MemberActivity.this, NavigationHomePageActivity.class);
                 startActivity(intent);
                 finish();
@@ -216,13 +216,5 @@ public class MemberActivity extends AppCompatActivity implements RegisterFragmen
             } catch (ApiException e) {
             }
         }
-    }
-
-    @Override
-    public void onRegisterClicked(Intent inputData) {
-        Intent intent = new Intent(MemberActivity.this, NavigationHomePageActivity.class);
-        intent.putExtra("userPhoneNumber", inputData.getExtras().getString("userPhoneNumber"));
-        startActivity(intent);
-        finish();
     }
 }
