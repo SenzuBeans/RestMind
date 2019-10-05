@@ -19,6 +19,7 @@ import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.util.MusicItem;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -61,14 +62,14 @@ public class MusicPlayerFragment extends Fragment {
         cons = context;
 
         MusicPlayerFragment fragment = new MusicPlayerFragment();
-        fragment.setArguments(args);
+        fragment.setArguments( args );
         return fragment;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        init(savedInstanceState);
+        super.onCreate( savedInstanceState );
+        init( savedInstanceState );
     }
 
     private void init(Bundle savedInstanceState) {
@@ -78,69 +79,82 @@ public class MusicPlayerFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_media_player, container, false);
-        initInstance(rootView, savedInstanceState);
-        workplace(rootView, savedInstanceState);
+        View rootView = inflater.inflate( R.layout.fragment_media_player, container, false );
+        initInstance( rootView, savedInstanceState );
+        workplace( rootView, savedInstanceState );
         return rootView;
     }
 
     private void initInstance(View rootView, Bundle savedInstanceState) {
-        soundController = rootView.findViewById(R.id.soundPlayerControlView);
-        soundPlayerCover = rootView.findViewById(R.id.soundPlayerCover);
+        soundController = rootView.findViewById( R.id.soundPlayerControlView );
+        soundPlayerCover = rootView.findViewById( R.id.soundPlayerCover );
     }
 
     private void workplace(View rootView, Bundle savedInstanceState) {
         if (soundPlayer == null) {
-            soundPlayer = ExoPlayerFactory.newSimpleInstance(cons, new DefaultTrackSelector());
-            soundController.setPlayer(soundPlayer);
+            soundPlayer = ExoPlayerFactory.newSimpleInstance( cons, new DefaultTrackSelector() );
+            soundController.setPlayer( soundPlayer );
 
-            soundDataSourceFactory = new DefaultDataSourceFactory(cons, Util.getUserAgent(cons, "Sound Player"));
+            soundDataSourceFactory = new DefaultDataSourceFactory( cons, Util.getUserAgent( cons, "Sound Player" ) );
             if (soundConcatenatingMediaSource == null)
                 soundConcatenatingMediaSource = new ConcatenatingMediaSource();
 
-            updateDataList(dataList);
+            updateDataList( dataList );
         }
 
         if (soundPlayer != null) {
-            soundPlayer.seekTo(CURRENT_SOUND, 0);
-            soundPlayer.setPlayWhenReady(true);
+            soundPlayer.seekTo( CURRENT_SOUND, 0 );
+            soundPlayer.setPlayWhenReady( true );
+            soundPlayer.addListener( new Player.EventListener() {
+                @Override
+                public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                    if (playbackState == ExoPlayer.STATE_ENDED) {
+                        getActivity().runOnUiThread( new Runnable() {
+                            @Override
+                            public void run() {
+                                soundPlayerCover.getAnimation().cancel();
+                            }
+                        } );
+                    }
+                }
+            } );
         }
-        soundPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
-        soundController.setVisibilityListener(new PlayerControlView.VisibilityListener() {
+        soundPlayer.setRepeatMode( Player.REPEAT_MODE_ALL );
+        soundController.setVisibilityListener( new PlayerControlView.VisibilityListener() {
             @Override
             public void onVisibilityChange(int visibility) {
                 soundController.show();
             }
-        });
-        soundPlayer.addListener(new Player.EventListener() {
+        } );
+        soundPlayer.addListener( new Player.EventListener() {
             @Override
             public void onIsPlayingChanged(boolean isPlaying) {
-                if (!isPlaying){
-                    getActivity().runOnUiThread(new Runnable() {
+                if (!isPlaying) {
+                    getActivity().runOnUiThread( new Runnable() {
                         @Override
                         public void run() {
                             soundPlayerCover.getAnimation().cancel();
                         }
-                    });
+                    } );
                 }
             }
-        });
+        } );
 
-        soundPlayer.addListener(new Player.EventListener() {
+        soundPlayer.addListener( new Player.EventListener() {
             @Override
             public void onIsPlayingChanged(boolean isPlaying) {
                 if (isPlaying) {
-                    Glide.with(cons)
-                            .load(dataList.get(soundPlayer.getCurrentWindowIndex()).image_link)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(soundPlayerCover);
+                    Glide.with( cons )
+                            .load( dataList.get( soundPlayer.getCurrentWindowIndex() ).image_link )
+                            .diskCacheStrategy( DiskCacheStrategy.ALL )
+                            .into( soundPlayerCover );
 
-                    Log.d("dodo", "onIsPlayingChanged: "+ soundPlayerCover.getPivotX()+ " :" +soundPlayerCover.getPivotY());
+                    Log.d( "dodo", "onIsPlayingChanged: " + soundPlayerCover.getPivotX() + " :" + soundPlayerCover.getPivotY() );
 
-                    anim = new RotateAnimation(0, 360, soundPlayerCover.getPivotX(), soundPlayerCover.getPivotY());
-                    anim.setInterpolator(new LinearInterpolator());
-                    anim.setDuration(15000);
-                    anim.setAnimationListener(new Animation.AnimationListener() {
+                    anim = new RotateAnimation( 0, 360, soundPlayerCover.getPivotX(), soundPlayerCover.getPivotY() );
+                    anim.setInterpolator( new LinearInterpolator() );
+                    anim.setDuration( 15000 );
+                    anim.setAnimationListener( new Animation.AnimationListener() {
                         @Override
                         public void onAnimationStart(Animation animation) {
                         }
@@ -148,7 +162,7 @@ public class MusicPlayerFragment extends Fragment {
                         @Override
                         public void onAnimationEnd(Animation animation) {
                             if (soundPlayer.isPlaying()) {
-                                soundPlayerCover.startAnimation(anim);
+                                soundPlayerCover.startAnimation( anim );
                             }
                         }
 
@@ -156,30 +170,27 @@ public class MusicPlayerFragment extends Fragment {
                         public void onAnimationRepeat(Animation animation) {
 
                         }
-                    });
-                    soundPlayerCover.startAnimation(anim);
+                    } );
+                    soundPlayerCover.startAnimation( anim );
                 }
 
             }
-        });
+        } );
     }
 
-    //AAAAAAAAAAAAAAAAAAAAAAAA
-    //SSSSSSSSSSSSSSSSSSSSSSS
-//SSDFDKJKH
     private void updateDataList(ArrayList<MusicItem> dataList) {
         for (MusicItem item : dataList) {
-            soundMediaSource = new ProgressiveMediaSource.Factory(soundDataSourceFactory)
-                    .createMediaSource(Uri.parse(item.link));
-            soundConcatenatingMediaSource.addMediaSource(soundMediaSource);
+            soundMediaSource = new ProgressiveMediaSource.Factory( soundDataSourceFactory )
+                    .createMediaSource( Uri.parse( item.link ) );
+            soundConcatenatingMediaSource.addMediaSource( soundMediaSource );
         }
-        soundPlayer.prepare(soundConcatenatingMediaSource);
+        soundPlayer.prepare( soundConcatenatingMediaSource );
     }
 
     @Override
     public void onStop() {
         if (soundPlayer != null) {
-            soundController.setPlayer(null);
+            soundController.setPlayer( null );
             soundPlayer.release();
             soundPlayer = null;
         }
@@ -191,7 +202,7 @@ public class MusicPlayerFragment extends Fragment {
     @Override
     public void onDestroy() {
         if (soundPlayer != null) {
-            soundController.setPlayer(null);
+            soundController.setPlayer( null );
             soundPlayer.release();
             soundPlayer = null;
         }
