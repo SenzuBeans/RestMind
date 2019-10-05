@@ -58,12 +58,12 @@ public class BackgroundFragment extends Fragment {
     }
 
     private void workbench(View root, Bundle savedInstanceState) {
+        hideNavigationBar();
+
         user = FirebaseAuth.getInstance().getCurrentUser();
         database = FirebaseDatabase.getInstance();
         videoRef = database.getReference().child("video");
 
-//        backgroundRecyclerView = root.findViewById(R.id.backgroundViewPager);
-//        backgroundIndicator = root.findViewById(R.id.backgroundIndicator);
         backgroundVideo = root.findViewById(R.id.backgroundVideoView);
         backgroundId = root.findViewById(R.id.backgroundID);
 
@@ -93,13 +93,21 @@ public class BackgroundFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        hideNavigationBar();
+    }
+
+    private void hideNavigationBar() {
+        this.getActivity().getWindow().getDecorView()
+                .setSystemUiVisibility( View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN |
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+    }
+
     private void doStuff() {
-//        adapter = new BackgroundAdapter(listLink, listId);
         setUri(listLink.get(currentVideo));
-//        backgroundRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-//        backgroundRecyclerView.setAdapter(adapter);
-//
-//        backgroundIndicator.attachTo(backgroundRecyclerView);
         backgroundVideo.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {

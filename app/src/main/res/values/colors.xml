@@ -14,4 +14,8 @@
     <color name="colorCustom02">#26F314</color>
     <color name="colorCustom04">#06B8FF</color>
 
+    <color name="transparent01">#80000000</color>
+
+    <color name="headbar">#a3a7ad</color>
+
 </resources>

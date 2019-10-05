@@ -4,35 +4,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#141414">
 
-    <androidx.appcompat.widget.Toolbar
+    <FrameLayout
+        android:id="@+id/narrationContentContainer"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Narration"
-                android:textSize="30dp"
-                android:fontFamily="?attr/actionBarTheme"
-                android:textColor="@android:color/white"
-                android:gravity="center|left"
-                android:layout_weight="0.9"/>
-
-        </LinearLayout>
-    </androidx.appcompat.widget.Toolbar>
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/narrationRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
         android:padding="5dp"/>
 
 

@@ -1,30 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#A101A6">
+
+    <FrameLayout
+        android:id="@+id/settingContainerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
 
     <LinearLayout
+        android:id="@+id/settingMainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center">
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:visibility="visible">
 
-
-        <TextView
-            android:id="@+id/userNameTv"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:gravity="center"
-            android:textSize="30dp"
-            android:text="User Test"
-            android:layout_marginBottom="50dp"/>
+            android:layout_marginTop="20dp"
+            android:layout_margin="3dp">
 
-        <Button
-            android:id="@+id/logoutBtn"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/hi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Hi!..  "
+                android:textColor="#FFF"
+                android:textSize="30dp" />
+
+            <TextView
+                android:id="@+id/userNameTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="User Test"
+                android:textColor="#FFF"
+                android:textSize="30dp" />
+
+
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imageProfileView"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/user_profile_image"
+            android:layout_gravity="center"
+            tools:srcCompat="@tools:sample/avatars[6]" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="logout"
-            android:layout_gravity="center"/>
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/profileBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/btn_rounded3"
+                android:text="Profile"
+                android:textColor="#fff" />
+
+            <Button
+                android:id="@+id/changePasswordBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/btn_rounded3"
+                android:text="Change Password"
+                android:textColor="#fff" />
+
+            <Button
+                android:id="@+id/notificationsBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/btn_rounded3"
+                android:text="Notifications"
+                android:textColor="#fff" />
+
+            <Button
+                android:id="@+id/contactBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/btn_rounded3"
+                android:text="Contact Support"
+                android:textColor="#fff" />
+
+            <Button
+                android:id="@+id/shareBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/btn_rounded3"
+                android:text="Share with friends"
+                android:textColor="#fff" />
+
+            <Button
+                android:id="@+id/logoutBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/btn_rounded3"
+                android:text="logout"
+                android:textColor="#fff" />
+        </LinearLayout>
+
+
     </LinearLayout>
 </RelativeLayout>

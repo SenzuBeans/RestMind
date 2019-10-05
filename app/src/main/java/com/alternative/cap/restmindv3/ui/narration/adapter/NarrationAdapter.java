@@ -1,6 +1,7 @@
 package com.alternative.cap.restmindv3.ui.narration.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,19 +12,22 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alternative.cap.restmindv3.R;
+import com.alternative.cap.restmindv3.util.MusicItem;
 
 import java.util.ArrayList;
 
 public class NarrationAdapter extends RecyclerView.Adapter<NarrationAdapter.NarrationViewHolder> {
 
+    private NarrationSubAdapter.NarrationSubListener listener;
     private Context cons;
-    private String[] headerName;
-    private String[][] mediaName;
+    private ArrayList<String> headerName;
+    private ArrayList<ArrayList<MusicItem>> mediaList;
 
-    public NarrationAdapter(Context context, String[] passingHeader, String[][] passingMediaName) {
+    public NarrationAdapter(Context context, ArrayList<String> passingHeader, ArrayList<ArrayList<MusicItem>> passingMediaName , NarrationSubAdapter.NarrationSubListener passingListener) {
+        listener = passingListener;
         this.cons = context;
         this.headerName = passingHeader;
-        this.mediaName = passingMediaName;
+        this.mediaList = passingMediaName;
     }
 
 
@@ -37,13 +41,13 @@ public class NarrationAdapter extends RecyclerView.Adapter<NarrationAdapter.Narr
 
     @Override
     public void onBindViewHolder(@NonNull NarrationViewHolder holder, int position) {
-        holder.header.setText(headerName[position]);
-        holder.setSubAdapter(mediaName[position]);
+        holder.header.setText(headerName.get(position));
+        holder.setSubAdapter(mediaList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return headerName.length;
+        return headerName.size();
     }
 
     public class NarrationViewHolder extends RecyclerView.ViewHolder {
@@ -59,8 +63,8 @@ public class NarrationAdapter extends RecyclerView.Adapter<NarrationAdapter.Narr
             subRecyclerView = itemView.findViewById(R.id.narrationSubRecyclerView);
         }
 
-        public void setSubAdapter(String[] data){
-            NarrationSubAdapter subAdapter = new NarrationSubAdapter(data);
+        public void setSubAdapter(ArrayList<MusicItem>  data){
+            NarrationSubAdapter subAdapter = new NarrationSubAdapter(cons,data, listener);
             subRecyclerView.setLayoutManager(
                     new LinearLayoutManager(cons, LinearLayoutManager.HORIZONTAL, false));
             subRecyclerView.setAdapter(subAdapter);

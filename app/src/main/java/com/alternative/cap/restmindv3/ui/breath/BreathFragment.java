@@ -3,12 +3,14 @@ package com.alternative.cap.restmindv3.ui.breath;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -24,12 +26,14 @@ import cn.iwgang.countdownview.CountdownView;
 
 public class BreathFragment extends Fragment {
 
-    private CircularImageView circularImageView;
     private Button playerBtn;
     private TextView breathStatusTextView;
+
+    private CircularImageView circularImageView;
     private MediaPlayer breathSongPlayer;
     private CountdownView timerView;
     private boolean isSongPlaying = false;
+    private boolean isSetting = false;
 
     private String[] STATE = {"inhale", "hold", "exhale"};
     private MutableValue passingBreathData;
@@ -48,15 +52,20 @@ public class BreathFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_breath, container, false);
+        init(rootView,savedInstanceState);
         workbench(rootView, savedInstanceState);
         return rootView;
     }
 
-    private void workbench(View rootView, Bundle savedInstanceState) {
+    private void init(View rootView, Bundle savedInstanceState) {
         circularImageView = rootView.findViewById(R.id.circularImageView);
         playerBtn = rootView.findViewById(R.id.playerBtn);
         breathStatusTextView = rootView.findViewById(R.id.breathStatusTextView);
         timerView =  rootView.findViewById(R.id.breathTimer);
+    }
+
+    private void workbench(View rootView, Bundle savedInstanceState) {
+        hideNavigationBar();
 
         playerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,19 +95,40 @@ public class BreathFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 stopRunningBreath();
-                rootView.findViewById(R.id.contentContainerBreathFragment).setVisibility(View.VISIBLE);
-                getFragmentManager().beginTransaction()
-                        .addToBackStack(null)
-                        .add(R.id.contentContainerBreathFragment, BreathSettingFragment.newInstance(new BreathSettingFragment.BreathSettingListener() {
-                            @Override
-                            public void onSetSetting() {
-                                recallBreathData();
-                            }
-                        }))
-                        .commit();
+                if (!isSetting) {
+                    isSetting = true;
+                    rootView.findViewById(R.id.contentContainerBreathFragment).setVisibility(View.VISIBLE);
+                    getFragmentManager().beginTransaction()
+                            .addToBackStack(null)
+                            .add(R.id.contentContainerBreathFragment, BreathSettingFragment.newInstance(new BreathSettingFragment.BreathSettingListener() {
+                                @Override
+                                public void onSetSetting() {
+                                    recallBreathData();
+                                    isSetting = false;
+                                }
+
+                                @Override
+                                public void onPopStack() {
+                                    isSetting = false;
+                                }
+                            }))
+                            .commit();
+                }
             }
         });
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        hideNavigationBar();
+    }
+
+    private void hideNavigationBar() {
+        this.getActivity().getWindow().getDecorView()
+                .setSystemUiVisibility( View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN |
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
     }
 
     private void startRunningBreath() {
