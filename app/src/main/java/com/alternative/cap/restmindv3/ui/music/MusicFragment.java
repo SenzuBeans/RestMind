@@ -150,7 +150,13 @@ public class MusicFragment extends Fragment implements MusicAdapter.MediaListAda
         mediaListRecyclerView.setVisibility(View.GONE);
         soundPlayerContentContainer.setVisibility(View.VISIBLE);
         getChildFragmentManager().beginTransaction()
-                .add(R.id.soundPlayerContentContainer, MusicPlayerFragment.newInstance(passingDataList,current,getContext()))
+                .add(R.id.soundPlayerContentContainer, MusicPlayerFragment.newInstance(passingDataList, current, getContext(), new MusicPlayerFragment.MusicListener() {
+                    @Override
+                    public void onDestory() {
+                        mediaListRecyclerView.setVisibility(View.VISIBLE);
+                        soundPlayerContentContainer.setVisibility(View.GONE);
+                    }
+                }))
                 .addToBackStack(null)
                 .commit();
     }

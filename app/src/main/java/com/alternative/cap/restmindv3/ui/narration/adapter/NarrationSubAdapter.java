@@ -25,10 +25,12 @@ import java.util.ArrayList;
 
 public class NarrationSubAdapter extends RecyclerView.Adapter<NarrationSubAdapter.NarrationSubViewHolder> {
 
+    private static NarrationSubListener listener;
     private Context cons;
     private ArrayList<MusicItem>  dataList;
 
-    public NarrationSubAdapter(Context context, ArrayList<MusicItem> data) {
+    public NarrationSubAdapter(Context context, ArrayList<MusicItem> data, NarrationSubListener passingListener) {
+        listener = passingListener;
         cons = context;
         this.dataList = data;
     }
@@ -46,8 +48,7 @@ public class NarrationSubAdapter extends RecyclerView.Adapter<NarrationSubAdapte
         holder.root.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MediaPlayer player = MediaPlayer.create( cons, Uri.parse(dataList.get( position ).link ));
-                player.start();
+                listener.onItemClicked(dataList, position);
             }
         } );
     }
@@ -83,5 +84,9 @@ public class NarrationSubAdapter extends RecyclerView.Adapter<NarrationSubAdapte
 
             nameNarration.setText(name);
         }
+    }
+
+    public interface NarrationSubListener{
+        void onItemClicked(ArrayList<MusicItem> passingDataList, int current);
     }
 }

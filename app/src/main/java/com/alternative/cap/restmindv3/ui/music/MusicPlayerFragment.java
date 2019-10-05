@@ -38,6 +38,7 @@ public class MusicPlayerFragment extends Fragment {
     private DefaultDataSourceFactory soundDataSourceFactory;
     private PlayerControlView soundController;
 
+    private static MusicListener listener;
     private static ArrayList<MusicItem> dataList;
     private static int CURRENT_SOUND = 0;
     private static Context cons;
@@ -45,10 +46,11 @@ public class MusicPlayerFragment extends Fragment {
     public MusicPlayerFragment() {
     }
 
-    public static MusicPlayerFragment newInstance(ArrayList<MusicItem> passingDataList, int passingCurrent, Context context) {
+    public static MusicPlayerFragment newInstance(ArrayList<MusicItem> passingDataList, int passingCurrent, Context context, MusicListener passingListener) {
 
         Bundle args = new Bundle();
 
+        listener = passingListener;
         dataList = passingDataList;
         CURRENT_SOUND = passingCurrent;
         cons = context;
@@ -99,6 +101,12 @@ public class MusicPlayerFragment extends Fragment {
             soundPlayer.setPlayWhenReady(true);
         }
         soundPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
+        soundController.setVisibilityListener(new PlayerControlView.VisibilityListener() {
+            @Override
+            public void onVisibilityChange(int visibility) {
+                soundController.show();
+            }
+        });
 
         soundPlayer.addListener(new Player.EventListener() {
             @Override
@@ -124,14 +132,29 @@ public class MusicPlayerFragment extends Fragment {
 
     @Override
     public void onStop() {
-
+        if (soundPlayer != null) {
+            soundController.setPlayer(null);
+            soundPlayer.release();
+            soundPlayer = null;
+        }
+        getFragmentManager().popBackStack();
+        listener.onDestory();
         super.onStop();
     }
 
     @Override
     public void onDestroy() {
-
+        if (soundPlayer != null) {
+            soundController.setPlayer(null);
+            soundPlayer.release();
+            soundPlayer = null;
+        }
+        getFragmentManager().popBackStack();
+        listener.onDestory();
         super.onDestroy();
     }
 
+    public interface MusicListener{
+        void onDestory();
+    }
 }
