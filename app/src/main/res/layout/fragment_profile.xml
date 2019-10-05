@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     tools:context=".ui.setting.sub_setting.ProfileFragment">
 
 
@@ -43,13 +42,6 @@
             android:orientation="horizontal"
             android:padding="5dp"
             android:layout_margin="20dp">
-
-            <com.mikhaellopez.circularimageview.CircularImageView
-                android:id="@+id/profilePicture"
-                android:layout_width="60dp"
-                android:layout_height="60dp"/>
-
-
 
             <LinearLayout
                 android:layout_width="match_parent"
