@@ -45,7 +45,6 @@
             android:layout_margin="20dp">
 
             <com.mikhaellopez.circularimageview.CircularImageView
-                android:id="@+id/profilePicture"
                 android:layout_width="60dp"
                 android:layout_height="60dp"/>
 

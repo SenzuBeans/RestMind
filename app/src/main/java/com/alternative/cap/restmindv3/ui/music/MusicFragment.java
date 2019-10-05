@@ -92,6 +92,13 @@ public class MusicFragment extends Fragment implements MusicAdapter.MediaListAda
 
     private void workbench(View rootView, Bundle savedInstanceState) {
         getMusic();
+
+        rootView.findViewById( R.id.soundBackBtn ).setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getFragmentManager().popBackStack();
+            }
+        } );
     }
 
     @Override
