@@ -177,7 +177,7 @@ public class MusicPlayerFragment extends Fragment {
             soundPlayer.release();
             soundPlayer = null;
         }
-        getFragmentManager().popBackStack();
+//        getFragmentManager().popBackStack();
         listener.onDestory();
         super.onStop();
     }
@@ -189,7 +189,7 @@ public class MusicPlayerFragment extends Fragment {
             soundPlayer.release();
             soundPlayer = null;
         }
-        getFragmentManager().popBackStack();
+//        getFragmentManager().popBackStack();
         listener.onDestory();
         super.onDestroy();
     }
