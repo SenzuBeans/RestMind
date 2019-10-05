@@ -134,7 +134,7 @@ public class MusicPlayerFragment extends Fragment {
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(soundPlayerCover);
 
-                    anim = new RotateAnimation(0, 360, 250, 250);
+                    anim = new RotateAnimation(0, 360, soundPlayerCover.getPivotX(), soundPlayerCover.getPivotY());
                     anim.setInterpolator(new LinearInterpolator());
                     anim.setDuration(15000);
                     anim.setAnimationListener(new Animation.AnimationListener() {
