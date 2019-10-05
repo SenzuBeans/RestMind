@@ -1,5 +1,7 @@
 package com.alternative.cap.restmindv3.ui.setting.sub_setting;
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,19 +14,19 @@ import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.util.SettingListener;
 
 
-public class ContactSupport extends Fragment {
+public class ShareWithFriends extends Fragment {
 
     static SettingListener listener;
 
-    public ContactSupport() {
+    public ShareWithFriends() {
         // Required empty public constructor
     }
 
-    public static ContactSupport newInstance(SettingListener passingListener) {
+    public static ShareWithFriends newInstance(SettingListener passingListener) {
 
         Bundle args = new Bundle();
         listener = passingListener;
-        ContactSupport fragment = new ContactSupport();
+        ShareWithFriends fragment = new ShareWithFriends();
         fragment.setArguments( args );
         return fragment;
     }
@@ -38,16 +40,16 @@ public class ContactSupport extends Fragment {
     private void init(Bundle savedInstanceState) {
     }
 
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View rootView = inflater.inflate( R.layout.fragment_contact_support, container, false );
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+        View rootView = inflater.inflate( R.layout.fragment_share_with_friends, container, false );
         initInsance(rootView, savedInstanceState);
         workbench(rootView, savedInstanceState);
 
         return rootView;
     }
+
 
     private void initInsance(View rootView, Bundle savedInstanceState) {
 
@@ -55,7 +57,7 @@ public class ContactSupport extends Fragment {
 
     private void workbench(View rootView, Bundle savedInstanceState) {
 
-        rootView.findViewById( R.id.settingContentBackBtn ).setOnClickListener( new View.OnClickListener() {
+        rootView.findViewById( R.id.settingShareBackBtn ).setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getFragmentManager().popBackStack();

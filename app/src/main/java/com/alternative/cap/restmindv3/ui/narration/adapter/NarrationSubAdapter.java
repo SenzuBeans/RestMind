@@ -1,6 +1,8 @@
 package com.alternative.cap.restmindv3.ui.narration.adapter;
 
 import android.content.Context;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,9 @@ import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.util.MusicItem;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 
 
 import java.util.ArrayList;
@@ -38,6 +43,13 @@ public class NarrationSubAdapter extends RecyclerView.Adapter<NarrationSubAdapte
     @Override
     public void onBindViewHolder(@NonNull NarrationSubViewHolder holder, int position) {
         holder.setDetail(dataList.get(position).image_link, dataList.get(position).name);
+        holder.root.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MediaPlayer player = MediaPlayer.create( cons, Uri.parse(dataList.get( position ).link ));
+                player.start();
+            }
+        } );
     }
 
     @Override
@@ -61,10 +73,14 @@ public class NarrationSubAdapter extends RecyclerView.Adapter<NarrationSubAdapte
         }
 
         public void setDetail(String imageLink, String name){
+//            RequestOptions requestOptions = new RequestOptions();
+//            requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(16));
             Glide.with(cons)
                     .load(imageLink)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .apply( RequestOptions.bitmapTransform( new RoundedCorners( 16 ) ) )
                     .into(coverImage);
+            coverImage.setBackgroundResource( R.drawable.layout_border_image );
 
             nameNarration.setText(name);
         }
