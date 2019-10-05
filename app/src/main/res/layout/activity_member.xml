@@ -5,13 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/image_bg"
+    android:background="#FF6A00"
     tools:context=".activity.multi.MemberActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         android:layout_margin="10dp"
         android:orientation="vertical">
 
@@ -31,7 +30,9 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="20dp"
-            android:text="Please enter your information"/>
+            android:text="Please enter your phone number"
+            android:textColor="#FFF"
+            android:background="@drawable/btn_rounded5"/>
 
 
         <LinearLayout
@@ -39,7 +40,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:background="@drawable/btn_rounded5">
 
             <Spinner
                 android:id="@+id/countyDataSpinner"
@@ -51,25 +53,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:hint=" 095  012  3456"
+                android:hint=" 095-0123456"
                 android:inputType="number"
                 android:maxLength="10"
-                android:textColor="@android:color/white"
+                android:textColor="@android:color/black"
                 android:textColorHint="@android:color/white" />
         </LinearLayout>
 
 
-        <me.rishabhkhanna.customtogglebutton.CustomToggleButton
+        <Button
             android:id="@+id/loginBtn"
-            android:layout_width="232dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textOff="Continue"
-            android:textOn="Pending"
-            app:uncheckedColor="#FD6B84"
+            android:text="Login"
+            android:textColor="@android:color/white"
+            android:background="@drawable/btn_rounded5"
             android:layout_marginTop="10dp">
 
-        </me.rishabhkhanna.customtogglebutton.CustomToggleButton>
+        </Button>
 
 <!--        <com.facebook.login.widget.LoginButton-->
 <!--            android:id="@+id/fbLoginBtn"-->
@@ -81,15 +83,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:gravity="center"
-            android:layout_marginTop="20dp"
-            android:paddingLeft="50dp"
-            android:paddingRight="50dp">
-
-
+            android:layout_marginTop="5dp">
             <com.google.android.gms.common.SignInButton
                 android:id="@+id/loginGoogleBtn"
+                android:visibility="gone"
                 android:layout_weight="0.5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -101,20 +100,33 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"/>
 
-            <me.rishabhkhanna.customtogglebutton.CustomToggleButton
+
+            <Button
+                android:id="@+id/loginGoogleCloneBtn"
+                android:layout_weight="0.5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Sign up with Google"
+                android:textColor="@android:color/white"
+                android:background="@drawable/btn_rounded9"
+                android:padding="10dp"
+                android:layout_marginTop="3dp">
+
+            </Button>
+            <Button
                 android:id="@+id/loginGuestBtn"
                 android:layout_weight="0.5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textOff="Guest"
-                android:textOn="Pending"
-                app:uncheckedColor="#3E8EF1"
-                android:layout_marginLeft="10dp"
+                android:text="Guest"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp">
+                android:textColor="@android:color/white"
+                android:background="@drawable/btn_rounded5">
 
-            </me.rishabhkhanna.customtogglebutton.CustomToggleButton>
+            </Button>
+
         </LinearLayout>
 
     </LinearLayout>
