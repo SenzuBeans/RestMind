@@ -80,7 +80,6 @@ public class NarrationSubAdapter extends RecyclerView.Adapter<NarrationSubAdapte
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .apply( RequestOptions.bitmapTransform( new RoundedCorners( 16 ) ) )
                     .into(coverImage);
-            coverImage.setBackgroundResource( R.drawable.layout_border_image );
 
             nameNarration.setText(name);
         }

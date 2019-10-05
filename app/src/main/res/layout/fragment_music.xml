@@ -7,6 +7,12 @@
     tools:context=".ui.music.MusicFragment"
     android:background="@drawable/music_screen_mobile">
 
+    <FrameLayout
+        android:id="@+id/soundPlayerContentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,12 +23,7 @@
              android:layout_height="?attr/actionBarSize"
              android:background="@color/colorTransparent">
 
-             <ImageButton
-                 android:id="@+id/mediaListBackBtn"
-                 android:layout_width="wrap_content"
-                 android:layout_height="match_parent"
-                 android:background="@color/colorTransparent"
-                 app:srcCompat="@drawable/ic_arrow_back_24dp" />
+
          </androidx.appcompat.widget.Toolbar>
 
 
@@ -32,98 +33,11 @@
             android:background="@color/colorTransparent">
 
             <androidx.recyclerview.widget.RecyclerView
+                android:padding="3dp"
                 android:id="@+id/mediaListRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <RelativeLayout
-                android:id="@+id/musicLayout"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_alignParentBottom="true"
-                android:visibility="gone"
-                >
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:layout_alignParentBottom="true"
-                    android:background="#ADBDBABA"
-                    android:gravity="right"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginRight="30dp"
-                        android:gravity="bottom|right"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/nameMediaTv"
-                            android:layout_width="150dp"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="2dp"
-                            android:gravity="right"
-                            android:maxLines="2"
-                            android:ellipsize="end"
-                            android:text="song name"
-                            android:textSize="18dp" />
-
-                        <TextView
-                            android:id="@+id/artistMediaTv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="2dp"
-                            android:text="artist name"
-                            android:textSize="15dp" />
-                    </LinearLayout>
-
-                    <RelativeLayout
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <ImageButton
-                            android:id="@+id/playMediaBtn"
-                            android:layout_width="70dp"
-                            android:layout_height="70dp"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/image_play" />
-
-                        <ImageButton
-                            android:id="@+id/pauseMediaBtn"
-                            android:layout_width="70dp"
-                            android:layout_height="70dp"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/image_pause"
-                            android:visibility="gone" />
-                    </RelativeLayout>
-
-                </LinearLayout>
-
-<!--                <RelativeLayout-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:gravity="center">-->
-
-<!--                    <com.mikhaellopez.circularimageview.CircularImageView-->
-<!--                        android:layout_width="100dp"-->
-<!--                        android:layout_height="100dp"-->
-<!--                        android:layout_centerHorizontal="true"-->
-<!--                        android:layout_centerVertical="true"-->
-<!--                        android:src="@drawable/dark_bg" />-->
-
-<!--                    <com.mikhaellopez.circularimageview.CircularImageView-->
-<!--                        android:id="@+id/coverMediaCircularImageView"-->
-<!--                        android:layout_width="80dp"-->
-<!--                        android:layout_height="80dp"-->
-<!--                        android:layout_centerHorizontal="true"-->
-<!--                        android:layout_centerVertical="true"-->
-<!--                        android:src="@drawable/cover_07" />-->
-
-<!--                </RelativeLayout>-->
-            </RelativeLayout>
 
         </RelativeLayout>
     </LinearLayout>

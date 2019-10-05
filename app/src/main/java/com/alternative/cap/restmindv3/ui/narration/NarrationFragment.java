@@ -86,26 +86,12 @@ public class NarrationFragment extends Fragment {
                     NarrationItem item = ds.getValue(NarrationItem.class);
 
                     mediaId = new ArrayList(Arrays.asList(item.rawId.split(",")));
-
                     tempMediaList = new ArrayList<>();
 
                     for (String s : mediaId){
                         tempMediaList.add(dataSnapshot.child("sound").child(s).getValue(MusicItem.class));
                     }
-
-//                    for (DataSnapshot data : dataSnapshot.child("sound").getChildren()) {
-//                        for (String s : mediaId) {
-//                            if (s.equals(data.getKey())) {
-//                                tempMediaList.add(data.getValue(MusicItem.class));
-//                                Log.d("dodo", "add: " + tempMediaList.get(tempMediaList.size()-1).name);
-//
-//                                break;
-//                            }
-////                            Log.d("dodo", "onDataChange: " + s + " : ds" + data.getKey());
-//                        }
-//                    }
                     mediaList.add(tempMediaList);
-                    Log.d("dodo", "add end: " + mediaList.get(mediaList.size()-1).get(tempMediaList.size()-1).name);
                 }
                 updateAdapter(root);
             }
@@ -119,7 +105,6 @@ public class NarrationFragment extends Fragment {
     }
 
     private void updateAdapter(View root) {
-
         narrationRecyclerView = root.findViewById(R.id.narrationRecyclerView);
         narrationRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new NarrationAdapter(getContext(), header, mediaList);

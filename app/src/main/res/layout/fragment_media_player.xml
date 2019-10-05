@@ -5,85 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.music.MusicPlayerFragment"
-    android:background="#fff"
-    android:elevation="24dp"
-    app:layout_insetEdge="none"
-    android:paddingBottom="10dp"
-    app:behavior_peekHeight="66dp"
-    app:behavior_hideable="true"
-    app:layout_behavior="@string/bottom_sheet_behavior">
+    android:background="@android:color/white">
 
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:background="@drawable/ic_action_pause"
-        android:elevation="100dp" />
-
-    <ImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:elevation="100dp"
-        android:src="@drawable/ic_action_prev" />
-
-    <ImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginBottom="32dp"
-        android:elevation="100dp"
-        android:src="@drawable/ic_action_next" />
-
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="20dp"
-        android:layout_marginRight="8dp"
-        android:ellipsize="end"
-        android:lines="1"
-        android:textColor="@color/colorPrimaryText"
-        tools:hint="DB" />
-
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:ellipsize="end"
-        android:lines="1"
-        android:textColor="@color/colorPrimaryText"
-        android:textSize="18sp"
-        tools:hint="Peaceful" />
 
     <com.mikhaellopez.circularimageview.CircularImageView
+        android:id="@+id/soundPlayerCover"
         android:layout_width="250dp"
         android:layout_height="250dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="82dp"
+        android:layout_marginTop="72dp"
+        android:layout_marginEnd="79dp"
         android:layout_marginBottom="8dp"
         android:elevation="100dp"
         android:src="@drawable/cover_07" />
 
-
-    <SeekBar
+    <com.google.android.exoplayer2.ui.PlayerControlView
+        android:id="@+id/soundPlayerControlView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:elevation="100dp"
-        android:max="100"
-        android:outlineProvider="none"
-        android:scrollIndicators="bottom"
-        android:scrollbarStyle="insideOverlay" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:elevation="100dp"
-        android:scaleType="fitCenter" />
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="70dp"/>
 
 </RelativeLayout>
