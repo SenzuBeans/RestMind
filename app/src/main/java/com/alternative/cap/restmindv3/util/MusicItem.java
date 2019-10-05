@@ -12,27 +12,37 @@ public class MusicItem {
     public String name;
     public String artist;
     public String link;
-    public long use_count;
+    public String image_link;
     public long temp_steam;
 
     public MusicItem() {
     }
 
-    public MusicItem(String name, String artist, String link, long use_count, long temp_steam) {
+    public MusicItem(String name, String artist, String link, String image_link, long temp_steam) {
         this.name = name;
         this.artist = artist;
         this.link = link;
-        this.use_count = use_count;
+        this.image_link = image_link;
         this.temp_steam = temp_steam;
     }
 
+    public void setter(String name, String artist, String link, String image_link, long temp_steam) {
+        this.name = name;
+        this.artist = artist;
+        this.link = link;
+        this.image_link = image_link;
+        this.temp_steam = temp_steam;
+    }
+
+
+
     @Exclude
-    public Map<String, Object> toMap(){
+    public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("name", name);
         result.put("artist", artist);
         result.put("link", link);
-        result.put("use_count", use_count);
+        result.put("use_count", image_link);
         result.put("temp_steam", temp_steam);
         return result;
     }

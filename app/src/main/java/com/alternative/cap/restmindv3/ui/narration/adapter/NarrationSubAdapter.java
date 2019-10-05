@@ -1,5 +1,8 @@
 package com.alternative.cap.restmindv3.ui.narration.adapter;
 
+import android.content.Context;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,16 +13,25 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alternative.cap.restmindv3.R;
+import com.alternative.cap.restmindv3.util.MusicItem;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 
 
 import java.util.ArrayList;
 
 public class NarrationSubAdapter extends RecyclerView.Adapter<NarrationSubAdapter.NarrationSubViewHolder> {
 
-    private String[] dataList;
-    private int[] coverImageTest = new int[]{R.drawable.cover1,R.drawable.cover2, R.drawable.cover3};
+    private static NarrationSubListener listener;
+    private Context cons;
+    private ArrayList<MusicItem>  dataList;
 
-    public NarrationSubAdapter(String[] data) {
+    public NarrationSubAdapter(Context context, ArrayList<MusicItem> data, NarrationSubListener passingListener) {
+        listener = passingListener;
+        cons = context;
         this.dataList = data;
     }
 
@@ -32,12 +44,18 @@ public class NarrationSubAdapter extends RecyclerView.Adapter<NarrationSubAdapte
 
     @Override
     public void onBindViewHolder(@NonNull NarrationSubViewHolder holder, int position) {
-        holder.setDetail(coverImageTest[position%3], dataList[position]);
+        holder.setDetail(dataList.get(position).image_link, dataList.get(position).name);
+        holder.root.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onItemClicked(dataList, position);
+            }
+        } );
     }
 
     @Override
     public int getItemCount() {
-        return dataList.length;
+        return dataList.size();
     }
 
     public class NarrationSubViewHolder extends RecyclerView.ViewHolder {
@@ -55,9 +73,20 @@ public class NarrationSubAdapter extends RecyclerView.Adapter<NarrationSubAdapte
             artistMedia = itemView.findViewById(R.id.narrationMediaArtist);
         }
 
-        public void setDetail(int imageId, String name){
-            coverImage.setImageResource(imageId);
+        public void setDetail(String imageLink, String name){
+//            RequestOptions requestOptions = new RequestOptions();
+//            requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(16));
+            Glide.with(cons)
+                    .load(imageLink)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .apply( RequestOptions.bitmapTransform( new RoundedCorners( 16 ) ) )
+                    .into(coverImage);
+
             nameNarration.setText(name);
         }
+    }
+
+    public interface NarrationSubListener{
+        void onItemClicked(ArrayList<MusicItem> passingDataList, int current);
     }
 }

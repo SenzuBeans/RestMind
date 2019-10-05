@@ -85,6 +85,7 @@ public class BreathSettingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 getActivity().getSupportFragmentManager().popBackStack();
+                listener.onPopStack();
             }
         });
         breathSettingSetBtn.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +106,7 @@ public class BreathSettingFragment extends Fragment {
 
     public interface BreathSettingListener{
         void onSetSetting();
+        void onPopStack();
     }
 
 

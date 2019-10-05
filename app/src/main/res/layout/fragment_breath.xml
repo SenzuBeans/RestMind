@@ -17,30 +17,23 @@
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary">
+            android:background="@color/colorTransparent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="right">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="Breath"
-                    android:textSize="30dp"
-                    android:fontFamily="?attr/actionBarTheme"
-                    android:textColor="@android:color/white"
-                    android:gravity="center|left"
-                    android:layout_weight="0.9"/>
+
 
                 <ImageButton
                     android:id="@+id/breathSettingBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     app:srcCompat="@drawable/ic_settings_24dp"
-                    android:background="@color/colorTransparent"
-                    android:layout_weight="0.1"/>
+                    android:layout_marginRight="3dp"
+                    android:background="@color/colorTransparent"/>
 
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
@@ -89,18 +82,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:isHideTimeBackground="true"
-                app:isShowHour="true"
+
                 app:isShowMinute="true"
                 app:isShowSecond="true"
                 app:isTimeTextBold="true"
                 app:suffixGravity="center"
-                app:suffixHour="H"
-                app:suffixMinute="M"
-                app:suffixSecond="S"
-                app:suffixTextColor="#000000"
+                app:suffixHour=":"
+                app:suffixMinute=":"
+
+                app:suffixTextColor="#D33F51B5"
                 app:suffixTextSize="12sp"
-                app:timeTextColor="#000000"
-                app:timeTextSize="28dp" />
+                app:timeTextColor="#D33F51B5"
+                app:timeTextSize="28dp"
+                />
         </RelativeLayout>
 
         <RelativeLayout
@@ -114,7 +108,9 @@
                 android:id="@+id/playerBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="play" />
+                android:background="@drawable/btn_rounded2"
+                android:text="play"
+                android:textColor="#fff"/>
         </RelativeLayout>
     </LinearLayout>
 
