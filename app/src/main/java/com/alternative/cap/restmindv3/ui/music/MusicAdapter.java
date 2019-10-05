@@ -1,4 +1,4 @@
-package com.alternative.cap.restmindv3.manager.adapter;
+package com.alternative.cap.restmindv3.ui.music;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alternative.cap.restmindv3.R;
-import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.ArrayList;
 

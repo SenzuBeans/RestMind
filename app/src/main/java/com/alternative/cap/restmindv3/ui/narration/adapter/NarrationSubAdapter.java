@@ -1,6 +1,8 @@
 package com.alternative.cap.restmindv3.ui.narration.adapter;
 
 import android.content.Context;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +40,13 @@ public class NarrationSubAdapter extends RecyclerView.Adapter<NarrationSubAdapte
     @Override
     public void onBindViewHolder(@NonNull NarrationSubViewHolder holder, int position) {
         holder.setDetail(dataList.get(position).image_link, dataList.get(position).name);
+        holder.root.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MediaPlayer player = MediaPlayer.create( cons, Uri.parse(dataList.get( position ).link ));
+                player.start();
+            }
+        } );
     }
 
     @Override

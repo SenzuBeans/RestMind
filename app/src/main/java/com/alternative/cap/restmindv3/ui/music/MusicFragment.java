@@ -2,7 +2,6 @@ package com.alternative.cap.restmindv3.ui.music;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.icu.util.TimeZone;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,10 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alternative.cap.restmindv3.R;
-import com.alternative.cap.restmindv3.manager.adapter.MusicAdapter;
 import com.alternative.cap.restmindv3.util.MusicItem;
-import com.alternative.cap.restmindv3.util.VideoItem;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -35,9 +31,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.ArrayList;
 import java.util.Random;
