@@ -3,6 +3,7 @@ package com.alternative.cap.restmindv3.ui.music;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -134,7 +135,9 @@ public class MusicPlayerFragment extends Fragment {
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(soundPlayerCover);
 
-                    anim = new RotateAnimation(0, 360, 250, 250);
+                    Log.d("dodo", "onIsPlayingChanged: "+ soundPlayerCover.getPivotX()+ " :" +soundPlayerCover.getPivotY());
+
+                    anim = new RotateAnimation(0, 360, soundPlayerCover.getPivotX(), soundPlayerCover.getPivotY());
                     anim.setInterpolator(new LinearInterpolator());
                     anim.setDuration(15000);
                     anim.setAnimationListener(new Animation.AnimationListener() {
