@@ -8,7 +8,8 @@
         android:id="@+id/narrationMediaCoverImage"
         android:layout_width="140dp"
         android:layout_height="140dp"
-        android:layout_marginBottom="2dp" />
+        android:layout_marginBottom="2dp"
+        android:background="@drawable/layout_border_image"/>
 
     <TextView
         android:id="@+id/narrationMediaName"

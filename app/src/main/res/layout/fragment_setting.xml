@@ -15,24 +15,26 @@
     <LinearLayout
         android:id="@+id/settingMainLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
+        android:layout_height="match_parent"
         android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
         android:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_margin="3dp">
 
             <TextView
                 android:id="@+id/hi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Hi!.."
+                android:text="Hi!..  "
                 android:textColor="#FFF"
                 android:textSize="30dp" />
 
@@ -40,21 +42,23 @@
                 android:id="@+id/userNameTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
                 android:gravity="center"
                 android:text="User Test"
                 android:textColor="#FFF"
                 android:textSize="30dp" />
 
-            <ImageView
-                android:id="@+id/imageProfileView"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_marginBottom="20dp"
-                android:src="@drawable/user_profile_image"
-                tools:srcCompat="@tools:sample/avatars[6]" />
+
 
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imageProfileView"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/user_profile_image"
+            android:layout_gravity="center"
+            tools:srcCompat="@tools:sample/avatars[6]" />
 
         <LinearLayout
             android:layout_width="match_parent"
