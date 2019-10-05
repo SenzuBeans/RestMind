@@ -1,4 +1,4 @@
-package com.alternative.cap.restmindv3.support;
+package com.alternative.cap.restmindv3.ui.setting.sub_setting.support;
 
 import android.content.Intent;
 import android.view.View;
