@@ -66,7 +66,6 @@ public class MemberActivity extends AppCompatActivity implements RegisterFragmen
     private EditText phoneNumberEditText;
     private Spinner countyDataSpinner;
     private Button loginBtn;
-    private Button loginGuestBtn;
     private Button loginGoogleCloneBtn;
     private FrameLayout contentContainerMemberFragment;
     private SignInButton signInButton;
@@ -97,7 +96,6 @@ public class MemberActivity extends AppCompatActivity implements RegisterFragmen
         reference = databaseReference.child("users");
 
         signInButton = findViewById(R.id.loginGoogleBtn);
-        loginGuestBtn = findViewById(R.id.loginGuestBtn);
         loginGoogleCloneBtn = findViewById(R.id.loginGoogleCloneBtn);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
