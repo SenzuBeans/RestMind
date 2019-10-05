@@ -126,7 +126,6 @@ public class MemberActivity extends AppCompatActivity implements RegisterFragmen
 
     }
 
-
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -146,6 +145,26 @@ public class MemberActivity extends AppCompatActivity implements RegisterFragmen
                         } else {
                             Toast.makeText(MemberActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            Toast.makeText(MemberActivity.this, "user : " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(MemberActivity.this, NavigationHomePageActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -198,57 +217,6 @@ public class MemberActivity extends AppCompatActivity implements RegisterFragmen
         });
     }
 
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable final Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUIRE_CODE) {
-            if (resultCode == RESULT_OK) {
-                currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                reference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        compareUserData(dataSnapshot, data);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-            }
-        }
-
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account);
-            } catch (ApiException e) {
-            }
-        }
-    }
-
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(MemberActivity.this, "user : " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(MemberActivity.this, NavigationHomePageActivity.class);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
-
     private void compareUserData(DataSnapshot dataSnapshot, Intent data) {
         int userCheck = 0;
         for (DataSnapshot ds : dataSnapshot.getChildren()) {
@@ -284,6 +252,36 @@ public class MemberActivity extends AppCompatActivity implements RegisterFragmen
             }
         }
         return value.substring(equalSymbol + 2, commaSymbol);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUIRE_CODE) {
+            if (resultCode == RESULT_OK) {
+                currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                reference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        compareUserData(dataSnapshot, data);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        }
+
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account);
+            } catch (ApiException e) {
+            }
+        }
     }
 
     @Override
