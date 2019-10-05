@@ -18,7 +18,6 @@
 
 
         <TextView
-            android:id="@+id/phoneErrorTextView"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_marginTop="320dp"
@@ -119,19 +118,5 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"/>
-
-
-
-
-    <FrameLayout
-        android:id="@+id/contentContainerMemberFragment"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:background="@color/colorPrimaryDark"
-        android:layout_centerVertical="true"
-        android:layout_margin="20dp"
-        android:visibility="gone">
-
-    </FrameLayout>
 
 </RelativeLayout>

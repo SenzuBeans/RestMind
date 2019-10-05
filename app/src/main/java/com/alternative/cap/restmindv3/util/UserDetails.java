@@ -4,6 +4,8 @@ public class UserDetails {
 
     public String name;
     public String email;
+    public StepItem stepItem;
+    public int temp_steam;
 
     public UserDetails() {
     }
@@ -13,19 +15,10 @@ public class UserDetails {
         this.email = email;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    public UserDetails(String name, String email, StepItem stepItem, int temp_steam) {
         this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
         this.email = email;
+        this.stepItem = stepItem;
+        this.temp_steam = temp_steam;
     }
 }

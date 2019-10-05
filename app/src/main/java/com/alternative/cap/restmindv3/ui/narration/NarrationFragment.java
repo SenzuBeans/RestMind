@@ -84,19 +84,22 @@ public class NarrationFragment extends Fragment implements NarrationSubAdapter.N
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.child("narration").getChildren()) {
-                    Log.d("dodo", "onDataChange: "+ ds.getKey());
-                    header.add(ds.getKey());
-                    NarrationItem item = ds.getValue(NarrationItem.class);
+                    if (!ds.getKey().equals("Step")) {
+                        Log.d("dodo", "onDataChange: " + ds.getKey());
+                        header.add(ds.getKey());
+                        NarrationItem item = ds.getValue(NarrationItem.class);
 
-                    mediaId = new ArrayList(Arrays.asList(item.rawId.split(",")));
-                    tempMediaList = new ArrayList<>();
+                        mediaId = new ArrayList(Arrays.asList(item.rawId.split(",")));
+                        tempMediaList = new ArrayList<>();
 
-                    for (String s : mediaId){
-                        tempMediaList.add(dataSnapshot.child("sound").child(s).getValue(MusicItem.class));
+                        for (String s : mediaId) {
+                            tempMediaList.add(dataSnapshot.child("sound").child(s).getValue(MusicItem.class));
+                        }
+                        mediaList.add(tempMediaList);
                     }
-                    mediaList.add(tempMediaList);
                 }
                 updateAdapter(root);
+
             }
 
             @Override

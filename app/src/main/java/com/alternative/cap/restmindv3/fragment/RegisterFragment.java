@@ -1,7 +1,6 @@
 package com.alternative.cap.restmindv3.fragment;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,10 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.alternative.cap.restmindv3.R;
-import com.alternative.cap.restmindv3.activity.multi.MemberActivity;
 import com.alternative.cap.restmindv3.util.UserDetails;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -29,7 +26,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterFragment extends Fragment {
 
-    private static Intent data;
+    static RegisterListener listener;
+
     private DatabaseReference databaseReference;
     private DatabaseReference reference;
     private FirebaseUser user;
@@ -42,9 +40,9 @@ public class RegisterFragment extends Fragment {
     public RegisterFragment() {
     }
 
-    public static RegisterFragment newInstance(Intent imputData) {
+    public static RegisterFragment newInstance(RegisterListener passingListener) {
         Bundle args = new Bundle();
-        data = imputData;
+        listener = passingListener;
         RegisterFragment fragment = new RegisterFragment();
         fragment.setArguments(args);
         return fragment;
@@ -77,6 +75,8 @@ public class RegisterFragment extends Fragment {
     }
 
     private void workbench(View rootView, Bundle savedInstanceState){
+        userNameEditText.requestFocus();
+        
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,18 +104,17 @@ public class RegisterFragment extends Fragment {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    Log.d("dodo", "onComplete: "+ user.getDisplayName());
+                                    listener.onRegis();
+                                    getChildFragmentManager().popBackStack();
                                 }
                             }
                         });
-                RegisterBtnClickListener listener = (RegisterBtnClickListener) getActivity();
-                listener.onRegisterClicked(data);
             }
         });
     }
 
-    public interface RegisterBtnClickListener{
-        void onRegisterClicked(Intent inputData);
+    public interface RegisterListener{
+        void onRegis();
     }
 
 }
