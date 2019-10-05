@@ -52,38 +52,60 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    //
+    <style name="about_About" />
 
-    //Setting
-    <style name="easySettings_textView_title">
+    <style name="about_About.wrapper">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@color/about_background_color</item>
+    </style>
+
+    <style name="about_sub_wrapper">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textAppearance">?android:textAppearanceMedium</item>
-        <item name="android:textColor">@android:color/black</item>
-        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">20dp</item>
     </style>
 
-    <style name="easySettings_textView_summary">
+    <style name="about_image">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginBottom">30dp</item>
+        <item name="android:layout_marginTop">20dp</item>
+    </style>
+
+    <style name="about_description" parent="@android:style/TextAppearance">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textAppearance">?android:textAppearanceSmall</item>
+        <item name="android:text">@string/about_page_description</item>
+        <item name="android:lineSpacingExtra">8dp</item>
+        <item name="android:layout_marginBottom">20dp</item>
+        <item name="android:textColor">@color/about_description_text_color</item>
+        <item name="android:textSize">@dimen/about_description_text_size</item>
     </style>
 
-    <style name="easySettings_imageView_icon">
-        <item name="android:layout_width">@dimen/settings_icon_width_and_height</item>
-        <item name="android:layout_height">@dimen/settings_icon_width_and_height</item>
-        <item name="android:layout_marginEnd">@dimen/settings_icon_end_margin</item>
-        <item name="android:layout_alignParentStart">true</item>
-        <item name="android:layout_centerVertical">true</item>
-        <item name="android:scaleType">fitCenter</item>
-    </style>
-
-    <style name="easySettings_settingContainer">
+    <style name="about_separator">
+        <item name="android:layout_height">@dimen/about_separator_height</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">?android:attr/selectableItemBackground</item>
-        <item name="android:clickable">true</item>
-        <item name="android:focusable">true</item>
-        <item name="android:padding">@dimen/settings_container_padding</item>
+        <item name="android:background">@color/about_separator_color</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginTop">0dp</item>
+        <item name="android:layout_marginBottom">0dp</item>
     </style>
 
+    <style name="about_elementTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/about_text_color</item>
+        <item name="android:textSize">@dimen/about_item_text_size</item>
+    </style>
+
+    <style name="about_groupTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/about_item_text_color</item>
+        <item name="android:textSize">@dimen/about_group_item_text_size</item>
+    </style>
 </resources>
