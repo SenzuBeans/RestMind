@@ -66,6 +66,7 @@ public class MemberActivity extends AppCompatActivity implements RegisterFragmen
     private EditText phoneNumberEditText;
     private Spinner countyDataSpinner;
     private Button loginBtn;
+    private Button loginGuestBtn;
     private Button loginGoogleCloneBtn;
     private FrameLayout contentContainerMemberFragment;
     private SignInButton signInButton;
@@ -96,6 +97,7 @@ public class MemberActivity extends AppCompatActivity implements RegisterFragmen
         reference = databaseReference.child("users");
 
         signInButton = findViewById(R.id.loginGoogleBtn);
+        loginGuestBtn = findViewById(R.id.loginGuestBtn);
         loginGoogleCloneBtn = findViewById(R.id.loginGoogleCloneBtn);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -122,32 +124,11 @@ public class MemberActivity extends AppCompatActivity implements RegisterFragmen
                 signIn();
             }
         });
-
-
     }
 
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-    private void signInAnonymously() {
-        mAuth.signInAnonymously()
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(MemberActivity.this, "user : " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(MemberActivity.this, NavigationHomePageActivity.class);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            Toast.makeText(MemberActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
@@ -217,60 +198,15 @@ public class MemberActivity extends AppCompatActivity implements RegisterFragmen
         });
     }
 
-    private void compareUserData(DataSnapshot dataSnapshot, Intent data) {
-        int userCheck = 0;
-        for (DataSnapshot ds : dataSnapshot.getChildren()) {
-            userCheck = currentUser.getUid().equals(userId(ds.toString())) ? 1 : 0;
-            if (userCheck == 1) {
-                break;
-            }
-        }
-        if (userCheck == 1) {
-            Intent intent = new Intent(MemberActivity.this, NavigationHomePageActivity.class);
-            startActivity(intent);
-            finish();
-        } else {
-            contentContainerMemberFragment.setVisibility(View.VISIBLE);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.contentContainerMemberFragment, RegisterFragment.newInstance(data))
-                    .commit();
-        }
-    }
-
-    private String userId(String value) {
-        int equalSymbol = 0;
-        int commaSymbol = 0;
-        for (int i = 0; i < value.length(); i++) {
-            char s = value.charAt(i);
-            if (s == '=' && equalSymbol == 0) {
-                equalSymbol = i;
-            }
-
-            if (s == ',' && commaSymbol == 0) {
-                commaSymbol = i;
-                break;
-            }
-        }
-        return value.substring(equalSymbol + 2, commaSymbol);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUIRE_CODE) {
             if (resultCode == RESULT_OK) {
                 currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                reference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        compareUserData(dataSnapshot, data);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
+                Intent intent = new Intent(MemberActivity.this, NavigationHomePageActivity.class);
+                startActivity(intent);
+                finish();
             }
         }
 

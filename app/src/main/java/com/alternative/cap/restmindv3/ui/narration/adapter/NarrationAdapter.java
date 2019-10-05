@@ -18,14 +18,15 @@ import java.util.ArrayList;
 
 public class NarrationAdapter extends RecyclerView.Adapter<NarrationAdapter.NarrationViewHolder> {
 
+    private NarrationSubAdapter.NarrationSubListener listener;
     private Context cons;
     private ArrayList<String> headerName;
     private ArrayList<ArrayList<MusicItem>> mediaList;
 
-    public NarrationAdapter(Context context, ArrayList<String> passingHeader, ArrayList<ArrayList<MusicItem>> passingMediaName) {
+    public NarrationAdapter(Context context, ArrayList<String> passingHeader, ArrayList<ArrayList<MusicItem>> passingMediaName , NarrationSubAdapter.NarrationSubListener passingListener) {
+        listener = passingListener;
         this.cons = context;
         this.headerName = passingHeader;
-        Log.d("dodo", "NarrationAdapter: " + headerName.get(0));
         this.mediaList = passingMediaName;
     }
 
@@ -63,7 +64,7 @@ public class NarrationAdapter extends RecyclerView.Adapter<NarrationAdapter.Narr
         }
 
         public void setSubAdapter(ArrayList<MusicItem>  data){
-            NarrationSubAdapter subAdapter = new NarrationSubAdapter(cons,data);
+            NarrationSubAdapter subAdapter = new NarrationSubAdapter(cons,data, listener);
             subRecyclerView.setLayoutManager(
                     new LinearLayoutManager(cons, LinearLayoutManager.HORIZONTAL, false));
             subRecyclerView.setAdapter(subAdapter);
