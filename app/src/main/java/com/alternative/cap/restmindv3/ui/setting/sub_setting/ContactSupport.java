@@ -40,7 +40,7 @@ public class ContactSupport extends Fragment {
 
         View aboutPage = new AboutPage(getContext())
                 .isRTL(false)
-                .setImage(R.drawable.image_logo)
+                .setImage(R.drawable.cover1)
                 .addItem(new Element().setTitle("Version 6.2"))
                 .addItem(adsElement)
                 .addGroup("Connect with us")
