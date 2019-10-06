@@ -28,11 +28,13 @@ public class NarrationSubAdapter extends RecyclerView.Adapter<NarrationSubAdapte
     private static NarrationSubListener listener;
     private Context cons;
     private ArrayList<MusicItem>  dataList;
+    private String header;
 
-    public NarrationSubAdapter(Context context, ArrayList<MusicItem> data, NarrationSubListener passingListener) {
+    public NarrationSubAdapter(Context context, ArrayList<MusicItem> data, NarrationSubListener passingListener, String passingHeader) {
         listener = passingListener;
         cons = context;
         this.dataList = data;
+        this.header = passingHeader;
     }
 
     @NonNull
@@ -49,7 +51,7 @@ public class NarrationSubAdapter extends RecyclerView.Adapter<NarrationSubAdapte
         holder.root.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onItemClicked(dataList, position);
+                listener.onItemClicked(dataList, position, header);
             }
         } );
     }
@@ -88,6 +90,6 @@ public class NarrationSubAdapter extends RecyclerView.Adapter<NarrationSubAdapte
     }
 
     public interface NarrationSubListener{
-        void onItemClicked(ArrayList<MusicItem> passingDataList, int current);
+        void onItemClicked(ArrayList<MusicItem> passingDataList, int current,String passingHeader);
     }
 }

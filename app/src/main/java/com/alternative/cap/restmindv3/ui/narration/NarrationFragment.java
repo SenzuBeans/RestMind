@@ -85,7 +85,6 @@ public class NarrationFragment extends Fragment implements NarrationSubAdapter.N
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.child("narration").getChildren()) {
                     if (!ds.getKey().equals("Step")) {
-                        Log.d("dodo", "onDataChange: " + ds.getKey());
                         header.add(ds.getKey());
                         NarrationItem item = ds.getValue(NarrationItem.class);
 
@@ -130,11 +129,11 @@ public class NarrationFragment extends Fragment implements NarrationSubAdapter.N
     }
 
     @Override
-    public void onItemClicked(ArrayList<MusicItem> passingDataList, int current) {
+    public void onItemClicked(ArrayList<MusicItem> passingDataList, int current , String passingHeader) {
         narrationRecyclerView.setVisibility(View.GONE);
         narrationContentContainer.setVisibility(View.VISIBLE);
         getChildFragmentManager().beginTransaction()
-                .add(R.id.narrationContentContainer, MusicPlayerFragment.newInstance(passingDataList, current, getContext(), new MusicPlayerFragment.MusicListener() {
+                .add(R.id.narrationContentContainer, MusicPlayerFragment.newInstance(passingHeader,passingDataList, current, getContext(), new MusicPlayerFragment.MusicListener() {
                     @Override
                     public void onDestory() {
                         narrationRecyclerView.setVisibility(View.VISIBLE);
