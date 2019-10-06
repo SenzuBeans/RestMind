@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,6 +34,7 @@ import com.google.android.exoplayer2.util.Util;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.ArrayList;
+import java.util.Currency;
 
 public class MusicPlayerFragment extends Fragment {
 
@@ -44,10 +46,16 @@ public class MusicPlayerFragment extends Fragment {
     private DefaultDataSourceFactory soundDataSourceFactory;
     private PlayerControlView soundController;
 
+    private TextView soundPlayerName;
+    private TextView soundPlayerArtist;
+
     private static MusicListener listener;
+
     private static ArrayList<MusicItem> dataList;
     private static int CURRENT_SOUND = 0;
     private static Context cons;
+
+    private long currentProgress = 0;
 
     public MusicPlayerFragment() {
     }
@@ -88,6 +96,9 @@ public class MusicPlayerFragment extends Fragment {
     private void initInstance(View rootView, Bundle savedInstanceState) {
         soundController = rootView.findViewById( R.id.soundPlayerControlView );
         soundPlayerCover = rootView.findViewById( R.id.soundPlayerCover );
+
+        soundPlayerName = rootView.findViewById(R.id.soundPlayerName);
+        soundPlayerArtist = rootView.findViewById(R.id.soundPlayerArtist);
     }
 
     private void workplace(View rootView, Bundle savedInstanceState) {
@@ -105,19 +116,6 @@ public class MusicPlayerFragment extends Fragment {
         if (soundPlayer != null) {
             soundPlayer.seekTo( CURRENT_SOUND, 0 );
             soundPlayer.setPlayWhenReady( true );
-            soundPlayer.addListener( new Player.EventListener() {
-                @Override
-                public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-                    if (playbackState == ExoPlayer.STATE_ENDED) {
-                        getActivity().runOnUiThread( new Runnable() {
-                            @Override
-                            public void run() {
-                                soundPlayerCover.getAnimation().cancel();
-                            }
-                        } );
-                    }
-                }
-            } );
         }
         soundPlayer.setRepeatMode( Player.REPEAT_MODE_ALL );
         soundController.setVisibilityListener( new PlayerControlView.VisibilityListener() {
@@ -136,6 +134,24 @@ public class MusicPlayerFragment extends Fragment {
                             soundPlayerCover.getAnimation().cancel();
                         }
                     } );
+                }else{
+                    getActivity().runOnUiThread( new Runnable() {
+                        @Override
+                        public void run() {
+                           if (soundPlayer.getCurrentPosition() > currentProgress){
+                               currentProgress = soundPlayer.getCurrentPosition();
+                           }else{
+                               currentProgress = 0;
+                               CURRENT_SOUND = soundPlayer.getCurrentWindowIndex();
+                               if (soundPlayer != null) {
+                                   soundPlayer.stop();
+
+                                   soundPlayer.seekTo( CURRENT_SOUND, 1 );
+                                   soundPlayer.setPlayWhenReady( true );
+                               }
+                           }
+                        }
+                    } );
                 }
             }
         } );
@@ -148,8 +164,6 @@ public class MusicPlayerFragment extends Fragment {
                             .load( dataList.get( soundPlayer.getCurrentWindowIndex() ).image_link )
                             .diskCacheStrategy( DiskCacheStrategy.ALL )
                             .into( soundPlayerCover );
-
-                    Log.d( "dodo", "onIsPlayingChanged: " + soundPlayerCover.getPivotX() + " :" + soundPlayerCover.getPivotY() );
 
                     anim = new RotateAnimation( 0, 360, soundPlayerCover.getPivotX(), soundPlayerCover.getPivotY() );
                     anim.setInterpolator( new LinearInterpolator() );
