@@ -18,8 +18,22 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.alternative.cap.restmindv3.R;
+import com.alternative.cap.restmindv3.util.BreathLogItem;
 import com.alternative.cap.restmindv3.util.MutableValue;
+import com.alternative.cap.restmindv3.util.UserDetails;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mikhaellopez.circularimageview.CircularImageView;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Random;
 
 import cn.iwgang.countdownview.CountdownView;
 
@@ -44,6 +58,14 @@ public class BreathFragment extends Fragment {
     private static long exhale;
     private static long timer;
 
+    private DatabaseReference databaseReference;
+    private DatabaseReference reference;
+    private FirebaseUser user;
+    private ValueEventListener valueEventListener;
+
+    Random random = new Random();
+    int x = random.nextInt(1000);
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,10 +80,48 @@ public class BreathFragment extends Fragment {
     }
 
     private void init(View rootView, Bundle savedInstanceState) {
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        reference = databaseReference.child("users");
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
         circularImageView = rootView.findViewById(R.id.circularImageView);
         playerBtn = rootView.findViewById(R.id.playerBtn);
         breathStatusTextView = rootView.findViewById(R.id.breathStatusTextView);
         timerView =  rootView.findViewById(R.id.breathTimer);
+
+        valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                UserDetails userDetails = dataSnapshot.child(user.getUid()).getValue(UserDetails.class);
+                ArrayList<BreathLogItem> log = userDetails.breath_log;
+
+                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd");
+                String currentDate = sdf.format(new Date());
+
+                boolean isUpdate = false;
+                for (int i = 0 ; i < log.size(); i++){
+                    if (log.get(i).date.equals(currentDate)){
+                        log.get(i).updateTotalTime(timer);
+                        isUpdate = true;
+                    }
+                }
+
+                if (!isUpdate) {
+                    log.add(new BreathLogItem(currentDate, (timer/60000) + ""));
+                }
+
+                userDetails.setBreath_log(log);
+
+                reference.child(user.getUid()).setValue(userDetails);
+                reference.removeEventListener(valueEventListener);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
     }
 
     private void workbench(View rootView, Bundle savedInstanceState) {
@@ -79,6 +139,9 @@ public class BreathFragment extends Fragment {
                             @Override
                             public void onEnd(CountdownView cv) {
                                 stopRunningBreath();
+
+                                reference.child(user.getUid()).child("temp_steam").setValue(x);
+                                reference.addValueEventListener(valueEventListener);
                             }
                         });
                     }
@@ -116,6 +179,8 @@ public class BreathFragment extends Fragment {
                 }
             }
         });
+
+
     }
 
     @Override

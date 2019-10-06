@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 public class MutableValue {
 
-    private static long[] breathData = {3000,1000,3000,0};
+    private static long[] breathData = {3000,1000,3000,300000};
 
     public MutableValue() {
     }
