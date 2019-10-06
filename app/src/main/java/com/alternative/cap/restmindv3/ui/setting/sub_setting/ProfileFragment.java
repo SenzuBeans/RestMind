@@ -13,8 +13,12 @@ import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.fragment.RegisterFragment;
 import com.alternative.cap.restmindv3.util.SettingListener;
 import com.alternative.cap.restmindv3.util.UserDetails;
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -35,7 +39,7 @@ public class ProfileFragment extends Fragment {
 
     static SettingListener listener;
 
-    private LineChart breathChart;
+    private BarChart breathChart;
 
     private DatabaseReference databaseReference;
     private DatabaseReference reference;
@@ -110,39 +114,36 @@ public class ProfileFragment extends Fragment {
         });
 
         breathChart.setBackgroundColor(Color.GREEN);
-        breathChart.setGridBackgroundColor(Color.BLUE);
+        breathChart.setGridBackgroundColor(Color.DKGRAY);
         breathChart.setDrawGridBackground(true);
 
         breathChart.setDrawBorders(true);
         breathChart.getDescription().setEnabled(false);
         breathChart.setPinchZoom(false);
-        breathChart.getLegend().setEnabled(false);
+        breathChart.getLegend().setEnabled(true);
 
         setData();
     }
 
     private void setData() {
 
-        ArrayList<Entry> yVels = new ArrayList<>();
+        ArrayList<BarEntry> yVels = new ArrayList<>();
 
-        for (int i = 0 ; i < 100 ; i++){
-            yVels.add(new Entry(i, (float) (Math.random()*10)+150));
+        for (int i = 0 ; i < 6 ; i++){
+            yVels.add(new BarEntry(i, (float) (Math.random()*10)+10));
         }
 
-        LineDataSet lineDataSet = new LineDataSet(yVels, "data 1");
+        BarDataSet barDataSet = new BarDataSet(yVels, "data 1");
 
-        lineDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-        lineDataSet.setColor(Color.RED);
-        lineDataSet.setDrawCircles(false);
-        lineDataSet.setLineWidth(3f);
-        lineDataSet.setFillAlpha(255);
-        lineDataSet.setDrawFilled(true);
-        lineDataSet.setFillColor(Color.CYAN);
+        barDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+        barDataSet.setColor(Color.YELLOW);
 
-        LineData lineData = new LineData(lineDataSet);
-        lineData.setDrawValues(true);
 
-        breathChart.setData(lineData);
+        BarData barData = new BarData(barDataSet);
+        barData.setDrawValues(true);
+
+        breathChart.setScaleEnabled(false);
+        breathChart.setData(barData);
 
     }
 
