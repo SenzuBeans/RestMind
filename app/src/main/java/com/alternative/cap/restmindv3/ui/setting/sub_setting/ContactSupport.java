@@ -32,7 +32,6 @@ public class ContactSupport extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         init(savedInstanceState);
-
     }
 
     private void init(Bundle savedInstanceState) {
@@ -45,12 +44,10 @@ public class ContactSupport extends Fragment {
         View rootView = inflater.inflate( R.layout.fragment_contact_support, container, false );
         initInsance(rootView, savedInstanceState);
         workbench(rootView, savedInstanceState);
-
         return rootView;
     }
 
     private void initInsance(View rootView, Bundle savedInstanceState) {
-
     }
 
     private void workbench(View rootView, Bundle savedInstanceState) {
