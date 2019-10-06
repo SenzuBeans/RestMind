@@ -95,7 +95,6 @@ public class ProfileFragment extends Fragment {
         reference.child(user.getUid()).child("temp_steam").setValue(x);
 
         breathChart = rootView.findViewById(R.id.breathChart);
-
         initChart();
         profileUserName = rootView.findViewById(R.id.profileUserName);
         profileUserEmail = rootView.findViewById(R.id.profileUserEmail);
@@ -154,11 +153,12 @@ public class ProfileFragment extends Fragment {
     }
 
     private void initChart() {
-        breathChart.setNoDataText("Edit here");
+        breathChart.setNoDataText("Tap to refresh information");
         breathChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
-
+                e.getX();
+                e.getY();
             }
 
             @Override
