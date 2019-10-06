@@ -130,11 +130,11 @@ public class NarrationFragment extends Fragment implements NarrationSubAdapter.N
     }
 
     @Override
-    public void onItemClicked(ArrayList<MusicItem> passingDataList, int current , String passingHeadrt) {
+    public void onItemClicked(ArrayList<MusicItem> passingDataList, int current , String passingHeader) {
         narrationRecyclerView.setVisibility(View.GONE);
         narrationContentContainer.setVisibility(View.VISIBLE);
         getChildFragmentManager().beginTransaction()
-                .add(R.id.narrationContentContainer, MusicPlayerFragment.newInstance(passingDataList, current, getContext(), new MusicPlayerFragment.MusicListener() {
+                .add(R.id.narrationContentContainer, MusicPlayerFragment.newInstance(passingHeader,passingDataList, current, getContext(), new MusicPlayerFragment.MusicListener() {
                     @Override
                     public void onDestory() {
                         narrationRecyclerView.setVisibility(View.VISIBLE);
