@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.setting.sub_setting.ProfileFragment">
+    tools:context=".ui.setting.sub_setting.ProfileFragment"
+    android:background="@drawable/profile_bg_stat">
 
 
     <LinearLayout
@@ -15,7 +16,7 @@
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@drawable/bg_regtangle_outer"
+            android:background="@drawable/btn_rounded14"
             tools:ignore="MissingConstraints">
 
             <ImageButton
@@ -46,7 +47,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:orientation="horizontal"
-                android:padding="5dp">
+                android:padding="5dp"
+                android:background="@drawable/btn_rounded16">
 
                 <com.mikhaellopez.circularimageview.CircularImageView
                     android:id="@+id/profilePicture"
@@ -66,7 +68,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:text="name"
-                        android:textSize="18dp" />
+                        android:textSize="25dp"
+                        android:textColor="#FFF"/>
 
                     <TextView
                         android:id="@+id/profileUserEmail"
@@ -74,7 +77,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:text="e-mail"
-                        android:textSize="15dp" />
+                        android:textSize="16dp"
+                        android:textColor="#FFF"/>
                 </LinearLayout>
 
 
@@ -90,8 +94,20 @@
                 <com.github.mikephil.charting.charts.BarChart
                     android:id="@+id/breathChart"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp" />
+                    android:layout_height="200dp"
+                    android:background="@drawable/btn_rounded15"/>
 
+                <TextView
+                    android:id="@+id/userResult"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="สถิติการฝึกกำหนดลมหายใจของคุณ"
+                    android:textColor="#FFF"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:textSize="18dp">
+
+                </TextView>
             </LinearLayout>
         </LinearLayout>
 
