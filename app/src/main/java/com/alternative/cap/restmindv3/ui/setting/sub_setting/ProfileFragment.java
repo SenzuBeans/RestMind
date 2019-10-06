@@ -2,19 +2,26 @@ package com.alternative.cap.restmindv3.ui.setting.sub_setting;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.fragment.RegisterFragment;
+import com.alternative.cap.restmindv3.util.BreathLogItem;
 import com.alternative.cap.restmindv3.util.SettingListener;
 import com.alternative.cap.restmindv3.util.UserDetails;
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -27,6 +34,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 
@@ -35,12 +43,15 @@ public class ProfileFragment extends Fragment {
 
     static SettingListener listener;
 
-    private LineChart breathChart;
+    private TextView profileUserName;
+    private TextView profileUserEmail;
+    private BarChart breathChart;
 
     private DatabaseReference databaseReference;
     private DatabaseReference reference;
     private FirebaseUser user;
     private UserDetails userDetails;
+
 
     Random random = new Random();
     int x = random.nextInt(1000);
@@ -83,6 +94,87 @@ public class ProfileFragment extends Fragment {
 
     private void initInsance(View rootView, Bundle savedInstanceState) {
         reference.child(user.getUid()).child("temp_steam").setValue(x);
+
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                UserDetails userDetails = dataSnapshot.child(user.getUid()).getValue(UserDetails.class);
+                ArrayList<BreathLogItem> log = userDetails.breath_log;
+                setData(log);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        checkRegis(rootView);
+        breathChart = rootView.findViewById(R.id.breathChart);
+        initChart();
+        profileUserName = rootView.findViewById(R.id.profileUserName);
+        profileUserEmail = rootView.findViewById(R.id.profileUserEmail);
+    }
+
+    private void workbench(View rootView, Bundle savedInstanceState) {
+        backBtn(rootView);
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+    private void backBtn(View rootView) {
+        rootView.findViewById(R.id.settingProfileBackBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getFragmentManager().popBackStack();
+            }
+        });
+    }
+
+    private void initChart() {
+        breathChart.setBackgroundColor(Color.GREEN);
+        breathChart.setGridBackgroundColor(Color.DKGRAY);
+        breathChart.setDrawGridBackground(true);
+
+        breathChart.setDrawBorders(true);
+        breathChart.getDescription().setEnabled(false);
+        breathChart.setPinchZoom(false);
+        breathChart.getLegend().setEnabled(true);
+    }
+
+    private void setData(ArrayList<BreathLogItem> log) {
+
+        ArrayList<BarEntry> yVels = new ArrayList<>();
+
+        for (int i = 0 ; i < log.size() ; i++){
+            yVels.add(new BarEntry(i, (float) (Integer.parseInt(log.get(i).totalTime)*10)));
+        }
+
+        BarDataSet barDataSet = new BarDataSet(yVels, "data 1");
+        barDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+        barDataSet.setColor(Color.YELLOW);
+
+        BarData barData = new BarData(barDataSet);
+        barData.setDrawValues(false);
+
+        breathChart.setScaleEnabled(false);
+        breathChart.setData(barData);
+    }
+
+    private void checkRegis(View rootView) {
         if (user.getDisplayName().equals("VISITOR")) {
             rootView.findViewById(R.id.profileContentContainer).setVisibility(View.VISIBLE);
             getChildFragmentManager().beginTransaction()
@@ -94,56 +186,6 @@ public class ProfileFragment extends Fragment {
                     }))
                     .commit();
         }
-
-        breathChart = rootView.findViewById(R.id.breathChart);
-
-
-    }
-
-    private void workbench(View rootView, Bundle savedInstanceState) {
-
-        rootView.findViewById(R.id.settingProfileBackBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getFragmentManager().popBackStack();
-            }
-        });
-
-        breathChart.setBackgroundColor(Color.GREEN);
-        breathChart.setGridBackgroundColor(Color.BLUE);
-        breathChart.setDrawGridBackground(true);
-
-        breathChart.setDrawBorders(true);
-        breathChart.getDescription().setEnabled(false);
-        breathChart.setPinchZoom(false);
-        breathChart.getLegend().setEnabled(false);
-
-        setData();
-    }
-
-    private void setData() {
-
-        ArrayList<Entry> yVels = new ArrayList<>();
-
-        for (int i = 0 ; i < 100 ; i++){
-            yVels.add(new Entry(i, (float) (Math.random()*10)+150));
-        }
-
-        LineDataSet lineDataSet = new LineDataSet(yVels, "data 1");
-
-        lineDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-        lineDataSet.setColor(Color.RED);
-        lineDataSet.setDrawCircles(false);
-        lineDataSet.setLineWidth(3f);
-        lineDataSet.setFillAlpha(255);
-        lineDataSet.setDrawFilled(true);
-        lineDataSet.setFillColor(Color.CYAN);
-
-        LineData lineData = new LineData(lineDataSet);
-        lineData.setDrawValues(true);
-
-        breathChart.setData(lineData);
-
     }
 
     @Override
