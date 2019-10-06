@@ -85,7 +85,6 @@ public class NarrationFragment extends Fragment implements NarrationSubAdapter.N
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.child("narration").getChildren()) {
                     if (!ds.getKey().equals("Step")) {
-                        Log.d("dodo", "onDataChange: " + ds.getKey());
                         header.add(ds.getKey());
                         NarrationItem item = ds.getValue(NarrationItem.class);
 
