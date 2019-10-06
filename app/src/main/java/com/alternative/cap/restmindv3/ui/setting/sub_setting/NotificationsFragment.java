@@ -1,6 +1,7 @@
 package com.alternative.cap.restmindv3.ui.setting.sub_setting;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.util.SettingListener;
@@ -17,6 +19,8 @@ public class NotificationsFragment extends Fragment {
 
 
     static SettingListener listener;
+
+
 
     public NotificationsFragment() {
         // Required empty public constructor
@@ -64,7 +68,11 @@ public class NotificationsFragment extends Fragment {
                 getFragmentManager().popBackStack();
             }
         } );
+
+
     }
+
+
 
     @Override
     public void onDestroy() {

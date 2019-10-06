@@ -40,8 +40,8 @@
          android:layout_margin="20dp"
          android:hint="Entry Code"
          android:maxLength="6"
-         android:textColor="#FFF"
-         android:inputType="number"
+         android:textColor="#1A1A1A"
+         android:inputType="numberPassword"
          android:gravity="center"
          android:background="@drawable/btn_rounded6"/>
 
@@ -61,7 +61,7 @@
         android:text="Resend Code!"
         android:layout_marginTop="20dp"
         android:textSize="16dp"
-        android:textColor="@color/color_blue"
+        android:textColor="#FFF"
         android:clickable="true"/>
 
 </LinearLayout>

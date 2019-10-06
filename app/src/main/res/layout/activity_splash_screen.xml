@@ -5,13 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.single.SplashScreenActivity"
-    android:background="@drawable/image_bg">
+    android:background="@drawable/spash_view">
 
-   <ImageView
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:padding="110dp"
-       android:layout_centerHorizontal="true"
-       android:src="@drawable/image_logo_bottomshadow" />
+
 
 </RelativeLayout>
