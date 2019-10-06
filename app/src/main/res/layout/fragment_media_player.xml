@@ -8,6 +8,11 @@
     tools:context=".ui.music.MusicPlayerFragment">
 
 
+    <TextView
+        android:id="@+id/soundPlayerHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
     <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/soundPlayerCover"
         android:layout_width="250dp"

@@ -130,7 +130,7 @@ public class NarrationFragment extends Fragment implements NarrationSubAdapter.N
     }
 
     @Override
-    public void onItemClicked(ArrayList<MusicItem> passingDataList, int current) {
+    public void onItemClicked(ArrayList<MusicItem> passingDataList, int current , String passingHeadrt) {
         narrationRecyclerView.setVisibility(View.GONE);
         narrationContentContainer.setVisibility(View.VISIBLE);
         getChildFragmentManager().beginTransaction()

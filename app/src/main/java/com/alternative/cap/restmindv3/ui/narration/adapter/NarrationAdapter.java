@@ -42,7 +42,7 @@ public class NarrationAdapter extends RecyclerView.Adapter<NarrationAdapter.Narr
     @Override
     public void onBindViewHolder(@NonNull NarrationViewHolder holder, int position) {
         holder.header.setText(headerName.get(position));
-        holder.setSubAdapter(mediaList.get(position));
+        holder.setSubAdapter(mediaList.get(position), position);
     }
 
     @Override
@@ -63,8 +63,8 @@ public class NarrationAdapter extends RecyclerView.Adapter<NarrationAdapter.Narr
             subRecyclerView = itemView.findViewById(R.id.narrationSubRecyclerView);
         }
 
-        public void setSubAdapter(ArrayList<MusicItem>  data){
-            NarrationSubAdapter subAdapter = new NarrationSubAdapter(cons,data, listener);
+        public void setSubAdapter(ArrayList<MusicItem>  data, int position){
+            NarrationSubAdapter subAdapter = new NarrationSubAdapter(cons,data, listener, headerName.get(position));
             subRecyclerView.setLayoutManager(
                     new LinearLayoutManager(cons, LinearLayoutManager.HORIZONTAL, false));
             subRecyclerView.setAdapter(subAdapter);
