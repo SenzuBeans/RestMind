@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 
 import com.alternative.cap.restmindv3.R;
-import com.alternative.cap.restmindv3.ui.setting.sub_setting.support.AboutPage;
-import com.alternative.cap.restmindv3.ui.setting.sub_setting.support.Element;
 import com.alternative.cap.restmindv3.util.SettingListener;
 
 
@@ -35,20 +33,6 @@ public class ContactSupport extends Fragment {
         super.onCreate( savedInstanceState );
         init(savedInstanceState);
 
-        Element adsElement = new Element();
-        adsElement.setTitle("Advertise with us");
-
-        View aboutPage = new AboutPage(getContext())
-                .isRTL(false)
-                .setImage(R.drawable.image_logo)
-                .addItem(new Element().setTitle("Version 6.2"))
-                .addItem(adsElement)
-                .addGroup("Connect with us")
-                .addEmail("uppyyoyo@gmail.com")
-                .addFacebook("sarawut.loujumpar")
-                .addYoutube("i")
-                .addGitHub("SenzuBeans\n")
-                .create();
     }
 
     private void init(Bundle savedInstanceState) {

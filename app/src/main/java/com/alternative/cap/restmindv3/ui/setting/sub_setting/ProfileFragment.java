@@ -1,5 +1,6 @@
 package com.alternative.cap.restmindv3.ui.setting.sub_setting;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,11 @@ import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.fragment.RegisterFragment;
 import com.alternative.cap.restmindv3.util.SettingListener;
 import com.alternative.cap.restmindv3.util.UserDetails;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -20,6 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -27,6 +34,8 @@ public class ProfileFragment extends Fragment {
 
 
     static SettingListener listener;
+
+    private LineChart breathChart;
 
     private DatabaseReference databaseReference;
     private DatabaseReference reference;
@@ -73,9 +82,7 @@ public class ProfileFragment extends Fragment {
 
 
     private void initInsance(View rootView, Bundle savedInstanceState) {
-//        reference.child(user.getUid()).child("temp_steam").setValue(x);
-
-
+        reference.child(user.getUid()).child("temp_steam").setValue(x);
         if (user.getDisplayName().equals("VISITOR")) {
             rootView.findViewById(R.id.profileContentContainer).setVisibility(View.VISIBLE);
             getChildFragmentManager().beginTransaction()
@@ -88,6 +95,8 @@ public class ProfileFragment extends Fragment {
                     .commit();
         }
 
+        breathChart = rootView.findViewById(R.id.breathChart);
+
 
     }
 
@@ -99,6 +108,42 @@ public class ProfileFragment extends Fragment {
                 getFragmentManager().popBackStack();
             }
         });
+
+        breathChart.setBackgroundColor(Color.GREEN);
+        breathChart.setGridBackgroundColor(Color.BLUE);
+        breathChart.setDrawGridBackground(true);
+
+        breathChart.setDrawBorders(true);
+        breathChart.getDescription().setEnabled(false);
+        breathChart.setPinchZoom(false);
+        breathChart.getLegend().setEnabled(false);
+
+        setData();
+    }
+
+    private void setData() {
+
+        ArrayList<Entry> yVels = new ArrayList<>();
+
+        for (int i = 0 ; i < 100 ; i++){
+            yVels.add(new Entry(i, (float) (Math.random()*10)+150));
+        }
+
+        LineDataSet lineDataSet = new LineDataSet(yVels, "data 1");
+
+        lineDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+        lineDataSet.setColor(Color.RED);
+        lineDataSet.setDrawCircles(false);
+        lineDataSet.setLineWidth(3f);
+        lineDataSet.setFillAlpha(255);
+        lineDataSet.setDrawFilled(true);
+        lineDataSet.setFillColor(Color.CYAN);
+
+        LineData lineData = new LineData(lineDataSet);
+        lineData.setDrawValues(true);
+
+        breathChart.setData(lineData);
+
     }
 
     @Override

@@ -8,6 +8,7 @@ android {
         applicationId "com.alternative.cap.restmindv3"
         minSdkVersion 19
         targetSdkVersion 26
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -16,6 +17,8 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            multiDexKeepFile file('multidex-main-dex-list.txt')
+            multiDexKeepProguard file('multidex-main-dex-list.pro')
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -72,6 +75,8 @@ dependencies {
     implementation 'com.github.DeweyReed:ScrollHmsPicker:2.0.1'
     implementation 'com.ultramegasoft.radarchart:radar-chart:0.1.5'
     implementation 'com.github.chahine:pageindicator:0.2.8'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
 
+    implementation "androidx.multidex:multidex:2.0.1"
 }
