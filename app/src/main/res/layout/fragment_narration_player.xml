@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/music_screen_mobile"
-    tools:context=".ui.music.MusicPlayerFragment">
+    tools:context=".ui.narration.NarrationPlayerFragment">
 
 
     <LinearLayout
@@ -50,7 +50,7 @@
                 android:orientation="vertical">
 
                 <com.mikhaellopez.circularimageview.CircularImageView
-                    android:id="@+id/soundPlayerCover"
+                    android:id="@+id/stepPlayerCover"
                     android:layout_width="250dp"
                     android:layout_height="250dp"
                     android:elevation="100dp"
@@ -66,7 +66,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/soundPlayerName"
+                        android:id="@+id/stepPlayerName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -74,7 +74,7 @@
                         android:textSize="22dp" />
 
                     <TextView
-                        android:id="@+id/soundPlayerArtist"
+                        android:id="@+id/stepPlayerArtist"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="#CCCBCB"
@@ -93,7 +93,7 @@
             android:layout_marginRight="5dp">
 
             <com.google.android.exoplayer2.ui.PlayerControlView
-                android:id="@+id/soundPlayerControlView"
+                android:id="@+id/stepPlayerControlView"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_alignParentTop="true"

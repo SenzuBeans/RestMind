@@ -196,7 +196,7 @@ public class ProfileFragment extends Fragment {
             BarData barData = new BarData(barDataSet);
             barData.setDrawValues(false);
 
-            breathChart.setScaleEnabled(true);
+            breathChart.setScaleEnabled(false);
             breathChart.setData(barData);
         }
     }

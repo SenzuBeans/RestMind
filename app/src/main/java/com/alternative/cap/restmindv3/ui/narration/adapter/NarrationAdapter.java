@@ -1,7 +1,6 @@
 package com.alternative.cap.restmindv3.ui.narration.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alternative.cap.restmindv3.R;
-import com.alternative.cap.restmindv3.util.MusicItem;
+import com.alternative.cap.restmindv3.util.MediaItem;
 
 import java.util.ArrayList;
 
@@ -21,9 +20,9 @@ public class NarrationAdapter extends RecyclerView.Adapter<NarrationAdapter.Narr
     private NarrationSubAdapter.NarrationSubListener listener;
     private Context cons;
     private ArrayList<String> headerName;
-    private ArrayList<ArrayList<MusicItem>> mediaList;
+    private ArrayList<ArrayList<MediaItem>> mediaList;
 
-    public NarrationAdapter(Context context, ArrayList<String> passingHeader, ArrayList<ArrayList<MusicItem>> passingMediaName , NarrationSubAdapter.NarrationSubListener passingListener) {
+    public NarrationAdapter(Context context, ArrayList<String> passingHeader, ArrayList<ArrayList<MediaItem>> passingMediaName , NarrationSubAdapter.NarrationSubListener passingListener) {
         listener = passingListener;
         this.cons = context;
         this.headerName = passingHeader;
@@ -63,7 +62,7 @@ public class NarrationAdapter extends RecyclerView.Adapter<NarrationAdapter.Narr
             subRecyclerView = itemView.findViewById(R.id.narrationSubRecyclerView);
         }
 
-        public void setSubAdapter(ArrayList<MusicItem>  data, int position){
+        public void setSubAdapter(ArrayList<MediaItem>  data, int position){
             NarrationSubAdapter subAdapter = new NarrationSubAdapter(cons,data, listener, headerName.get(position));
             subRecyclerView.setLayoutManager(
                     new LinearLayoutManager(cons, LinearLayoutManager.HORIZONTAL, false));
