@@ -25,6 +25,8 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -93,6 +95,7 @@ public class ProfileFragment extends Fragment {
         reference.child(user.getUid()).child("temp_steam").setValue(x);
 
         breathChart = rootView.findViewById(R.id.breathChart);
+
         initChart();
         profileUserName = rootView.findViewById(R.id.profileUserName);
         profileUserEmail = rootView.findViewById(R.id.profileUserEmail);
@@ -151,6 +154,20 @@ public class ProfileFragment extends Fragment {
     }
 
     private void initChart() {
+        breathChart.setNoDataText("Edit here");
+        breathChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
+        breathChart.getXAxis().setEnabled(false);
+
         breathChart.setBackgroundColor(Color.GREEN);
         breathChart.setGridBackgroundColor(Color.DKGRAY);
         breathChart.setDrawGridBackground(true);
@@ -163,21 +180,24 @@ public class ProfileFragment extends Fragment {
 
     private void setData(ArrayList<BreathLogItem> log) {
 
-        ArrayList<BarEntry> yVels = new ArrayList<>();
+        if (log != null) {
+            ArrayList<BarEntry> yVels = new ArrayList<>();
 
-        for (int i = 0 ; i < log.size() ; i++){
-            yVels.add(new BarEntry(i, (float) (Integer.parseInt(log.get(i).totalTime)*10)));
+            for (int i = 0; i < log.size(); i++) {
+                yVels.add(new BarEntry((float) (Integer.parseInt(log.get(i).date)), (float) (Integer.parseInt(log.get(i).totalTime))));
+            }
+
+            BarDataSet barDataSet = new BarDataSet(yVels, "");
+            barDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+            barDataSet.setColor(Color.YELLOW);
+            barDataSet.setDrawValues(false);
+
+            BarData barData = new BarData(barDataSet);
+            barData.setDrawValues(false);
+
+            breathChart.setScaleEnabled(false);
+            breathChart.setData(barData);
         }
-
-        BarDataSet barDataSet = new BarDataSet(yVels, "data 1");
-        barDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-        barDataSet.setColor(Color.YELLOW);
-
-        BarData barData = new BarData(barDataSet);
-        barData.setDrawValues(false);
-
-        breathChart.setScaleEnabled(false);
-        breathChart.setData(barData);
     }
 
 

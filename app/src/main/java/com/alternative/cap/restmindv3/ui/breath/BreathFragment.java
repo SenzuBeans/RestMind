@@ -3,18 +3,16 @@ package com.alternative.cap.restmindv3.ui.breath;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.alternative.cap.restmindv3.R;
@@ -74,7 +72,7 @@ public class BreathFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_breath, container, false);
-        init(rootView,savedInstanceState);
+        init(rootView, savedInstanceState);
         workbench(rootView, savedInstanceState);
         return rootView;
     }
@@ -87,7 +85,7 @@ public class BreathFragment extends Fragment {
         circularImageView = rootView.findViewById(R.id.circularImageView);
         playerBtn = rootView.findViewById(R.id.playerBtn);
         breathStatusTextView = rootView.findViewById(R.id.breathStatusTextView);
-        timerView =  rootView.findViewById(R.id.breathTimer);
+        timerView = rootView.findViewById(R.id.breathTimer);
 
         valueEventListener = new ValueEventListener() {
             @Override
@@ -95,19 +93,24 @@ public class BreathFragment extends Fragment {
                 UserDetails userDetails = dataSnapshot.child(user.getUid()).getValue(UserDetails.class);
                 ArrayList<BreathLogItem> log = userDetails.breath_log;
 
-                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd");
+                SimpleDateFormat sdf = new SimpleDateFormat("dd");
                 String currentDate = sdf.format(new Date());
 
                 boolean isUpdate = false;
-                for (int i = 0 ; i < log.size(); i++){
-                    if (log.get(i).date.equals(currentDate)){
-                        log.get(i).updateTotalTime(timer);
-                        isUpdate = true;
+                if (log != null) {
+                    for (int i = 0; i < log.size(); i++) {
+                        if (log.get(i).date.equals(currentDate)) {
+                            log.get(i).updateTotalTime(timer);
+                            isUpdate = true;
+                        }
                     }
-                }
 
-                if (!isUpdate) {
-                    log.add(new BreathLogItem(currentDate, (timer/60000) + ""));
+                    if (!isUpdate) {
+                        log.add(new BreathLogItem(currentDate, (timer / 60000) + ""));
+                    }
+                }else{
+                    log = new ArrayList<>();
+                    log.add(new BreathLogItem(currentDate, (timer / 60000) + ""));
                 }
 
                 userDetails.setBreath_log(log);
@@ -133,7 +136,7 @@ public class BreathFragment extends Fragment {
                 if (!isSongPlaying) {
                     startRunningBreath();
 
-                    if (timer > 0){
+                    if (timer > 0) {
                         timerView.start(timer);
                         timerView.setOnCountdownEndListener(new CountdownView.OnCountdownEndListener() {
                             @Override
@@ -145,9 +148,9 @@ public class BreathFragment extends Fragment {
                             }
                         });
                     }
-                }else{
+                } else {
                     stopRunningBreath();
-                    if (timerView != null){
+                    if (timerView != null) {
                         timerView.stop();
                     }
                 }
@@ -191,7 +194,7 @@ public class BreathFragment extends Fragment {
 
     private void hideNavigationBar() {
         this.getActivity().getWindow().getDecorView()
-                .setSystemUiVisibility( View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                .setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                         View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN |
                         View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
     }
@@ -207,7 +210,7 @@ public class BreathFragment extends Fragment {
     }
 
     private void stopRunningBreath() {
-        if(isSongPlaying) {
+        if (isSongPlaying) {
             breathStatusTextView.setText("Ready");
             breathSongPlayer.stop();
             breathSongPlayer.release();
@@ -228,18 +231,18 @@ public class BreathFragment extends Fragment {
 
     private void animationPlayer(boolean state) {
 
-        final ScaleAnimation scaleIn = new ScaleAnimation(1f,1.25f, 1f,1.25f,
-                circularImageView.getWidth()/2, circularImageView.getHeight()/2);
-        final ScaleAnimation scaleOut = new ScaleAnimation(1.25f,1f, 1.25f,1f,
-                circularImageView.getWidth()/2, circularImageView.getHeight()/2);
-        final ScaleAnimation textScaleIn = new ScaleAnimation(1f,1.25f, 1f,1.25f,
-                breathStatusTextView.getWidth()/2, breathStatusTextView.getHeight()/2);
-        final ScaleAnimation textScaleOut = new ScaleAnimation(1.25f,1f, 1.25f,1f,
-                breathStatusTextView.getWidth()/2, breathStatusTextView.getHeight()/2);
-        final Animation holdInAnimation = new AlphaAnimation(1,1);
-        final Animation holdOutAnimation = new AlphaAnimation(1,1);
+        final ScaleAnimation scaleIn = new ScaleAnimation(1f, 1.25f, 1f, 1.25f,
+                circularImageView.getWidth() / 2, circularImageView.getHeight() / 2);
+        final ScaleAnimation scaleOut = new ScaleAnimation(1.25f, 1f, 1.25f, 1f,
+                circularImageView.getWidth() / 2, circularImageView.getHeight() / 2);
+        final ScaleAnimation textScaleIn = new ScaleAnimation(1f, 1.25f, 1f, 1.25f,
+                breathStatusTextView.getWidth() / 2, breathStatusTextView.getHeight() / 2);
+        final ScaleAnimation textScaleOut = new ScaleAnimation(1.25f, 1f, 1.25f, 1f,
+                breathStatusTextView.getWidth() / 2, breathStatusTextView.getHeight() / 2);
+        final Animation holdInAnimation = new AlphaAnimation(1, 1);
+        final Animation holdOutAnimation = new AlphaAnimation(1, 1);
 
-        Animation stopAnimation = new ScaleAnimation(1f,1f,1f,1f);
+        Animation stopAnimation = new ScaleAnimation(1f, 1f, 1f, 1f);
         stopAnimation.setDuration(1000);
 
         textScaleIn.setDuration(inhale);
@@ -261,8 +264,8 @@ public class BreathFragment extends Fragment {
             }
         });
 
-        Animation a = new ScaleAnimation(1.25f,1.25f, 1.25f,1.25f,
-                breathStatusTextView.getWidth()/2, breathStatusTextView.getHeight()/2);
+        Animation a = new ScaleAnimation(1.25f, 1.25f, 1.25f, 1.25f,
+                breathStatusTextView.getWidth() / 2, breathStatusTextView.getHeight() / 2);
         a.setDuration(hold);
         holdInAnimation.setDuration(hold);
         holdInAnimation.setAnimationListener(new Animation.AnimationListener() {
@@ -324,10 +327,10 @@ public class BreathFragment extends Fragment {
         });
 
 
-        if (state){
+        if (state) {
             circularImageView.startAnimation(scaleIn);
             breathStatusTextView.startAnimation(textScaleIn);
-        }else{
+        } else {
             circularImageView.startAnimation(stopAnimation);
             breathStatusTextView.startAnimation(stopAnimation);
         }

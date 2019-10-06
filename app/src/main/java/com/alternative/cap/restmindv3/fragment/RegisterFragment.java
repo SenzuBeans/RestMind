@@ -96,8 +96,6 @@ public class RegisterFragment extends Fragment {
                 }
                 ArrayList<BreathLogItem> log = new ArrayList<>();
 
-                log.add(new BreathLogItem("0", "0"));
-
                 userDetails = new UserDetails(userName, email);
                 userDetails.setBreath_log(log);
 
