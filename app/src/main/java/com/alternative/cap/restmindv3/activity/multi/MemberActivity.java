@@ -6,10 +6,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -172,8 +175,20 @@ public class MemberActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        countyDataSpinner.setAdapter(new ArrayAdapter<>(MemberActivity.this, android.R.layout.simple_spinner_dropdown_item, phoneCountyNameList));
+        countyDataSpinner.setAdapter(new ArrayAdapter<String>(MemberActivity.this, android.R.layout.simple_spinner_dropdown_item, phoneCountyNameList){});
         countyDataSpinner.setSelection(208);
+
+        countyDataSpinner.setOnItemSelectedListener( new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                ((TextView) view).setTextColor(Color.WHITE);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        } );
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -54,6 +54,7 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp"
             android:src="@drawable/user_profile_image"
             android:layout_gravity="center"
             tools:srcCompat="@tools:sample/avatars[6]" />
@@ -75,7 +76,7 @@
                 android:text="Profile"
                 android:textColor="#fff" />
 
-            <Button
+           <!--> <Button
                 android:id="@+id/changePasswordBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -85,7 +86,7 @@
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/btn_rounded3"
                 android:text="Change Password"
-                android:textColor="#fff" />
+                android:textColor="#fff" /> <!-->
 
             <Button
                 android:id="@+id/notificationsBtn"

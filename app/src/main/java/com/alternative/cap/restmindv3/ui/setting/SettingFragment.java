@@ -36,7 +36,7 @@ public class SettingFragment extends Fragment
 
     private TextView userName;
 
-    private Button contactBtn, profileBtn, notificationsBtn, shareBtn, changePasswordBtn;
+    private Button contactBtn, profileBtn, notificationsBtn, shareBtn;
     private FrameLayout settingContainerLayout;
     private LinearLayout settingMainLayout;
 
@@ -65,7 +65,7 @@ public class SettingFragment extends Fragment
         profileBtn = root.findViewById( R.id.profileBtn );
         notificationsBtn = root.findViewById( R.id.notificationsBtn );
         shareBtn = root.findViewById( R.id.shareBtn );
-        changePasswordBtn  = root.findViewById( R.id.changePasswordBtn );
+        //changePasswordBtn  = root.findViewById( R.id.changePasswordBtn );
     }
 
     private void workbench(View root, Bundle savedInstanceState) {
@@ -117,25 +117,41 @@ public class SettingFragment extends Fragment
         shareBtn.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                swapContent(SHOW);
-                getChildFragmentManager().beginTransaction()
-                        .add( R.id.settingContainerLayout, ShareWithFriends.newInstance(SettingFragment.this) )
-                        .addToBackStack( null )
-                        .commit();
+//                swapContent(SHOW);
+//                getChildFragmentManager().beginTransaction()
+//                        .add( R.id.settingContainerLayout, ShareWithFriends.newInstance(SettingFragment.this) )
+//                        .addToBackStack( null )
+//                        .commit();
+                shareTextUrl();
             }
         } );
 
-        changePasswordBtn.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                swapContent(SHOW);
-                getChildFragmentManager().beginTransaction()
-                        .add( R.id.settingContainerLayout, ChangePassword.newInstance(SettingFragment.this) )
-                        .addToBackStack( null )
-                        .commit();
-            }
-        } );
+//        changePasswordBtn.setOnClickListener( new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                swapContent(SHOW);
+//                getChildFragmentManager().beginTransaction()
+//                        .add( R.id.settingContainerLayout, ChangePassword.newInstance(SettingFragment.this) )
+//                        .addToBackStack( null )
+//                        .commit();
+//            }
+//        } );
     }
+
+    // Method to share either text or URL.
+    private void shareTextUrl() {
+        Intent share = new Intent(android.content.Intent.ACTION_SEND);
+        share.setType("text/plain");
+        share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+
+        // Add data to the intent, the receiving app will decide
+        // what to do with it.
+        share.putExtra(Intent.EXTRA_SUBJECT, "Title Of The Post");
+        share.putExtra(Intent.EXTRA_TEXT, "https://www.facebook.com/RestMind-124282092307252/?modal=admin_todo_tour");
+
+        startActivity(Intent.createChooser(share, "To our site..."));
+    }
+
     @Override
     public void onResume() {
         super.onResume();
