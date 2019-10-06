@@ -55,6 +55,8 @@ public class MusicPlayerFragment extends Fragment {
     private static String header = "Music List";
     private static Context cons;
 
+    private boolean isAnimationPlaying = false;
+
     public MusicPlayerFragment() {
     }
 
@@ -202,13 +204,17 @@ public class MusicPlayerFragment extends Fragment {
             }
         });
         soundPlayerCover.startAnimation(anim);
+        isAnimationPlaying = true;
     }
 
     private void stopAnimation() {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                soundPlayerCover.getAnimation().cancel();
+                if (isAnimationPlaying) {
+                    soundPlayerCover.getAnimation().cancel();
+                    isAnimationPlaying = false;
+                }
             }
         });
     }

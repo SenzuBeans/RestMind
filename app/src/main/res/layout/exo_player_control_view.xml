@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#CCFFFFFF"
     android:gravity="center"
     android:orientation="vertical">
 
@@ -11,7 +10,11 @@
         android:id="@+id/exo_progress"
         android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:background="#000"/>
+        android:padding="5dp"
+        android:layout_margin="10dp"
+        android:background="@color/colorTransparent">
+
+    </com.google.android.exoplayer2.ui.DefaultTimeBar>
 
 
 
