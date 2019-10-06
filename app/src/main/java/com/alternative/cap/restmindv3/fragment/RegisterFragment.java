@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.alternative.cap.restmindv3.R;
+import com.alternative.cap.restmindv3.util.BreathLogItem;
 import com.alternative.cap.restmindv3.util.UserDetails;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -23,6 +24,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 
 public class RegisterFragment extends Fragment {
 
@@ -91,8 +94,11 @@ public class RegisterFragment extends Fragment {
                     emailEditText.requestFocus();
                     return;
                 }
+                ArrayList<BreathLogItem> log = new ArrayList<>();
 
                 userDetails = new UserDetails(userName, email);
+                userDetails.setBreath_log(log);
+
                 reference.child(user.getUid()).setValue(userDetails);
 
 

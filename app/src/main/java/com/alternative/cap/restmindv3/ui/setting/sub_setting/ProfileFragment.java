@@ -25,6 +25,8 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -50,8 +52,6 @@ public class ProfileFragment extends Fragment {
     private DatabaseReference databaseReference;
     private DatabaseReference reference;
     private FirebaseUser user;
-    private UserDetails userDetails;
-
 
     Random random = new Random();
     int x = random.nextInt(1000);
@@ -86,8 +86,7 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
         initInsance(rootView, savedInstanceState);
-        workbench(rootView, savedInstanceState);
-
+        checkRegis(rootView, savedInstanceState);
         return rootView;
     }
 
@@ -95,26 +94,30 @@ public class ProfileFragment extends Fragment {
     private void initInsance(View rootView, Bundle savedInstanceState) {
         reference.child(user.getUid()).child("temp_steam").setValue(x);
 
-
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                UserDetails userDetails = dataSnapshot.child(user.getUid()).getValue(UserDetails.class);
-                ArrayList<BreathLogItem> log = userDetails.breath_log;
-                setData(log);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        checkRegis(rootView);
         breathChart = rootView.findViewById(R.id.breathChart);
+
         initChart();
         profileUserName = rootView.findViewById(R.id.profileUserName);
         profileUserEmail = rootView.findViewById(R.id.profileUserEmail);
+
+    }
+
+    private void checkRegis(View rootView, Bundle savedInstanceState) {
+        if (user.getDisplayName().equals("VISITOR")) {
+            rootView.findViewById(R.id.profileContentContainer).setVisibility(View.VISIBLE);
+            getChildFragmentManager().beginTransaction()
+                    .add(R.id.profileContentContainer, RegisterFragment.newInstance(new RegisterFragment.RegisterListener() {
+                        @Override
+                        public void onRegis() {
+                            rootView.findViewById(R.id.profileContentContainer).setVisibility(View.GONE);
+                        }
+                    }))
+                    .commit();
+        }
+
+        if (rootView.findViewById(R.id.profileContentContainer).getVisibility() == View.GONE){
+            workbench(rootView, savedInstanceState);
+        }
     }
 
     private void workbench(View rootView, Bundle savedInstanceState) {
@@ -123,7 +126,13 @@ public class ProfileFragment extends Fragment {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                UserDetails userDetails = dataSnapshot.child(user.getUid()).getValue(UserDetails.class);
 
+                profileUserName.setText(userDetails.name);
+                profileUserEmail.setText(userDetails.email);
+
+                ArrayList<BreathLogItem> log = userDetails.breath_log;
+                setData(log);
             }
 
             @Override
@@ -145,6 +154,20 @@ public class ProfileFragment extends Fragment {
     }
 
     private void initChart() {
+        breathChart.setNoDataText("Edit here");
+        breathChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
+        breathChart.getXAxis().setEnabled(false);
+
         breathChart.setBackgroundColor(Color.GREEN);
         breathChart.setGridBackgroundColor(Color.DKGRAY);
         breathChart.setDrawGridBackground(true);
@@ -157,36 +180,26 @@ public class ProfileFragment extends Fragment {
 
     private void setData(ArrayList<BreathLogItem> log) {
 
-        ArrayList<BarEntry> yVels = new ArrayList<>();
+        if (log != null) {
+            ArrayList<BarEntry> yVels = new ArrayList<>();
 
-        for (int i = 0 ; i < log.size() ; i++){
-            yVels.add(new BarEntry(i, (float) (Integer.parseInt(log.get(i).totalTime)*10)));
-        }
+            for (int i = 0; i < log.size(); i++) {
+                yVels.add(new BarEntry((float) (Integer.parseInt(log.get(i).date)), (float) (Integer.parseInt(log.get(i).totalTime))));
+            }
 
-        BarDataSet barDataSet = new BarDataSet(yVels, "data 1");
-        barDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-        barDataSet.setColor(Color.YELLOW);
+            BarDataSet barDataSet = new BarDataSet(yVels, "");
+            barDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+            barDataSet.setColor(Color.YELLOW);
+            barDataSet.setDrawValues(false);
 
-        BarData barData = new BarData(barDataSet);
-        barData.setDrawValues(false);
+            BarData barData = new BarData(barDataSet);
+            barData.setDrawValues(false);
 
-        breathChart.setScaleEnabled(false);
-        breathChart.setData(barData);
-    }
-
-    private void checkRegis(View rootView) {
-        if (user.getDisplayName().equals("VISITOR")) {
-            rootView.findViewById(R.id.profileContentContainer).setVisibility(View.VISIBLE);
-            getChildFragmentManager().beginTransaction()
-                    .add(R.id.profileContentContainer, RegisterFragment.newInstance(new RegisterFragment.RegisterListener() {
-                        @Override
-                        public void onRegis() {
-                            rootView.findViewById(R.id.profileContentContainer).setVisibility(View.GONE);
-                        }
-                    }))
-                    .commit();
+            breathChart.setScaleEnabled(false);
+            breathChart.setData(barData);
         }
     }
+
 
     @Override
     public void onDestroy() {

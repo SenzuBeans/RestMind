@@ -15,4 +15,26 @@ public class BreathLogItem {
         this.date = date;
         this.totalTime = totalTime;
     }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getTotalTime() {
+        return totalTime;
+    }
+
+    public void setTotalTime(String totalTime) {
+        this.totalTime = totalTime;
+    }
+
+    public void updateTotalTime(long time) {
+        int minte = (int) (time/60);
+        int current = Integer.parseInt(this.totalTime);
+        this.totalTime = (current + (minte/1000)) + "";
+    }
 }
