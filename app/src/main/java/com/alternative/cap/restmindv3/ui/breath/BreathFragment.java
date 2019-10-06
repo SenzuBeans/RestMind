@@ -99,9 +99,6 @@ public class BreathFragment extends Fragment {
                 boolean isUpdate = false;
                 if (log != null) {
 
-                    if (log.size() > 7){
-                        log.remove(0);
-                    }
 
                     for (int i = 0; i < log.size(); i++) {
                         if (log.get(i).date.equals(currentDate)) {
@@ -113,6 +110,11 @@ public class BreathFragment extends Fragment {
                     if (!isUpdate) {
                         log.add(new BreathLogItem(currentDate, (timer / 60000) + ""));
                     }
+
+                    if (log.size() > 7){
+                        log.remove(0);
+                    }
+
                 }else{
                     log = new ArrayList<>();
                     log.add(new BreathLogItem(currentDate, (timer / 60000) + ""));
