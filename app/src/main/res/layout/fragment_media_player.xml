@@ -17,6 +17,22 @@
         android:elevation="100dp"
         android:src="@drawable/cover_07" />
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/soundPlayerName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/soundPlayerArtist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
     <com.google.android.exoplayer2.ui.PlayerControlView
         android:id="@+id/soundPlayerControlView"
         android:layout_width="match_parent"
