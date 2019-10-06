@@ -166,7 +166,9 @@ public class ProfileFragment extends Fragment {
 
             }
         });
-        breathChart.getXAxis().setEnabled(false);
+        breathChart.getXAxis().setEnabled(true);
+        breathChart.getAxisRight().setEnabled(false);
+        breathChart.getAxisLeft().setEnabled(true);
 
         breathChart.setBackgroundColor(Color.GREEN);
         breathChart.setGridBackgroundColor(Color.DKGRAY);
@@ -190,12 +192,11 @@ public class ProfileFragment extends Fragment {
             BarDataSet barDataSet = new BarDataSet(yVels, "");
             barDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
             barDataSet.setColor(Color.YELLOW);
-            barDataSet.setDrawValues(false);
 
             BarData barData = new BarData(barDataSet);
             barData.setDrawValues(false);
 
-            breathChart.setScaleEnabled(false);
+            breathChart.setScaleEnabled(true);
             breathChart.setData(barData);
         }
     }
