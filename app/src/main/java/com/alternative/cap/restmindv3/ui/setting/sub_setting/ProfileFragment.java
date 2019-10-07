@@ -1,6 +1,7 @@
 package com.alternative.cap.restmindv3.ui.setting.sub_setting;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,7 +49,7 @@ public class ProfileFragment extends Fragment {
     private TextView profileUserName;
     private TextView profileUserEmail;
     private BarChart breathChart;
-
+    private TextView userResult;
     private DatabaseReference databaseReference;
     private DatabaseReference reference;
     private FirebaseUser user;
@@ -93,13 +94,11 @@ public class ProfileFragment extends Fragment {
 
     private void initInsance(View rootView, Bundle savedInstanceState) {
         reference.child(user.getUid()).child("temp_steam").setValue(x);
-
         breathChart = rootView.findViewById(R.id.breathChart);
-
         initChart();
         profileUserName = rootView.findViewById(R.id.profileUserName);
         profileUserEmail = rootView.findViewById(R.id.profileUserEmail);
-
+        userResult = rootView.findViewById( R.id.userResult );
     }
 
     private void checkRegis(View rootView, Bundle savedInstanceState) {
@@ -127,12 +126,12 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 UserDetails userDetails = dataSnapshot.child(user.getUid()).getValue(UserDetails.class);
-
                 profileUserName.setText(userDetails.name);
                 profileUserEmail.setText(userDetails.email);
-
                 ArrayList<BreathLogItem> log = userDetails.breath_log;
                 setData(log);
+                breathChart.notifyDataSetChanged();
+                breathChart.invalidate();
             }
 
             @Override
@@ -140,6 +139,7 @@ public class ProfileFragment extends Fragment {
 
             }
         });
+
 
 
     }
@@ -154,13 +154,14 @@ public class ProfileFragment extends Fragment {
     }
 
     private void initChart() {
-        breathChart.setNoDataText("Edit here");
+        breathChart.setNoDataText("Tap to refresh information");
         breathChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
-
+                e.getX();
+                e.getY();
+                userResult.setText("เดือนนี้..วันที่ "+(int)e.getX() +" คุณได้ฝึกกำหนดลมหายใจ "+(int)e.getY()+" นาที");
             }
-
             @Override
             public void onNothingSelected() {
 
@@ -169,15 +170,19 @@ public class ProfileFragment extends Fragment {
         breathChart.getXAxis().setEnabled(true);
         breathChart.getAxisRight().setEnabled(false);
         breathChart.getAxisLeft().setEnabled(true);
+        breathChart.getAxisLeft().setTextColor( Color.WHITE );
+        breathChart.getXAxis().setTextColor( Color.WHITE );
 
-        breathChart.setBackgroundColor(Color.GREEN);
+
+        breathChart.setBackgroundColor(Color.BLACK);
         breathChart.setGridBackgroundColor(Color.DKGRAY);
+
         breathChart.setDrawGridBackground(true);
 
         breathChart.setDrawBorders(true);
         breathChart.getDescription().setEnabled(false);
         breathChart.setPinchZoom(false);
-        breathChart.getLegend().setEnabled(true);
+        breathChart.getLegend().setEnabled(false);
     }
 
     private void setData(ArrayList<BreathLogItem> log) {
@@ -192,6 +197,7 @@ public class ProfileFragment extends Fragment {
             BarDataSet barDataSet = new BarDataSet(yVels, "");
             barDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
             barDataSet.setColor(Color.YELLOW);
+
 
             BarData barData = new BarData(barDataSet);
             barData.setDrawValues(false);

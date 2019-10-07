@@ -15,6 +15,7 @@
 
 
     <color name="spinnerText">#DBDBDB</color>
+    <color name="bg_graph">#202020</color>
 
     //
     <!-- General -->
