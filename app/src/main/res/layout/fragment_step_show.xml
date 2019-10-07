@@ -21,9 +21,10 @@
             android:background="@color/colorTransparent">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp">
 
                 <ImageButton
                     android:id="@+id/stepShowBackBtn"
@@ -32,13 +33,22 @@
                     android:background="@color/colorTransparent"
                     app:srcCompat="@drawable/ic_arrow_back_24dp" />
 
-                <TextView
-                    android:id="@+id/stepHeader"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="20dp"
-                    android:layout_weight="0.5"
-                    android:text="Step" />
+
+                    <TextView
+                        android:id="@+id/stepHeader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="20dp"
+                        android:layout_weight="0.5"
+                        android:text="Step"
+                        android:textSize="20dp"
+                        android:textColor="#FFF"
+                        android:padding="5dp"
+                        android:background="@drawable/btn_rounded17"
+                        />
+
+
+
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
 
