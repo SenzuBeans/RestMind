@@ -131,7 +131,7 @@ public class NarrationFragment extends Fragment implements NarrationSubAdapter.N
         getChildFragmentManager().beginTransaction()
                 .add(R.id.narrationContentContainer, NarrationPlayerFragment.newInstance(passingHeader, passingDataList, current, getContext(), new NarrationPlayerFragment.MusicListener() {
                     @Override
-                    public void onDestory() {
+                    public void onDestroy() {
                         narrationRecyclerView.setVisibility(View.VISIBLE);
                         narrationContentContainer.setVisibility(View.GONE);
                     }

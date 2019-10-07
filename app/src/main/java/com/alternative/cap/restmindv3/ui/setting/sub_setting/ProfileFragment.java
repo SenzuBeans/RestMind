@@ -98,7 +98,7 @@ public class ProfileFragment extends Fragment {
         initChart();
         profileUserName = rootView.findViewById(R.id.profileUserName);
         profileUserEmail = rootView.findViewById(R.id.profileUserEmail);
-        userResult = rootView.findViewById( R.id.userResult );
+        userResult = rootView.findViewById(R.id.userResult );
     }
 
     private void checkRegis(View rootView, Bundle savedInstanceState) {

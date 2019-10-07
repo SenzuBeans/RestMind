@@ -1,45 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/music_screen_mobile"
-    android:orientation="vertical"
     tools:context=".ui.narration.NarrationPlayerFragment">
 
 
-    <androidx.appcompat.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorTransparent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/stepShowBackBtn"
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:background="@color/colorTransparent"
-                app:srcCompat="@drawable/ic_arrow_back_24dp" />
-
-            <TextView
-                android:id="@+id/stepHeader"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Step"
-                android:layout_marginLeft="20dp"
-                android:layout_weight="0.5"/>
-        </LinearLayout>
-    </androidx.appcompat.widget.Toolbar>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/stepShowRecyclerView"
+    <LinearLayout
+        android:id="@+id/stepShowLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="5dp" />
+        android:orientation="vertical">
 
-</LinearLayout>
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorTransparent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/stepShowBackBtn"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorTransparent"
+                    app:srcCompat="@drawable/ic_arrow_back_24dp" />
+
+                <TextView
+                    android:id="@+id/stepHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_weight="0.5"
+                    android:text="Step" />
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/stepShowRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="5dp" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/stepShowContentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
+</RelativeLayout>

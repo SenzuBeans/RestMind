@@ -112,7 +112,7 @@ public class NarrationPlayerFragment extends Fragment {
         soundController = rootView.findViewById(R.id.stepPlayerControlView);
         soundPlayerCover = rootView.findViewById(R.id.stepPlayerCover);
 
-        soundPlayerHeader = rootView.findViewById(R.id.soundPlayerHeader);
+        soundPlayerHeader = rootView.findViewById(R.id.stepPlayerHeader);
         soundPlayerName = rootView.findViewById(R.id.stepPlayerName);
         soundPlayerArtist = rootView.findViewById(R.id.stepPlayerArtist);
     }
@@ -236,7 +236,7 @@ public class NarrationPlayerFragment extends Fragment {
             soundPlayer = null;
         }
 //        getFragmentManager().popBackStack();
-        listener.onDestory();
+        listener.onDestroy();
         super.onStop();
     }
 
@@ -248,11 +248,11 @@ public class NarrationPlayerFragment extends Fragment {
             soundPlayer = null;
         }
 //        getFragmentManager().popBackStack();
-        listener.onDestory();
+        listener.onDestroy();
         super.onDestroy();
     }
 
     public interface MusicListener {
-        void onDestory();
+        void onDestroy();
     }
 }

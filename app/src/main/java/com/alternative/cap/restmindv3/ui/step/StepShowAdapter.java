@@ -15,20 +15,26 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.util.MediaItem;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
+import com.mikhaellopez.circularimageview.CircularImageView;
+
 public class StepShowAdapter extends RecyclerView.Adapter<StepShowAdapter.StepViewHolder> {
 
+    StepShowListener listener;
     ArrayList<MediaItem> dataList;
     int current;
     Context cons;
 
-    public StepShowAdapter(ArrayList<MediaItem> passingDataList, int passingCurrent, Context context) {
+    public StepShowAdapter(ArrayList<MediaItem> passingDataList, int passingCurrent, Context context, StepShowListener passingListener) {
         dataList = passingDataList;
         current = passingCurrent;
         cons = context;
+        listener = passingListener;
     }
 
     @NonNull
@@ -42,17 +48,22 @@ public class StepShowAdapter extends RecyclerView.Adapter<StepShowAdapter.StepVi
     public void onBindViewHolder(@NonNull StepViewHolder holder, int position) {
         holder.stepName.setText(dataList.get(position).name);
         holder.stepArtist.setText(dataList.get(position).artist);
+        holder.setImage(dataList.get(position).image_link);
+
         if (position <= current){
 //            holder.root.setBackground(ContextCompat.getDrawable(cons, R.drawable.background_step));
-            holder.stepName.setTextColor(Color.BLACK);
-            holder.stepArtist.setTextColor(Color.BLACK);
+            holder.stepName.setTextColor(Color.WHITE);
+            holder.stepArtist.setTextColor(Color.WHITE);
             holder.root.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Snackbar.make(view, "This step are allow to listen", Snackbar.LENGTH_SHORT).show();
+                    listener.onClickedItem(position, current);
+//                    Snackbar.make(view, "This step are allow to listen", Snackbar.LENGTH_SHORT).show();
                 }
             });
         }else{
+            holder.stepName.setTextColor(Color.BLACK);
+            holder.stepArtist.setTextColor(Color.BLACK);
             holder.root.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -72,6 +83,7 @@ public class StepShowAdapter extends RecyclerView.Adapter<StepShowAdapter.StepVi
         private View root;
         private TextView stepName;
         private TextView stepArtist;
+        private CircularImageView stepShowCover;
 
 
         public StepViewHolder(@NonNull View itemView) {
@@ -79,6 +91,18 @@ public class StepShowAdapter extends RecyclerView.Adapter<StepShowAdapter.StepVi
             root = itemView;
             stepName = itemView.findViewById(R.id.stepName);
             stepArtist = itemView.findViewById(R.id.stepArtist);
+            stepShowCover = itemView.findViewById(R.id.stepShowCover);
         }
+
+        public void setImage(String uri){
+            Glide.with(cons)
+                    .load(uri)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(stepShowCover);
+        }
+    }
+
+    public interface StepShowListener{
+        void onClickedItem(int passingCurrentPlay,int passingCurrentStep);
     }
 }
