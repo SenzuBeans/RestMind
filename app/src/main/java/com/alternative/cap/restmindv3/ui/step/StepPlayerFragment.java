@@ -15,7 +15,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.util.MediaItem;
@@ -23,11 +22,9 @@ import com.alternative.cap.restmindv3.util.StepLogItem;
 import com.alternative.cap.restmindv3.util.UserDetails;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
@@ -180,10 +177,15 @@ public class StepPlayerFragment extends Fragment {
                                 UserDetails userDetails = dataSnapshot.child("users").child(user.getUid()).getValue(UserDetails.class);
                                 ArrayList<StepLogItem> log = userDetails.step_log;
 
-                                for (int i = 0 ; i < log.size(); i ++){
-                                    if (log.get(i).stepId.equals(header)){
-                                        log.get(i).updateStep();
+                                if (log != null) {
+                                    for (int i = 0; i < log.size(); i++) {
+                                        if (log.get(i).stepId.equals(header)) {
+                                            log.get(i).updateStep();
+                                        }
                                     }
+                                }else{
+                                    log = new ArrayList<>();
+                                    log.add(new StepLogItem(header, currentStep +""));
                                 }
 
                                 userDetails.setStep_log(log);
