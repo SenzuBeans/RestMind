@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.music.MusicFragment"
+    tools:context=".ui.step.StepListFragment"
     android:background="@drawable/music_screen_mobile">
 
     <FrameLayout
-        android:id="@+id/soundPlayerContentContainer"
+        android:id="@+id/stepPlayerContentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"/>
@@ -24,7 +24,7 @@
              android:background="@color/colorTransparent">
 
               <ImageButton
-                  android:id="@+id/soundBackBtn"
+                  android:id="@+id/stepBackBtn"
                   android:layout_width="wrap_content"
                   android:layout_height="match_parent"
                   android:background="@color/colorTransparent"
@@ -40,7 +40,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:padding="3dp"
-                android:id="@+id/mediaListRecyclerView"
+                android:id="@+id/stepListRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

@@ -25,10 +25,10 @@
         tools:layout="@layout/fragment_narration" />
 
     <fragment
-        android:id="@+id/navigation_music"
-        android:name="com.alternative.cap.restmindv3.ui.music.MusicFragment"
+        android:id="@+id/navigation_step"
+        android:name="com.alternative.cap.restmindv3.ui.step.StepListFragment"
         android:label="Music"
-        tools:layout="@layout/fragment_music" />
+        tools:layout="@layout/fragment_step_list" />
 
     <fragment
         android:id="@+id/navigation_setting"

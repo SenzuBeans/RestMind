@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="180dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="horizontal">
-
-
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,12 +19,13 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="5dp"
             android:background="@drawable/btn_rounded"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center">
 
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/musicCover"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:src="@drawable/cover1"
                 android:layout_margin="5dp"
                 app:civ_border_width="0dp"/>
@@ -37,28 +35,30 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:paddingLeft="10dp"
-                android:gravity="left|center">
+                android:gravity="center">
 
 
                 <TextView
-                    android:id="@+id/nameMusicTv"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/stepName"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:text="song name"
+                    android:text="step name"
                     android:textColor="#FFFF"
                     android:textSize="18dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:gravity="center"/>
 
                 <TextView
-                    android:id="@+id/nameArtistMusicTv"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/stepArtist"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity=""
                     android:layout_margin="5dp"
                     android:text="artist name"
                     android:textColor="#FFFF"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"
+                    android:gravity="center"/>
             </LinearLayout>
         </LinearLayout>
 

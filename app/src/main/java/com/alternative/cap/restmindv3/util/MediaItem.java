@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @IgnoreExtraProperties
-public class MusicItem {
+public class MediaItem {
 
     public String name;
     public String artist;
@@ -15,10 +15,10 @@ public class MusicItem {
     public String image_link;
     public long temp_steam;
 
-    public MusicItem() {
+    public MediaItem() {
     }
 
-    public MusicItem(String name, String artist, String link, String image_link, long temp_steam) {
+    public MediaItem(String name, String artist, String link, String image_link, long temp_steam) {
         this.name = name;
         this.artist = artist;
         this.link = link;

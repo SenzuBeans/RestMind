@@ -1,8 +1,6 @@
 package com.alternative.cap.restmindv3.ui.narration.adapter;
 
 import android.content.Context;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alternative.cap.restmindv3.R;
-import com.alternative.cap.restmindv3.util.MusicItem;
+import com.alternative.cap.restmindv3.util.MediaItem;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
@@ -27,10 +24,10 @@ public class NarrationSubAdapter extends RecyclerView.Adapter<NarrationSubAdapte
 
     private static NarrationSubListener listener;
     private Context cons;
-    private ArrayList<MusicItem>  dataList;
+    private ArrayList<MediaItem>  dataList;
     private String header;
 
-    public NarrationSubAdapter(Context context, ArrayList<MusicItem> data, NarrationSubListener passingListener, String passingHeader) {
+    public NarrationSubAdapter(Context context, ArrayList<MediaItem> data, NarrationSubListener passingListener, String passingHeader) {
         listener = passingListener;
         cons = context;
         this.dataList = data;
@@ -90,6 +87,6 @@ public class NarrationSubAdapter extends RecyclerView.Adapter<NarrationSubAdapte
     }
 
     public interface NarrationSubListener{
-        void onItemClicked(ArrayList<MusicItem> passingDataList, int current,String passingHeader);
+        void onItemClicked(ArrayList<MediaItem> passingDataList, int current, String passingHeader);
     }
 }

@@ -13,6 +13,15 @@
 
     <color name="headbar">#a3a7ad</color>
 
+    <color name="spinnerText">#DBDBDB</color>
+    <color name="bg_graph">#202020</color>
+
+    //
+    <!-- General -->
+    <color name="about_item_icon_color">#313131</color>
+    <color name="about_background_color">#FFFFFF</color>
+    <color name="about_separator_color">#e1e1e1</color>
+
 
 
 </resources>

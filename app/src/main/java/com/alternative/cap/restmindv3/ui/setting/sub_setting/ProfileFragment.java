@@ -1,6 +1,7 @@
 package com.alternative.cap.restmindv3.ui.setting.sub_setting;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +26,8 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -46,12 +49,10 @@ public class ProfileFragment extends Fragment {
     private TextView profileUserName;
     private TextView profileUserEmail;
     private BarChart breathChart;
-
+    private TextView userResult;
     private DatabaseReference databaseReference;
     private DatabaseReference reference;
     private FirebaseUser user;
-    private UserDetails userDetails;
-
 
     Random random = new Random();
     int x = random.nextInt(1000);
@@ -86,35 +87,36 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
         initInsance(rootView, savedInstanceState);
-        workbench(rootView, savedInstanceState);
-
+        checkRegis(rootView, savedInstanceState);
         return rootView;
     }
 
 
     private void initInsance(View rootView, Bundle savedInstanceState) {
         reference.child(user.getUid()).child("temp_steam").setValue(x);
-
-
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                UserDetails userDetails = dataSnapshot.child(user.getUid()).getValue(UserDetails.class);
-                ArrayList<BreathLogItem> log = userDetails.breath_log;
-                setData(log);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        checkRegis(rootView);
         breathChart = rootView.findViewById(R.id.breathChart);
         initChart();
         profileUserName = rootView.findViewById(R.id.profileUserName);
         profileUserEmail = rootView.findViewById(R.id.profileUserEmail);
+        userResult = rootView.findViewById( R.id.userResult );
+    }
+
+    private void checkRegis(View rootView, Bundle savedInstanceState) {
+        if (user.getDisplayName().equals("VISITOR")) {
+            rootView.findViewById(R.id.profileContentContainer).setVisibility(View.VISIBLE);
+            getChildFragmentManager().beginTransaction()
+                    .add(R.id.profileContentContainer, RegisterFragment.newInstance(new RegisterFragment.RegisterListener() {
+                        @Override
+                        public void onRegis() {
+                            rootView.findViewById(R.id.profileContentContainer).setVisibility(View.GONE);
+                        }
+                    }))
+                    .commit();
+        }
+
+        if (rootView.findViewById(R.id.profileContentContainer).getVisibility() == View.GONE){
+            workbench(rootView, savedInstanceState);
+        }
     }
 
     private void workbench(View rootView, Bundle savedInstanceState) {
@@ -123,7 +125,13 @@ public class ProfileFragment extends Fragment {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                UserDetails userDetails = dataSnapshot.child(user.getUid()).getValue(UserDetails.class);
+                profileUserName.setText(userDetails.name);
+                profileUserEmail.setText(userDetails.email);
+                ArrayList<BreathLogItem> log = userDetails.breath_log;
+                setData(log);
+                breathChart.notifyDataSetChanged();
+                breathChart.invalidate();
             }
 
             @Override
@@ -131,6 +139,7 @@ public class ProfileFragment extends Fragment {
 
             }
         });
+
 
 
     }
@@ -145,48 +154,59 @@ public class ProfileFragment extends Fragment {
     }
 
     private void initChart() {
-        breathChart.setBackgroundColor(Color.GREEN);
+        breathChart.setNoDataText("Tap to refresh information");
+        breathChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                e.getX();
+                e.getY();
+                userResult.setText("เดือนนี้..วันที่ "+(int)e.getX() +" คุณได้ฝึกกำหนดลมหายใจ "+(int)e.getY()+" นาที");
+            }
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
+        breathChart.getXAxis().setEnabled(true);
+        breathChart.getAxisRight().setEnabled(false);
+        breathChart.getAxisLeft().setEnabled(true);
+        breathChart.getAxisLeft().setTextColor( Color.WHITE );
+        breathChart.getXAxis().setTextColor( Color.WHITE );
+
+
+        breathChart.setBackgroundColor(Color.BLACK);
         breathChart.setGridBackgroundColor(Color.DKGRAY);
+
         breathChart.setDrawGridBackground(true);
 
         breathChart.setDrawBorders(true);
         breathChart.getDescription().setEnabled(false);
         breathChart.setPinchZoom(false);
-        breathChart.getLegend().setEnabled(true);
+        breathChart.getLegend().setEnabled(false);
     }
 
     private void setData(ArrayList<BreathLogItem> log) {
 
-        ArrayList<BarEntry> yVels = new ArrayList<>();
+        if (log != null) {
+            ArrayList<BarEntry> yVels = new ArrayList<>();
 
-        for (int i = 0 ; i < log.size() ; i++){
-            yVels.add(new BarEntry(i, (float) (Integer.parseInt(log.get(i).totalTime)*10)));
-        }
+            for (int i = 0; i < log.size(); i++) {
+                yVels.add(new BarEntry((float) (Integer.parseInt(log.get(i).date)), (float) (Integer.parseInt(log.get(i).totalTime))));
+            }
 
-        BarDataSet barDataSet = new BarDataSet(yVels, "data 1");
-        barDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-        barDataSet.setColor(Color.YELLOW);
+            BarDataSet barDataSet = new BarDataSet(yVels, "");
+            barDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+            barDataSet.setColor(Color.YELLOW);
 
-        BarData barData = new BarData(barDataSet);
-        barData.setDrawValues(false);
 
-        breathChart.setScaleEnabled(false);
-        breathChart.setData(barData);
-    }
+            BarData barData = new BarData(barDataSet);
+            barData.setDrawValues(false);
 
-    private void checkRegis(View rootView) {
-        if (user.getDisplayName().equals("VISITOR")) {
-            rootView.findViewById(R.id.profileContentContainer).setVisibility(View.VISIBLE);
-            getChildFragmentManager().beginTransaction()
-                    .add(R.id.profileContentContainer, RegisterFragment.newInstance(new RegisterFragment.RegisterListener() {
-                        @Override
-                        public void onRegis() {
-                            rootView.findViewById(R.id.profileContentContainer).setVisibility(View.GONE);
-                        }
-                    }))
-                    .commit();
+            breathChart.setScaleEnabled(false);
+            breathChart.setData(barData);
         }
     }
+
 
     @Override
     public void onDestroy() {
