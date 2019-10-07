@@ -39,7 +39,10 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center_horizontal"
-        android:layout_marginTop="250dp">
+        android:layout_marginTop="250dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp">
 
         <TextView
             android:id="@+id/description"
@@ -50,8 +53,8 @@
             android:text="If you need to get in touch, contact us" />
 
         <LinearLayout
-            android:layout_width="350dp"
-            android:layout_height="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="5dp">
 
@@ -60,7 +63,8 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="5dp"
-                app:srcCompat="@drawable/ic_person" />
+                app:srcCompat="@drawable/ic_person"
+              />
             <Button
                 android:id="@+id/personText"
                 android:layout_width="match_parent"
@@ -68,14 +72,14 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/btn_rounded2"
-                android:text="Mr. Sarawut Laojampa"
+                android:background="@drawable/btn_rounded2_1"
+                android:text="RestMind Company Limited"
                 android:textColor="#fff" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="350dp"
-            android:layout_height="65dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <ImageView
@@ -91,14 +95,14 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/btn_rounded2"
+                android:background="@drawable/btn_rounded2_1"
                 android:text="SIT, KMUTT, 126 Pracha Uthit Rd., Bang Mod, Thung Khru, Bangkok, Thailand 10140"
                 android:textColor="#fff" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="350dp"
-            android:layout_height="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <ImageView
@@ -114,14 +118,14 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/btn_rounded2"
+                android:background="@drawable/btn_rounded2_1"
                 android:text="66 2470 9850"
                 android:textColor="#fff" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="350dp"
-            android:layout_height="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <ImageView
@@ -137,7 +141,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/btn_rounded2"
+                android:background="@drawable/btn_rounded2_1"
                 android:text="sarawut.up@mail.kmutt.ac.th"
                 android:textColor="#fff" />
         </LinearLayout>
