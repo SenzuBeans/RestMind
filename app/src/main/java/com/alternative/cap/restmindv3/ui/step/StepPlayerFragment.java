@@ -176,12 +176,18 @@ public class StepPlayerFragment extends Fragment {
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 UserDetails userDetails = dataSnapshot.child("users").child(user.getUid()).getValue(UserDetails.class);
                                 ArrayList<StepLogItem> log = userDetails.step_log;
+                                boolean isUpdate = false;
 
                                 if (log != null) {
                                     for (int i = 0; i < log.size(); i++) {
                                         if (log.get(i).stepId.equals(header)) {
                                             log.get(i).updateStep();
+                                            isUpdate = true;
                                         }
+                                    }
+
+                                    if (!isUpdate){
+                                        log.add(new StepLogItem(header, currentStep +""));
                                     }
                                 }else{
                                     log = new ArrayList<>();
