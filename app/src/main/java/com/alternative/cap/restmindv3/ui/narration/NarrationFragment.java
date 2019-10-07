@@ -14,10 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alternative.cap.restmindv3.R;
-import com.alternative.cap.restmindv3.ui.music.MusicPlayerFragment;
 import com.alternative.cap.restmindv3.ui.narration.adapter.NarrationAdapter;
 import com.alternative.cap.restmindv3.ui.narration.adapter.NarrationSubAdapter;
-import com.alternative.cap.restmindv3.util.MusicItem;
+import com.alternative.cap.restmindv3.util.MediaItem;
 import com.alternative.cap.restmindv3.util.NarrationItem;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -39,13 +38,11 @@ public class NarrationFragment extends Fragment implements NarrationSubAdapter.N
 
     private FirebaseUser user;
     private FirebaseDatabase database;
-    private DatabaseReference narrationRef;
-    private DatabaseReference musicRef;
 
     private ArrayList<String> header;// = new String[]{"test 1", "test 2"};
     private ArrayList<String> mediaId;// = new String[][]{{"Song 1", "Song 2", "Song 3", "Song 4", "Song 5"},{"Song 6", "Song 7", "Song 8", "Song 9", "Song 10"}};
-    private ArrayList<MusicItem> tempMediaList;
-    private ArrayList<ArrayList<MusicItem>> mediaList;
+    private ArrayList<MediaItem> tempMediaList;
+    private ArrayList<ArrayList<MediaItem>> mediaList;
 
     Random random = new Random();
     int x = random.nextInt(1000);
@@ -58,7 +55,7 @@ public class NarrationFragment extends Fragment implements NarrationSubAdapter.N
 
     private void init(Bundle savedInstanceState) {
         header = new ArrayList<>();
-        mediaList = new ArrayList<ArrayList<MusicItem>>();
+        mediaList = new ArrayList<ArrayList<MediaItem>>();
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,8 +68,6 @@ public class NarrationFragment extends Fragment implements NarrationSubAdapter.N
     private void initInstance(View root, Bundle savedInstanceState) {
         user = FirebaseAuth.getInstance().getCurrentUser();
         database = FirebaseDatabase.getInstance();
-        narrationRef = database.getReference().child("narration");
-        musicRef = database.getReference().child("sound");
         narrationRecyclerView = root.findViewById(R.id.narrationRecyclerView);
         narrationContentContainer = root.findViewById(R.id.narrationContentContainer);
     }
@@ -84,18 +79,18 @@ public class NarrationFragment extends Fragment implements NarrationSubAdapter.N
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.child("narration").getChildren()) {
-                    if (!ds.getKey().equals("Step")) {
-                        header.add(ds.getKey());
-                        NarrationItem item = ds.getValue(NarrationItem.class);
+                    header.add(ds.getKey());
+                    NarrationItem item = ds.getValue(NarrationItem.class);
 
-                        mediaId = new ArrayList(Arrays.asList(item.rawId.split(",")));
-                        tempMediaList = new ArrayList<>();
+                    mediaId = new ArrayList(Arrays.asList(item.rawId.split(",")));
+                    tempMediaList = new ArrayList<>();
 
-                        for (String s : mediaId) {
-                            tempMediaList.add(dataSnapshot.child("sound").child(s).getValue(MusicItem.class));
-                        }
-                        mediaList.add(tempMediaList);
+                    for (String s : mediaId) {
+                        tempMediaList.add(dataSnapshot.child("sound").child(s).getValue(MediaItem.class));
                     }
+                    mediaList.add(tempMediaList);
+                    Log.d("dodo", "onItemClicked: "+ mediaList.get(0).get(0).name);
+
                 }
                 updateAdapter(root);
 
@@ -115,6 +110,7 @@ public class NarrationFragment extends Fragment implements NarrationSubAdapter.N
 
         narrationRecyclerView.setAdapter(adapter);
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -123,17 +119,17 @@ public class NarrationFragment extends Fragment implements NarrationSubAdapter.N
 
     private void hideNavigationBar() {
         this.getActivity().getWindow().getDecorView()
-                .setSystemUiVisibility( View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                .setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                         View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN |
                         View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
     }
 
     @Override
-    public void onItemClicked(ArrayList<MusicItem> passingDataList, int current , String passingHeader) {
+    public void onItemClicked(ArrayList<MediaItem> passingDataList, int current, String passingHeader) {
         narrationRecyclerView.setVisibility(View.GONE);
         narrationContentContainer.setVisibility(View.VISIBLE);
         getChildFragmentManager().beginTransaction()
-                .add(R.id.narrationContentContainer, MusicPlayerFragment.newInstance(passingHeader,passingDataList, current, getContext(), new MusicPlayerFragment.MusicListener() {
+                .add(R.id.narrationContentContainer, NarrationPlayerFragment.newInstance(passingHeader, passingDataList, current, getContext(), new NarrationPlayerFragment.MusicListener() {
                     @Override
                     public void onDestory() {
                         narrationRecyclerView.setVisibility(View.VISIBLE);

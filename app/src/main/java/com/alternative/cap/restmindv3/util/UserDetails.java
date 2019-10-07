@@ -13,6 +13,7 @@ public class UserDetails {
     public String name;
     public String email;
     public ArrayList<BreathLogItem> breath_log;
+    public ArrayList<StepLogItem> step_log;
     public int temp_steam;
 
     public UserDetails() {
@@ -23,14 +24,11 @@ public class UserDetails {
         this.email = email;
     }
 
-    public UserDetails(ArrayList<BreathLogItem> breath_log) {
-        this.breath_log = breath_log;
-    }
-
-    public UserDetails(String name, String email,ArrayList<BreathLogItem> breath_log) {
+    public UserDetails(String name, String email, ArrayList<BreathLogItem> breath_log, ArrayList<StepLogItem> step_log) {
         this.name = name;
         this.email = email;
         this.breath_log = breath_log;
+        this.step_log = step_log;
     }
 
     public String getName() {
@@ -55,5 +53,13 @@ public class UserDetails {
 
     public void setBreath_log(ArrayList<BreathLogItem> breath_log) {
         this.breath_log = breath_log;
+    }
+
+    public ArrayList<StepLogItem> getStep_log() {
+        return step_log;
+    }
+
+    public void setStep_log(ArrayList<StepLogItem> step_log) {
+        this.step_log = step_log;
     }
 }

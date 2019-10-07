@@ -16,6 +16,7 @@ import android.widget.EditText;
 
 import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.util.BreathLogItem;
+import com.alternative.cap.restmindv3.util.StepLogItem;
 import com.alternative.cap.restmindv3.util.UserDetails;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -94,10 +95,12 @@ public class RegisterFragment extends Fragment {
                     emailEditText.requestFocus();
                     return;
                 }
-                ArrayList<BreathLogItem> log = new ArrayList<>();
+                ArrayList<BreathLogItem> breathLog = new ArrayList<>();
+                ArrayList<StepLogItem> stepLog = new ArrayList<>();
 
                 userDetails = new UserDetails(userName, email);
-                userDetails.setBreath_log(log);
+                userDetails.setBreath_log(breathLog);
+                userDetails.setStep_log(stepLog);
 
                 reference.child(user.getUid()).setValue(userDetails);
 

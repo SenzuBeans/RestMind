@@ -1,4 +1,4 @@
-package com.alternative.cap.restmindv3.ui.music;
+package com.alternative.cap.restmindv3.ui.narration;
 
 import android.content.Context;
 import android.net.Uri;
@@ -17,7 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.alternative.cap.restmindv3.R;
-import com.alternative.cap.restmindv3.util.MusicItem;
+import com.alternative.cap.restmindv3.util.MediaItem;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -34,7 +34,7 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.ArrayList;
 
-public class MusicPlayerFragment extends Fragment {
+public class NarrationPlayerFragment extends Fragment {
 
     private CircularImageView soundPlayerCover;
     private Animation anim;
@@ -50,17 +50,17 @@ public class MusicPlayerFragment extends Fragment {
 
     private static MusicListener listener;
 
-    private static ArrayList<MusicItem> dataList;
+    private static ArrayList<MediaItem> dataList;
     private static int currentSound = 0;
     private static String header = "Music List";
     private static Context cons;
 
     private boolean isAnimationPlaying = false;
 
-    public MusicPlayerFragment() {
+    public NarrationPlayerFragment() {
     }
 
-    public static MusicPlayerFragment newInstance(ArrayList<MusicItem> passingDataList, int passingCurrent, Context context, MusicListener passingListener) {
+    public static NarrationPlayerFragment newInstance(ArrayList<MediaItem> passingDataList, int passingCurrent, Context context, MusicListener passingListener) {
 
         Bundle args = new Bundle();
 
@@ -69,12 +69,12 @@ public class MusicPlayerFragment extends Fragment {
         currentSound = passingCurrent;
         cons = context;
 
-        MusicPlayerFragment fragment = new MusicPlayerFragment();
+        NarrationPlayerFragment fragment = new NarrationPlayerFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
-    public static MusicPlayerFragment newInstance(String passingHeader, ArrayList<MusicItem> passingDataList, int passingCurrent, Context context, MusicListener passingListener) {
+    public static NarrationPlayerFragment newInstance(String passingHeader, ArrayList<MediaItem> passingDataList, int passingCurrent, Context context, MusicListener passingListener) {
 
         Bundle args = new Bundle();
 
@@ -84,7 +84,7 @@ public class MusicPlayerFragment extends Fragment {
         cons = context;
         header = passingHeader;
 
-        MusicPlayerFragment fragment = new MusicPlayerFragment();
+        NarrationPlayerFragment fragment = new NarrationPlayerFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -102,19 +102,19 @@ public class MusicPlayerFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_media_player, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_narration_player, container, false);
         initInstance(rootView, savedInstanceState);
         workplace(rootView, savedInstanceState);
         return rootView;
     }
 
     private void initInstance(View rootView, Bundle savedInstanceState) {
-        soundController = rootView.findViewById(R.id.soundPlayerControlView);
-        soundPlayerCover = rootView.findViewById(R.id.soundPlayerCover);
+        soundController = rootView.findViewById(R.id.stepPlayerControlView);
+        soundPlayerCover = rootView.findViewById(R.id.stepPlayerCover);
 
         soundPlayerHeader = rootView.findViewById(R.id.soundPlayerHeader);
-        soundPlayerName = rootView.findViewById(R.id.soundPlayerName);
-        soundPlayerArtist = rootView.findViewById(R.id.soundPlayerArtist);
+        soundPlayerName = rootView.findViewById(R.id.stepPlayerName);
+        soundPlayerArtist = rootView.findViewById(R.id.stepPlayerArtist);
     }
 
     private void workplace(View rootView, Bundle savedInstanceState) {
@@ -219,8 +219,8 @@ public class MusicPlayerFragment extends Fragment {
         });
     }
 
-    private void updateDataList(ArrayList<MusicItem> dataList) {
-        for (MusicItem item : dataList) {
+    private void updateDataList(ArrayList<MediaItem> dataList) {
+        for (MediaItem item : dataList) {
             soundMediaSource = new ProgressiveMediaSource.Factory(soundDataSourceFactory)
                     .createMediaSource(Uri.parse(item.link));
             soundConcatenatingMediaSource.addMediaSource(soundMediaSource);
