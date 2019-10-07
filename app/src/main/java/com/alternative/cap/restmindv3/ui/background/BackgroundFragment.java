@@ -1,13 +1,15 @@
 package com.alternative.cap.restmindv3.ui.background;
 
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,6 +17,15 @@ import androidx.fragment.app.Fragment;
 
 import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.util.VideoItem;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -22,19 +33,23 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.takusemba.spotlight.Spotlight;
+import com.takusemba.spotlight.shape.Circle;
+import com.takusemba.spotlight.target.SimpleTarget;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 public class BackgroundFragment extends Fragment {
 
-    //    private RecyclerView backgroundRecyclerView;
-//    private PageIndicator backgroundIndicator;
-    private android.widget.VideoView backgroundVideo;
+    private TextureView backgroundVideo;
+    private SimpleExoPlayer backgroundPlayer;
+    private MediaSource backgroundMediaSource;
+    private ConcatenatingMediaSource backgroundConcatenatingMediaSource;
+    private DefaultDataSourceFactory backgroundDataSourceFactory;
     private TextView backgroundId;
 
-    private ArrayList<String> listLink;
-    private ArrayList<String> listId;
+    private ArrayList<VideoItem> videoList;
 
     private int currentVideo = 0;
     private float touchingPoint = 0;
@@ -44,22 +59,23 @@ public class BackgroundFragment extends Fragment {
     private boolean isMoveLeft;
     private boolean isMoveRight;
 
-    private BackgroundAdapter adapter;
-
     private FirebaseUser user;
     private FirebaseDatabase database;
     private DatabaseReference videoRef;
 
+    private SimpleTarget tapTarget;
+    private SimpleTarget leftTarget;
+    private SimpleTarget rightTarget;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_background, container, false);
+        init(root, savedInstanceState);
         workbench(root, savedInstanceState);
         return root;
     }
 
-    private void workbench(View root, Bundle savedInstanceState) {
-        hideNavigationBar();
-
+    private void init(View root, Bundle savedInstanceState) {
         user = FirebaseAuth.getInstance().getCurrentUser();
         database = FirebaseDatabase.getInstance();
         videoRef = database.getReference().child("video");
@@ -67,8 +83,7 @@ public class BackgroundFragment extends Fragment {
         backgroundVideo = root.findViewById(R.id.backgroundVideoView);
         backgroundId = root.findViewById(R.id.backgroundID);
 
-        listLink = new ArrayList<>();
-        listId = new ArrayList<>();
+        videoList = new ArrayList<>();
 
         Random random = new Random();
         int x = random.nextInt(1000);
@@ -79,9 +94,7 @@ public class BackgroundFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     VideoItem item = ds.getValue(VideoItem.class);
-
-                    listLink.add(item.link);
-                    listId.add(ds.getKey());
+                    videoList.add(item);
                 }
                 doStuff();
             }
@@ -91,6 +104,77 @@ public class BackgroundFragment extends Fragment {
 
             }
         });
+
+        tapTarget = new SimpleTarget.Builder(getActivity())
+                .setPoint(100f, 100f)
+                .setShape(new Circle(0f))
+                .setTitle("Single Tap")
+                .setDescription("to play and pause background video")
+                .build();
+
+        leftTarget = new SimpleTarget.Builder(getActivity())
+                .setPoint(100f, 300f)
+                .setShape(new Circle(0f))
+                .setTitle("Slide Left")
+                .setDescription("to move previous background video")
+                .build();
+
+        rightTarget = new SimpleTarget.Builder(getActivity())
+                .setPoint(100f, 500f)
+                .setShape(new Circle(0f))
+                .setTitle("Slide Right")
+                .setDescription("to move next background video")
+                .build();
+    }
+
+    private void workbench(View root, Bundle savedInstanceState) {
+        hideNavigationBar();
+
+        backgroundVideo.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                backgroundVideo.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                Spotlight.with(getActivity())
+                        .setOverlayColor(R.color.spotlight_bg)
+                        .setAnimation(new DecelerateInterpolator(1f))
+                        .setTargets(tapTarget, rightTarget, leftTarget)
+                        .setClosedOnTouchedOutside(true)
+                        .start();
+            }
+        });
+
+    }
+
+    private void setPlayer() {
+
+        if (backgroundPlayer == null) {
+            backgroundPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), new DefaultTrackSelector());
+//            backgroundVideo.setPlayer(backgroundPlayer);
+
+            backgroundDataSourceFactory = new DefaultDataSourceFactory(getContext(), Util.getUserAgent(getContext(), "Background Player"));
+            if (backgroundConcatenatingMediaSource == null)
+                backgroundConcatenatingMediaSource = new ConcatenatingMediaSource();
+
+            updateDataList(videoList);
+        }
+
+        if (backgroundPlayer != null) {
+            backgroundPlayer.setPlayWhenReady(false);
+//            backgroundVideo.hideController();
+        }
+
+        backgroundPlayer.setRepeatMode(Player.REPEAT_MODE_ONE);
+        backgroundPlayer.setVideoTextureView(backgroundVideo);
+    }
+
+    private void updateDataList(ArrayList<VideoItem> dataList) {
+        for (VideoItem item : dataList) {
+            backgroundMediaSource = new ProgressiveMediaSource.Factory(backgroundDataSourceFactory)
+                    .createMediaSource(Uri.parse(item.link));
+            backgroundConcatenatingMediaSource.addMediaSource(backgroundMediaSource);
+        }
+
+        backgroundPlayer.prepare(backgroundConcatenatingMediaSource);
     }
 
     @Override
@@ -101,13 +185,13 @@ public class BackgroundFragment extends Fragment {
 
     private void hideNavigationBar() {
         this.getActivity().getWindow().getDecorView()
-                .setSystemUiVisibility( View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                .setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                         View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN |
                         View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
     }
 
     private void doStuff() {
-        setUri(listLink.get(currentVideo));
+        setPlayer();
         backgroundVideo.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -136,10 +220,18 @@ public class BackgroundFragment extends Fragment {
                     case MotionEvent.ACTION_UP:
                         if (clicked) {
                             focusPlayer();
-                        }else if (isMoveLeft){
-                            changeVideo(0);
-                        }else if(isMoveRight){
-                            changeVideo(1);
+                        } else if (isMoveLeft) {
+                            if (backgroundPlayer.getCurrentWindowIndex() == 0) {
+                                backgroundPlayer.seekTo(videoList.size() - 1, 0);
+                            } else {
+                                backgroundPlayer.previous();
+                            }
+                        } else if (isMoveRight) {
+                            if (backgroundPlayer.getCurrentWindowIndex() == videoList.size() - 1) {
+                                backgroundPlayer.seekTo(0, 0);
+                            } else {
+                                backgroundPlayer.next();
+                            }
                         }
                         break;
                 }
@@ -148,57 +240,12 @@ public class BackgroundFragment extends Fragment {
         });
     }
 
-    private void changeVideo(int i) {
-       if (i == 0) {
-           if (currentVideo < listLink.size() && currentVideo > 0) {
-               currentVideo--;
-           }else if (currentVideo == 0) {
-               currentVideo = listLink.size() - 1;
-           }
-       }else {
-           if (currentVideo < listLink.size() - 1  && currentVideo >= 0) {
-               currentVideo++;
-           } else if (currentVideo == listLink.size() - 1) {
-               currentVideo = 0;
-           }
-       }
-        Log.d("dodo", "changeVideo: current : " + currentVideo + " : list size : "+ listLink.size());
-
-       backgroundId.setText(listId.get(currentVideo));
-
-        setUri(listLink.get(currentVideo));
-    }
-
-    public void setUri(String link) {
-        Log.d("dodo", "setUri: " + link);
-        backgroundVideo.setVideoURI(Uri.parse(link));
-        backgroundVideo.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mediaPlayer) {
-                backgroundVideo.start();
-            }
-        });
-        backgroundVideo.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-                backgroundVideo.start();
-            }
-        });
-    }
-
     public void focusPlayer() {
         if (backgroundVideo != null) {
-            if (!isPlay) {
-                if (isStart) {
-                    backgroundVideo.start();
-                    isStart = false;
-                    isPlay = true;
-                } else {
-                    backgroundVideo.resume();
-                    isPlay = true;
-                }
+            if (backgroundPlayer.isPlaying()) {
+                backgroundPlayer.setPlayWhenReady(false);
             } else {
-                backgroundVideo.pause();
+                backgroundPlayer.setPlayWhenReady(true);
             }
         }
     }
