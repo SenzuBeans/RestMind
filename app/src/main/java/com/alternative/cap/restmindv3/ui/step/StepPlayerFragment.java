@@ -18,6 +18,8 @@ import androidx.fragment.app.Fragment;
 
 import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.util.MediaItem;
+import com.alternative.cap.restmindv3.util.StepLogItem;
+import com.alternative.cap.restmindv3.util.UserDetails;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -30,9 +32,17 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.ui.PlayerControlView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class StepPlayerFragment extends Fragment {
 
@@ -46,25 +56,35 @@ public class StepPlayerFragment extends Fragment {
 
     private TextView stepPlayerName;
     private TextView stepPlayerArtist;
+    private TextView stepPlayerHeader;
 
     private static StepListener listener;
-
     private static ArrayList<MediaItem> dataList;
     private static String header;
     private static Context cons;
+    private static int currentPlay = 0;
+    private static int currentStep = 0;
 
     private boolean isAnimationPlaying = false;
+    private View exoNextBtn;
+
+    private FirebaseUser user;
+    private FirebaseDatabase database;
 
     public StepPlayerFragment() {
     }
 
-    public static StepPlayerFragment newInstance(String passingHeader, ArrayList<MediaItem> passingDataList, Context context, StepListener passingListener) {
+    public static StepPlayerFragment newInstance(String passingHeader
+            , ArrayList<MediaItem> passingDataList, int passingCurrentPlay
+            , int passingCurrentStep, Context context, StepListener passingListener) {
 
         Bundle args = new Bundle();
 
         listener = passingListener;
         dataList = passingDataList;
         header = passingHeader;
+        currentPlay = passingCurrentPlay;
+        currentStep = passingCurrentStep;
         cons = context;
 
         StepPlayerFragment fragment = new StepPlayerFragment();
@@ -79,7 +99,8 @@ public class StepPlayerFragment extends Fragment {
     }
 
     private void init(Bundle savedInstanceState) {
-
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        database = FirebaseDatabase.getInstance();
     }
 
     @Nullable
@@ -97,15 +118,26 @@ public class StepPlayerFragment extends Fragment {
 
         stepPlayerName = rootView.findViewById(R.id.stepPlayerName);
         stepPlayerArtist = rootView.findViewById(R.id.stepPlayerArtist);
+        stepPlayerHeader = rootView.findViewById(R.id.stepPlayerHeader);
+        exoNextBtn = rootView.findViewById(R.id.exo_next);
     }
 
     private void workplace(View rootView, Bundle savedInstanceState) {
+
+        stepPlayerHeader.setText(header);
+        rootView.findViewById(R.id.stepPlayerBackBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getFragmentManager().popBackStack();
+            }
+        });
+
 
         if (stepPlayer == null) {
             stepPlayer = ExoPlayerFactory.newSimpleInstance(cons, new DefaultTrackSelector());
             stepController.setPlayer(stepPlayer);
 
-            stepDataSourceFactory = new DefaultDataSourceFactory(cons, Util.getUserAgent(cons, "Sound Player"));
+            stepDataSourceFactory = new DefaultDataSourceFactory(cons, Util.getUserAgent(cons, "Step Player"));
             if (stepConcatenatingMediaSource == null)
                 stepConcatenatingMediaSource = new ConcatenatingMediaSource();
 
@@ -113,7 +145,8 @@ public class StepPlayerFragment extends Fragment {
         }
 
         if (stepPlayer != null) {
-//            stepPlayer.seekTo(currentSound, 0);
+            stepPlayer.seekTo(currentPlay, 0);
+            lockNextChapter(currentPlay == currentStep);
             stepPlayer.setPlayWhenReady(true);
         }
         stepPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
@@ -125,34 +158,91 @@ public class StepPlayerFragment extends Fragment {
         });
         stepPlayer.addListener(new Player.EventListener() {
             @Override
-            public void onIsPlayingChanged(boolean isPlaying) {
-                if (!isPlaying) {
-                    stopAnimation();
-                }
-            }
-        });
-
-        stepPlayer.addListener(new Player.EventListener() {
-            @Override
             public void onPositionDiscontinuity(int reason) {
                 int newIndex = stepPlayer.getCurrentWindowIndex();
-//                if (newIndex != currentSound){
+
+                if (newIndex != currentPlay) {
                     stopAnimation();
                     loadAnimation();
-//                    currentSound = newIndex;
-//                    Log.d("dodo", "onPositionDiscontinuity: " + currentSound);
-//                }
-            }
-        });
 
-        stepPlayer.addListener(new Player.EventListener() {
+                    if (newIndex > currentStep) {
+                        //TODO : update step here
+                        currentStep = newIndex;
+                        Random random = new Random();
+                        int x = random.nextInt(1000);
+                        database.getReference().child("users").child(user.getUid()).child("temp_steam").setValue(x);
+                        database.getReference().addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                UserDetails userDetails = dataSnapshot.child("users").child(user.getUid()).getValue(UserDetails.class);
+                                ArrayList<StepLogItem> log = userDetails.step_log;
+                                boolean isUpdate = false;
+
+                                if (log != null) {
+                                    for (int i = 0; i < log.size(); i++) {
+                                        if (log.get(i).stepId.equals(header)) {
+                                            log.get(i).updateStep();
+                                            isUpdate = true;
+                                        }
+                                    }
+
+                                    if (!isUpdate){
+                                        log.add(new StepLogItem(header, currentStep +""));
+                                    }
+                                }else{
+                                    log = new ArrayList<>();
+                                    log.add(new StepLogItem(header, currentStep +""));
+                                }
+
+                                userDetails.setStep_log(log);
+                                database.getReference().child("users").child(user.getUid()).setValue(userDetails);
+
+                                database.getReference().removeEventListener(this);
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                    lockNextChapter(newIndex == currentStep);
+
+                    currentPlay = newIndex;
+                    Log.d("dodo", "onPositionDiscontinuity: " + currentPlay + " : " + currentStep);
+                }
+            }
+
             @Override
             public void onIsPlayingChanged(boolean isPlaying) {
                 if (isPlaying) {
                     loadAnimation();
+                } else {
+                    stopAnimation();
                 }
             }
         });
+    }
+
+    private void lockNextChapter(boolean condition) {
+        if (condition) {
+            exoNextBtn.setBackgroundResource(R.drawable.ic_action_next_lock);
+            exoNextBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Snackbar.make(view, "Please finish this chapter!!", Snackbar.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            exoNextBtn.setBackgroundResource(R.drawable.ic_action_next);
+            exoNextBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    stepPlayer.next();
+                }
+            });
+        }
     }
 
     private void loadAnimation() {
@@ -217,7 +307,7 @@ public class StepPlayerFragment extends Fragment {
             stepPlayer = null;
         }
 //        getFragmentManager().popBackStack();
-        listener.onDestory();
+        listener.onDestroy();
         super.onStop();
     }
 
@@ -229,11 +319,11 @@ public class StepPlayerFragment extends Fragment {
             stepPlayer = null;
         }
 //        getFragmentManager().popBackStack();
-        listener.onDestory();
+        listener.onDestroy();
         super.onDestroy();
     }
 
     public interface StepListener {
-        void onDestory();
+        void onDestroy();
     }
 }

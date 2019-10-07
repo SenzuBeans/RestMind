@@ -31,4 +31,9 @@ public class StepLogItem {
     public void setStepCount(String stepCount) {
         this.stepCount = stepCount;
     }
+
+    public void updateStep(){
+        int x = Integer.parseInt(this.stepCount) + 1;
+        this.stepCount = (x) + "";
+    }
 }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,7 +37,8 @@ public class StepListFragment extends Fragment implements StepListAdapter.StepLi
 
     private StepListAdapter stepListAdapter;
     private RecyclerView stepListRecyclerView;
-    private FrameLayout stepPlayerContentContainer;
+    private FrameLayout stepListContentContainer;
+    private LinearLayout stepListLayout;
 
     private FirebaseUser user;
     private FirebaseDatabase database;
@@ -79,7 +81,8 @@ public class StepListFragment extends Fragment implements StepListAdapter.StepLi
     private void initInstance(View rootView, Bundle savedInstanceState) {
         hideNavigationBar();
         stepListRecyclerView = rootView.findViewById(R.id.stepListRecyclerView);
-        stepPlayerContentContainer = rootView.findViewById(R.id.stepPlayerContentContainer);
+        stepListLayout = rootView.findViewById(R.id.stepListLayout);
+        stepListContentContainer = rootView.findViewById(R.id.stepListContentContainer);
 
 
         valueEventListener = new ValueEventListener() {
@@ -155,15 +158,15 @@ public class StepListFragment extends Fragment implements StepListAdapter.StepLi
 
     @Override
     public void onItemClicked(String passingHeader, ArrayList<MediaItem> passingDataList) {
-        stepListRecyclerView.setVisibility(View.GONE);
-        stepPlayerContentContainer.setVisibility(View.VISIBLE);
+        stepListLayout.setVisibility(View.GONE);
+        stepListContentContainer.setVisibility(View.VISIBLE);
 
         getChildFragmentManager().beginTransaction()
-                .add(R.id.stepPlayerContentContainer, StepShowFragment.newInstance(passingHeader, passingDataList, getContext(), new StepShowFragment.StepListener() {
+                .add(R.id.stepListContentContainer, StepShowFragment.newInstance(passingHeader, passingDataList, getContext(), new StepShowFragment.StepListener() {
                     @Override
-                    public void onDestory() {
-                        stepListRecyclerView.setVisibility(View.VISIBLE);
-                        stepPlayerContentContainer.setVisibility(View.GONE);
+                    public void onDestroy() {
+                        stepListLayout.setVisibility(View.VISIBLE);
+                        stepListContentContainer.setVisibility(View.GONE);
                     }
                 }))
                 .addToBackStack(null)

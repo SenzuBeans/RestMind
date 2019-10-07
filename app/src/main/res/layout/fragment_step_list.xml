@@ -8,12 +8,13 @@
     android:background="@drawable/music_screen_mobile">
 
     <FrameLayout
-        android:id="@+id/stepPlayerContentContainer"
+        android:id="@+id/stepListContentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"/>
 
     <LinearLayout
+        android:id="@+id/stepListLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
