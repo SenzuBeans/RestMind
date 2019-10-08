@@ -31,11 +31,11 @@ public class SplashScreenActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (user == null) {
-                    startActivity(new Intent(SplashScreenActivity.this, TutorialActivity.class));
+                if (user != null) {
+                    startActivity(new Intent(SplashScreenActivity.this, NavigationHomePageActivity.class));
                     finish();
                 }else{
-                    startActivity(new Intent(SplashScreenActivity.this, NavigationHomePageActivity.class));
+                    startActivity(new Intent(SplashScreenActivity.this, TutorialActivity.class));
                     finish();
                 }
             }

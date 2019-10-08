@@ -2,7 +2,9 @@ package com.alternative.cap.restmindv3.ui.breath;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -34,27 +36,30 @@ import java.util.Date;
 import java.util.Random;
 
 import cn.iwgang.countdownview.CountdownView;
+import me.tankery.lib.circularseekbar.CircularSeekBar;
 
 
 public class BreathFragment extends Fragment {
 
-    private Button playerBtn;
-    private TextView breathStatusTextView;
 
     private CircularImageView circularImageView;
     private MediaPlayer breathSongPlayer;
     private CountdownView timerView;
-    private boolean isSongPlaying = false;
-    private boolean isSetting = false;
+    private Button playerBtn;
+    private TextView breathStatusTextView;
+    private CircularSeekBar circularSeekBar;
 
     private String[] STATE = {"inhale", "hold", "exhale"};
     private MutableValue passingBreathData;
     private long[] breathData;
+    private boolean timerResume = false;
+    private boolean isSongPlaying = false;
+    private boolean isSetting = false;
 
-    private static long inhale;
-    private static long hold;
-    private static long exhale;
-    private static long timer;
+    private long inhale;
+    private long hold;
+    private long exhale;
+    private long timer;
 
     private DatabaseReference databaseReference;
     private DatabaseReference reference;
@@ -86,6 +91,15 @@ public class BreathFragment extends Fragment {
         playerBtn = rootView.findViewById(R.id.playerBtn);
         breathStatusTextView = rootView.findViewById(R.id.breathStatusTextView);
         timerView = rootView.findViewById(R.id.breathTimer);
+        circularSeekBar = rootView.findViewById(R.id.circularSeekBar);
+        circularSeekBar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+
+//        updateSeekBar = new Thread(this);
 
         valueEventListener = new ValueEventListener() {
             @Override
@@ -100,23 +114,36 @@ public class BreathFragment extends Fragment {
                 if (log != null) {
                     for (int i = 0; i < log.size(); i++) {
                         if (log.get(i).date.equals(currentDate)) {
-                            log.get(i).updateTotalTime(timer);
+                            if (timerResume) {
+                                log.get(i).updateTotalTime(timer - ((timerView.getMinute()*60000)+(timerView.getSecond()*1000)));
+                                log.get(i).updateDismissTime(((timerView.getMinute()*60000)+(timerView.getSecond()*1000)));
+                            } else {
+                                log.get(i).updateTotalTime(timer);
+                            }
                             isUpdate = true;
                         }
                     }
 
                     if (!isUpdate) {
-                        log.add(new BreathLogItem(currentDate, (timer / 60000) + ""));
+                        if (timerResume) {
+                            log.add(new BreathLogItem(currentDate, ((timer -((timerView.getMinute()*60000)+(timerView.getSecond()*1000))) / 60000) + ""
+                                    , (timerView.getMinute()) + ""));
+                        } else {
+                            log.add(new BreathLogItem(currentDate, (timer / 60000) + ""));
+                        }
                     }
 
-                    if (log.size() > 7){
+                    if (log.size() > 7) {
                         log.remove(0);
                     }
 
-
-                }else{
+                } else {
                     log = new ArrayList<>();
-                    log.add(new BreathLogItem(currentDate, (timer / 60000) + ""));
+                    if (timerResume) {
+                        log.add(new BreathLogItem(currentDate, ((timer - ((timerView.getMinute()*60000)+(timerView.getSecond()*1000))) / 60000) + "", (timerView.getMinute()) + ""));
+                    } else {
+                        log.add(new BreathLogItem(currentDate, (timer / 60000) + ""));
+                    }
                 }
 
                 userDetails.setBreath_log(log);
@@ -143,30 +170,33 @@ public class BreathFragment extends Fragment {
                     startRunningBreath();
 
                     if (timer > 0) {
-                        timerView.start(timer);
+                        circularSeekBar.setMax(timer);
+                        circularSeekBar.setProgress(timer);
+                        timerView.setOnCountdownIntervalListener(1000, new CountdownView.OnCountdownIntervalListener() {
+                            @Override
+                            public void onInterval(CountdownView cv, long remainTime) {
+                                circularSeekBar.setProgress(cv.getRemainTime());
+//                                Log.d("dodo", "onInterval: " + cv.getRemainTime());
+                            }
+                        });
                         timerView.setOnCountdownEndListener(new CountdownView.OnCountdownEndListener() {
                             @Override
                             public void onEnd(CountdownView cv) {
-                                stopRunningBreath();
-
-                                reference.child(user.getUid()).child("temp_steam").setValue(x);
-                                reference.addValueEventListener(valueEventListener);
+                                stopRunningBreath(false);
                             }
                         });
                     }
                 } else {
-                    stopRunningBreath();
-                    if (timerView != null) {
-                        timerView.stop();
-                    }
+                    stopRunningBreath(true);
                 }
+//                Log.d("dodo", "onClick: "+timerView.getRemainTime());
             }
         });
 
         rootView.findViewById(R.id.breathSettingBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                stopRunningBreath();
+                stopRunningBreath(false);
                 if (!isSetting) {
                     isSetting = true;
                     rootView.findViewById(R.id.contentContainerBreathFragment).setVisibility(View.VISIBLE);
@@ -213,17 +243,63 @@ public class BreathFragment extends Fragment {
         animationPlayer(true);
         playerBtn.setText("Stop");
         isSongPlaying = true;
+//        updateSeekBar.start();
+        if (timerResume) {
+            timerView.start((timerView.getMinute()*60000)+(timerView.getSecond()*1000));
+        } else {
+            timerView.start(timer);
+        }
     }
 
-    private void stopRunningBreath() {
+//    public void run() {
+//
+//        int currentPosition = (timerView.getMinute()*60000)+(timerView.getSecond()*1000);
+//        int total = (int) timer;
+//
+//
+//        while (timerView != null && isSongPlaying && currentPosition < total) {
+//            try {
+//                Thread.sleep(1000);
+//                currentPosition = (timerView.getMinute()*60000)+(timerView.getSecond()*1000);
+//            } catch (InterruptedException e) {
+//                return;
+//            } catch (Exception e) {
+//                return;
+//            }
+//
+//            circularSeekBar.setProgress((timerView.getMinute()*60000)+(timerView.getSecond()*1000));
+//
+//        }
+//    }
+
+    private void stopRunningBreath(boolean timerState) {
         if (isSongPlaying) {
             breathStatusTextView.setText("Ready");
             breathSongPlayer.stop();
             breathSongPlayer.release();
             animationPlayer(false);
+//            updateSeekBar.interrupt();
             playerBtn.setText("Play");
+            timerView.stop();
             isSongPlaying = false;
         }
+
+        if (timerState) {
+            if (timerView != null) {
+                timerView.stop();
+                timerResume = true;
+            }
+        } else {
+            if (timerView != null) {
+                timerView.stop();
+                timerResume = false;
+            }
+        }
+    }
+
+    private void updateBreathTime() {
+        reference.child(user.getUid()).child("temp_steam").setValue(x);
+        reference.addValueEventListener(valueEventListener);
     }
 
     private void recallBreathData() {
@@ -344,23 +420,15 @@ public class BreathFragment extends Fragment {
 
     @Override
     public void onStop() {
-        if (isSongPlaying) {
-            breathSongPlayer.stop();
-            breathSongPlayer.release();
-            isSongPlaying = false;
-        }
+        stopRunningBreath(true);
         animationPlayer(false);
         super.onStop();
     }
 
     @Override
     public void onDestroy() {
-
-        if (isSongPlaying) {
-            breathSongPlayer.stop();
-            breathSongPlayer.release();
-            isSongPlaying = false;
-        }
+        stopRunningBreath(true);
+        updateBreathTime();
         animationPlayer(false);
         super.onDestroy();
     }

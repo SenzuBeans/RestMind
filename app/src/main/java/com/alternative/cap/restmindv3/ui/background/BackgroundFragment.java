@@ -106,25 +106,18 @@ public class BackgroundFragment extends Fragment {
         });
 
         tapTarget = new SimpleTarget.Builder(getActivity())
-                .setPoint(100f, 100f)
+                .setPoint(backgroundVideo)
                 .setShape(new Circle(0f))
-                .setTitle("Single Tap")
-                .setDescription("to play and pause background video")
+                .setTitle("How to use")
+                .setDescription("\nThere have three commanded." +
+                        "\n\n\n\t\t\tSingle Tap Screen" +
+                        "\n\n\t - for play and pause Background Video" +
+                        "\n\n\n\t\t\tSlide Right on Screen" +
+                        "\n\n\t - for move to next Background Video" +
+                        "\n\n\n\t\t\tSlide Left on Screen" +
+                        "\n\n\t - for move to previous Background Video")
                 .build();
 
-        leftTarget = new SimpleTarget.Builder(getActivity())
-                .setPoint(100f, 300f)
-                .setShape(new Circle(0f))
-                .setTitle("Slide Left")
-                .setDescription("to move previous background video")
-                .build();
-
-        rightTarget = new SimpleTarget.Builder(getActivity())
-                .setPoint(100f, 500f)
-                .setShape(new Circle(0f))
-                .setTitle("Slide Right")
-                .setDescription("to move next background video")
-                .build();
     }
 
     private void workbench(View root, Bundle savedInstanceState) {
@@ -137,7 +130,7 @@ public class BackgroundFragment extends Fragment {
                 Spotlight.with(getActivity())
                         .setOverlayColor(R.color.spotlight_bg)
                         .setAnimation(new DecelerateInterpolator(1f))
-                        .setTargets(tapTarget, rightTarget, leftTarget)
+                        .setTargets(tapTarget)
                         .setClosedOnTouchedOutside(true)
                         .start();
             }

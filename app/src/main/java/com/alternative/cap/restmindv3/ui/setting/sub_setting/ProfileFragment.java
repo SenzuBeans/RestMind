@@ -1,16 +1,18 @@
 package com.alternative.cap.restmindv3.ui.setting.sub_setting;
 
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.fragment.RegisterFragment;
@@ -18,14 +20,11 @@ import com.alternative.cap.restmindv3.util.BreathLogItem;
 import com.alternative.cap.restmindv3.util.SettingListener;
 import com.alternative.cap.restmindv3.util.UserDetails;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,7 +36,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 
@@ -46,13 +44,14 @@ public class ProfileFragment extends Fragment {
 
     static SettingListener listener;
 
+    private RecyclerView profileRecyclerView;
     private TextView profileUserName;
     private TextView profileUserEmail;
-    private BarChart breathChart;
-    private TextView userResult;
     private DatabaseReference databaseReference;
     private DatabaseReference reference;
     private FirebaseUser user;
+
+    private ProfileAdapter adapter;
 
     Random random = new Random();
     int x = random.nextInt(1000);
@@ -94,11 +93,10 @@ public class ProfileFragment extends Fragment {
 
     private void initInsance(View rootView, Bundle savedInstanceState) {
         reference.child(user.getUid()).child("temp_steam").setValue(x);
-        breathChart = rootView.findViewById(R.id.breathChart);
-        initChart();
+
         profileUserName = rootView.findViewById(R.id.profileUserName);
         profileUserEmail = rootView.findViewById(R.id.profileUserEmail);
-        userResult = rootView.findViewById(R.id.userResult );
+        profileRecyclerView = rootView.findViewById(R.id.profileRecyclerView);
     }
 
     private void checkRegis(View rootView, Bundle savedInstanceState) {
@@ -121,17 +119,23 @@ public class ProfileFragment extends Fragment {
 
     private void workbench(View rootView, Bundle savedInstanceState) {
         backBtn(rootView);
+        profileRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 UserDetails userDetails = dataSnapshot.child(user.getUid()).getValue(UserDetails.class);
-                profileUserName.setText(userDetails.name);
-                profileUserEmail.setText(userDetails.email);
+                profileUserName.setText(user.getDisplayName());
+                profileUserEmail.setText(user.getEmail());
                 ArrayList<BreathLogItem> log = userDetails.breath_log;
-                setData(log);
-                breathChart.notifyDataSetChanged();
-                breathChart.invalidate();
+
+
+                if (profileRecyclerView.getAdapter() == null){
+                    adapter = new ProfileAdapter(log);
+                    profileRecyclerView.setAdapter(adapter);
+                }
+                adapter.notifyDataSetChanged();
+
             }
 
             @Override
@@ -139,7 +143,6 @@ public class ProfileFragment extends Fragment {
 
             }
         });
-
 
 
     }
@@ -153,64 +156,126 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void initChart() {
-        breathChart.setNoDataText("Tap to refresh information");
-        breathChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-            @Override
-            public void onValueSelected(Entry e, Highlight h) {
-                e.getX();
-                e.getY();
-                userResult.setText("เดือนนี้..วันที่ "+(int)e.getX() +" คุณได้ฝึกกำหนดลมหายใจ "+(int)e.getY()+" นาที");
-            }
-            @Override
-            public void onNothingSelected() {
-
-            }
-        });
-        breathChart.getXAxis().setEnabled(true);
-        breathChart.getAxisRight().setEnabled(false);
-        breathChart.getAxisLeft().setEnabled(true);
-        breathChart.getAxisLeft().setTextColor( Color.WHITE );
-        breathChart.getXAxis().setTextColor( Color.WHITE );
-
-
-        breathChart.setBackgroundColor(Color.BLACK);
-        breathChart.setGridBackgroundColor(Color.DKGRAY);
-
-        breathChart.setDrawGridBackground(true);
-
-        breathChart.setDrawBorders(true);
-        breathChart.getDescription().setEnabled(false);
-        breathChart.setPinchZoom(false);
-        breathChart.getLegend().setEnabled(false);
-    }
-
-    private void setData(ArrayList<BreathLogItem> log) {
-
-        if (log != null) {
-            ArrayList<BarEntry> yVels = new ArrayList<>();
-
-            for (int i = 0; i < log.size(); i++) {
-                yVels.add(new BarEntry((float) (Integer.parseInt(log.get(i).date)), (float) (Integer.parseInt(log.get(i).totalTime))));
-            }
-
-            BarDataSet barDataSet = new BarDataSet(yVels, "");
-            barDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-            barDataSet.setColor(Color.YELLOW);
-
-
-            BarData barData = new BarData(barDataSet);
-            barData.setDrawValues(false);
-
-            breathChart.setScaleEnabled(false);
-            breathChart.setData(barData);
-        }
-    }
 
 
     @Override
     public void onDestroy() {
         listener.onClickedDestroy();
         super.onDestroy();
+    }
+
+
+    private class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ProfileViewHolder>{
+
+        ArrayList<BreathLogItem> log;
+
+        public ProfileAdapter(ArrayList<BreathLogItem> log) {
+            this.log = log;
+        }
+
+        @NonNull
+        @Override
+        public ProfileViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View root = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_profile_chart, parent,false);
+            return new ProfileViewHolder(root);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ProfileViewHolder holder, int position) {
+            if (!holder.chartInit) {
+                holder.setChart(position);
+            }
+            holder.updateData(log,position);
+        }
+
+        @Override
+        public int getItemCount() {
+            return 2;
+        }
+
+        public class ProfileViewHolder extends RecyclerView.ViewHolder {
+
+            private View root;
+            private BarChart chart;
+            private TextView result;
+            private boolean chartInit = false;
+
+            public ProfileViewHolder(@NonNull View itemView) {
+                super(itemView);
+                root = itemView;
+                chart = itemView.findViewById(R.id.chart);
+                result = itemView.findViewById(R.id.result);
+            }
+
+            public void setChart(int i){
+                chart.setNoDataText("Tap to refresh information");
+                chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+                    @Override
+                    public void onValueSelected(Entry e, Highlight h) {
+                        if (i == 0) {
+                            result.setText("เดือนนี้..วันที่ " + (int) e.getX() + " \nคุณได้ฝึกกำหนดลมหายใจ " + (int) e.getY() + " นาที");
+                        }else{
+                            result.setText("\tวันที่ "+(int)e.getX() +" \nคุณได้พลาดจากการกำหนดเป้าหมายไปแล้ว "+(int)e.getY()+" นาที");
+                        }
+                    }
+                    @Override
+                    public void onNothingSelected() {
+
+                    }
+                });
+                chart.getXAxis().setEnabled(true);
+                chart.getAxisRight().setEnabled(false);
+                chart.getAxisLeft().setEnabled(true);
+                chart.getAxisLeft().setTextColor( Color.WHITE );
+                chart.getXAxis().setTextColor( Color.WHITE );
+
+                chart.setBackgroundColor(Color.BLACK);
+                chart.setGridBackgroundColor(Color.DKGRAY);
+
+                chart.setDrawGridBackground(true);
+
+                chart.setDrawBorders(true);
+                chart.getDescription().setEnabled(false);
+                chart.setPinchZoom(false);
+                chart.getLegend().setEnabled(false);
+                this.chartInit = true;
+            }
+
+            public void updateData(ArrayList<BreathLogItem> log, int position) {
+
+                if (log != null) {
+                    ArrayList<BarEntry> yVels = new ArrayList<>();
+                    ArrayList<BarEntry> yDismissVels = new ArrayList<>();
+
+                    for (int i = 0; i < log.size(); i++) {
+                        yVels.add(new BarEntry((float) (Integer.parseInt(log.get(i).date)), (float) (Integer.parseInt(log.get(i).totalTime))));
+                        yDismissVels.add(new BarEntry((float) (Integer.parseInt(log.get(i).date)), (float) (Integer.parseInt(log.get(i).dismissTime))));
+                    }
+                    if (position == 0) {
+                        setData(yVels,position);
+                    }else {
+                        setData(yDismissVels,position);
+                    }
+                }
+            }
+
+            private void setData(ArrayList<BarEntry> yVels , int i) {
+                BarDataSet barDataSet = new BarDataSet(yVels, "");
+                barDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+                if (i == 0)
+                    barDataSet.setColor(Color.YELLOW);
+                else
+                    barDataSet.setColor(Color.RED);
+
+                BarData barData = new BarData(barDataSet);
+                barData.setDrawValues(false);
+
+                chart.setScaleEnabled(false);
+                chart.setData(barData);
+
+                chart.notifyDataSetChanged();
+                chart.invalidate();
+            }
+        }
     }
 }
