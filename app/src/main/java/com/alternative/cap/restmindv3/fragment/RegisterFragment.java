@@ -108,6 +108,7 @@ public class RegisterFragment extends Fragment {
                 UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                         .setDisplayName(userName).build();
 
+                user.updateEmail(email);
                 user.updateProfile(profileUpdates)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override

@@ -36,17 +36,17 @@ import java.util.ArrayList;
 
 public class NarrationPlayerFragment extends Fragment {
 
-    private CircularImageView soundPlayerCover;
+    private CircularImageView narrationPlayerCover;
     private Animation anim;
-    private SimpleExoPlayer soundPlayer;
-    private MediaSource soundMediaSource;
-    private ConcatenatingMediaSource soundConcatenatingMediaSource;
-    private DefaultDataSourceFactory soundDataSourceFactory;
-    private PlayerControlView soundController;
+    private SimpleExoPlayer narrationPlayer;
+    private MediaSource narrationMediaSource;
+    private ConcatenatingMediaSource narrationConcatenatingMediaSource;
+    private DefaultDataSourceFactory narrationDataSourceFactory;
+    private PlayerControlView narrationController;
 
-    private TextView soundPlayerHeader;
-    private TextView soundPlayerName;
-    private TextView soundPlayerArtist;
+    private TextView narrationPlayerHeader;
+    private TextView narrationPlayerName;
+    private TextView narrationPlayerArtist;
 
     private static MusicListener listener;
 
@@ -109,40 +109,40 @@ public class NarrationPlayerFragment extends Fragment {
     }
 
     private void initInstance(View rootView, Bundle savedInstanceState) {
-        soundController = rootView.findViewById(R.id.stepPlayerControlView);
-        soundPlayerCover = rootView.findViewById(R.id.stepPlayerCover);
+        narrationController = rootView.findViewById(R.id.stepPlayerControlView);
+        narrationPlayerCover = rootView.findViewById(R.id.stepPlayerCover);
 
-        soundPlayerHeader = rootView.findViewById(R.id.stepPlayerHeader);
-        soundPlayerName = rootView.findViewById(R.id.stepPlayerName);
-        soundPlayerArtist = rootView.findViewById(R.id.stepPlayerArtist);
+        narrationPlayerHeader = rootView.findViewById(R.id.stepPlayerHeader);
+        narrationPlayerName = rootView.findViewById(R.id.stepPlayerName);
+        narrationPlayerArtist = rootView.findViewById(R.id.stepPlayerArtist);
     }
 
     private void workplace(View rootView, Bundle savedInstanceState) {
-        soundPlayerHeader.setText(header);
+        narrationPlayerHeader.setText(header);
 
-        if (soundPlayer == null) {
-            soundPlayer = ExoPlayerFactory.newSimpleInstance(cons, new DefaultTrackSelector());
-            soundController.setPlayer(soundPlayer);
+        if (narrationPlayer == null) {
+            narrationPlayer = ExoPlayerFactory.newSimpleInstance(cons, new DefaultTrackSelector());
+            narrationController.setPlayer(narrationPlayer);
 
-            soundDataSourceFactory = new DefaultDataSourceFactory(cons, Util.getUserAgent(cons, "Sound Player"));
-            if (soundConcatenatingMediaSource == null)
-                soundConcatenatingMediaSource = new ConcatenatingMediaSource();
+            narrationDataSourceFactory = new DefaultDataSourceFactory(cons, Util.getUserAgent(cons, "Sound Player"));
+            if (narrationConcatenatingMediaSource == null)
+                narrationConcatenatingMediaSource = new ConcatenatingMediaSource();
 
             updateDataList(dataList);
         }
 
-        if (soundPlayer != null) {
-            soundPlayer.seekTo(currentSound, 0);
-            soundPlayer.setPlayWhenReady(true);
+        if (narrationPlayer != null) {
+            narrationPlayer.seekTo(currentSound, 0);
+            narrationPlayer.setPlayWhenReady(true);
         }
-        soundPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
-        soundController.setVisibilityListener(new PlayerControlView.VisibilityListener() {
+        narrationPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
+        narrationController.setVisibilityListener(new PlayerControlView.VisibilityListener() {
             @Override
             public void onVisibilityChange(int visibility) {
-                soundController.show();
+                narrationController.show();
             }
         });
-        soundPlayer.addListener(new Player.EventListener() {
+        narrationPlayer.addListener(new Player.EventListener() {
             @Override
             public void onIsPlayingChanged(boolean isPlaying) {
                 if (!isPlaying) {
@@ -151,10 +151,10 @@ public class NarrationPlayerFragment extends Fragment {
             }
         });
 
-        soundPlayer.addListener(new Player.EventListener() {
+        narrationPlayer.addListener(new Player.EventListener() {
             @Override
             public void onPositionDiscontinuity(int reason) {
-                int newIndex = soundPlayer.getCurrentWindowIndex();
+                int newIndex = narrationPlayer.getCurrentWindowIndex();
                 if (newIndex != currentSound){
                     stopAnimation();
                     loadAnimation();
@@ -164,7 +164,7 @@ public class NarrationPlayerFragment extends Fragment {
             }
         });
 
-        soundPlayer.addListener(new Player.EventListener() {
+        narrationPlayer.addListener(new Player.EventListener() {
             @Override
             public void onIsPlayingChanged(boolean isPlaying) {
                 if (isPlaying) {
@@ -175,15 +175,15 @@ public class NarrationPlayerFragment extends Fragment {
     }
 
     private void loadAnimation() {
-        soundPlayerName.setText(dataList.get(soundPlayer.getCurrentWindowIndex()).name);
-        soundPlayerArtist.setText(dataList.get(soundPlayer.getCurrentWindowIndex()).artist);
+        narrationPlayerName.setText(dataList.get(narrationPlayer.getCurrentWindowIndex()).name);
+        narrationPlayerArtist.setText(dataList.get(narrationPlayer.getCurrentWindowIndex()).artist);
 
         Glide.with(cons)
-                .load(dataList.get(soundPlayer.getCurrentWindowIndex()).image_link)
+                .load(dataList.get(narrationPlayer.getCurrentWindowIndex()).image_link)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(soundPlayerCover);
+                .into(narrationPlayerCover);
 
-        anim = new RotateAnimation(0, 360, soundPlayerCover.getPivotX(), soundPlayerCover.getPivotY());
+        anim = new RotateAnimation(0, 360, narrationPlayerCover.getPivotX(), narrationPlayerCover.getPivotY());
         anim.setInterpolator(new LinearInterpolator());
         anim.setDuration(15000);
         anim.setAnimationListener(new Animation.AnimationListener() {
@@ -193,8 +193,8 @@ public class NarrationPlayerFragment extends Fragment {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                if (soundPlayer.isPlaying()) {
-                    soundPlayerCover.startAnimation(anim);
+                if (narrationPlayer.isPlaying()) {
+                    narrationPlayerCover.startAnimation(anim);
                 }
             }
 
@@ -203,7 +203,7 @@ public class NarrationPlayerFragment extends Fragment {
 
             }
         });
-        soundPlayerCover.startAnimation(anim);
+        narrationPlayerCover.startAnimation(anim);
         isAnimationPlaying = true;
     }
 
@@ -212,7 +212,7 @@ public class NarrationPlayerFragment extends Fragment {
             @Override
             public void run() {
                 if (isAnimationPlaying) {
-                    soundPlayerCover.getAnimation().cancel();
+                    narrationPlayerCover.getAnimation().cancel();
                     isAnimationPlaying = false;
                 }
             }
@@ -221,19 +221,19 @@ public class NarrationPlayerFragment extends Fragment {
 
     private void updateDataList(ArrayList<MediaItem> dataList) {
         for (MediaItem item : dataList) {
-            soundMediaSource = new ProgressiveMediaSource.Factory(soundDataSourceFactory)
+            narrationMediaSource = new ProgressiveMediaSource.Factory(narrationDataSourceFactory)
                     .createMediaSource(Uri.parse(item.link));
-            soundConcatenatingMediaSource.addMediaSource(soundMediaSource);
+            narrationConcatenatingMediaSource.addMediaSource(narrationMediaSource);
         }
-        soundPlayer.prepare(soundConcatenatingMediaSource);
+        narrationPlayer.prepare(narrationConcatenatingMediaSource);
     }
 
     @Override
     public void onStop() {
-        if (soundPlayer != null) {
-            soundController.setPlayer(null);
-            soundPlayer.release();
-            soundPlayer = null;
+        if (narrationPlayer != null) {
+            narrationController.setPlayer(null);
+            narrationPlayer.release();
+            narrationPlayer = null;
         }
 //        getFragmentManager().popBackStack();
         listener.onDestroy();
@@ -242,10 +242,10 @@ public class NarrationPlayerFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        if (soundPlayer != null) {
-            soundController.setPlayer(null);
-            soundPlayer.release();
-            soundPlayer = null;
+        if (narrationPlayer != null) {
+            narrationController.setPlayer(null);
+            narrationPlayer.release();
+            narrationPlayer = null;
         }
 //        getFragmentManager().popBackStack();
         listener.onDestroy();

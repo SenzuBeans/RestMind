@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.setting.sub_setting.ProfileFragment"
-    android:background="@drawable/profile_bg_stat">
+    android:background="@drawable/profile_bg_stat"
+    tools:context=".ui.setting.sub_setting.ProfileFragment">
 
 
     <LinearLayout
@@ -46,9 +46,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
+                android:background="@drawable/btn_rounded16"
                 android:orientation="horizontal"
-                android:padding="5dp"
-                android:background="@drawable/btn_rounded16">
+                android:padding="5dp">
 
                 <com.mikhaellopez.circularimageview.CircularImageView
                     android:id="@+id/profilePicture"
@@ -68,8 +68,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:text="name"
-                        android:textSize="25dp"
-                        android:textColor="#FFF"/>
+                        android:textColor="#FFF"
+                        android:textSize="25dp" />
 
                     <TextView
                         android:id="@+id/profileUserEmail"
@@ -77,39 +77,19 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:text="e-mail"
-                        android:textSize="16dp"
-                        android:textColor="#FFF"/>
+                        android:textColor="#FFF"
+                        android:textSize="16dp" />
                 </LinearLayout>
-
-
             </LinearLayout>
 
-            <LinearLayout
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/profileRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.7"
-                android:padding="5dp"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:padding="2dp"/>
 
-                <com.github.mikephil.charting.charts.BarChart
-                    android:id="@+id/breathChart"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:background="@drawable/btn_rounded15"/>
 
-                <TextView
-                    android:id="@+id/userResult"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="สถิติการฝึกกำหนดลมหายใจของคุณ"
-                    android:textColor="#FFF"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center"
-                    android:textSize="18dp"/>
-            </LinearLayout>
         </LinearLayout>
-
-
     </LinearLayout>
 
 
