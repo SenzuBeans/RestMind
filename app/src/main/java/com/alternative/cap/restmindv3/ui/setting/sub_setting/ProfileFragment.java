@@ -107,6 +107,7 @@ public class ProfileFragment extends Fragment {
                         @Override
                         public void onRegis() {
                             rootView.findViewById(R.id.profileContentContainer).setVisibility(View.GONE);
+                            getChildFragmentManager().popBackStack();
                         }
                     }))
                     .commit();
@@ -215,7 +216,7 @@ public class ProfileFragment extends Fragment {
                         if (i == 0) {
                             result.setText("เดือนนี้..วันที่ " + (int) e.getX() + " \nคุณได้ฝึกกำหนดลมหายใจ " + (int) e.getY() + " นาที");
                         }else{
-                            result.setText("\tวันที่ "+(int)e.getX() +" \nคุณได้พลาดจากการกำหนดเป้าหมายไปแล้ว "+(int)e.getY()+" นาที");
+                            result.setText("\tวันที่ "+(int)e.getX() +" \nคุณได้พลาดไปแล้ว "+(int)e.getY()+" นาที");
                         }
                     }
                     @Override

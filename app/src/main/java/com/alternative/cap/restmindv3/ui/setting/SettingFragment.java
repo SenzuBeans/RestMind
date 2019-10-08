@@ -1,6 +1,7 @@
 package com.alternative.cap.restmindv3.ui.setting;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +11,11 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.activity.multi.MemberActivity;
+import com.alternative.cap.restmindv3.manager.Contextor;
 import com.alternative.cap.restmindv3.ui.setting.sub_setting.ChangePassword;
 import com.alternative.cap.restmindv3.ui.setting.sub_setting.ContactSupport;
 import com.alternative.cap.restmindv3.ui.setting.sub_setting.NotificationsFragment;
@@ -27,6 +30,8 @@ import com.google.firebase.database.FirebaseDatabase;
 public class SettingFragment extends Fragment
     implements SettingListener {
 
+    private SharedPreferences shared;
+
     private int SHOW = 0,
         HIDE = 1;
 
@@ -40,8 +45,22 @@ public class SettingFragment extends Fragment
     private FrameLayout settingContainerLayout;
     private LinearLayout settingMainLayout;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        init(savedInstanceState);
+    }
 
-    public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    private void init(Bundle savedInstanceState) {
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("users");
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        reference = databaseReference.child(user.getUid());
+        shared = getContext().getSharedPreferences("BackgroundWT", 0);
+        hideNavigationBar();
+    }
+
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_setting, container, false);
         initInstance(root, savedInstanceState);
         workbench(root, savedInstanceState);
@@ -49,18 +68,11 @@ public class SettingFragment extends Fragment
     }
 
     private void initInstance(View root, Bundle savedInstanceState) {
-        hideNavigationBar();
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("users");
-
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        reference = databaseReference.child(user.getUid());
 
         userName =  root.findViewById(R.id.userNameTv);
         userName.setText(user.getDisplayName());
-
         settingContainerLayout = root.findViewById( R.id.settingContainerLayout );
         settingMainLayout = root.findViewById( R.id.settingMainLayout );
-
         contactBtn = root.findViewById( R.id.contactBtn );
         profileBtn = root.findViewById( R.id.profileBtn );
         notificationsBtn = root.findViewById( R.id.notificationsBtn );
@@ -75,6 +87,9 @@ public class SettingFragment extends Fragment
             @Override
             public void onClick(View view) {
                 if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                    SharedPreferences.Editor editor = shared.edit();
+                    editor.remove("isBackgroundWT");
+                    editor.commit();
                     FirebaseAuth.getInstance().signOut();
                     getActivity().startActivity(new Intent(getContext(), MemberActivity.class));
                     getActivity().finish();
