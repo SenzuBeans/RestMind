@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.alternative.cap.restmindv3.R;
+import com.alternative.cap.restmindv3.activity.floating.FloatingActivity;
 import com.alternative.cap.restmindv3.activity.multi.MemberActivity;
 import com.alternative.cap.restmindv3.manager.Contextor;
 import com.alternative.cap.restmindv3.ui.setting.sub_setting.ChangePassword;
@@ -122,11 +123,14 @@ public class SettingFragment extends Fragment
         notificationsBtn.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                swapContent(SHOW);
-                getChildFragmentManager().beginTransaction()
-                        .add( R.id.settingContainerLayout, NotificationsFragment.newInstance(SettingFragment.this) )
-                        .addToBackStack( null )
-                        .commit();
+//                swapContent(SHOW);
+//                getChildFragmentManager().beginTransaction()
+//                        .add( R.id.settingContainerLayout, NotificationsFragment.newInstance(SettingFragment.this) )
+//                        .addToBackStack( null )
+//                        .commit();
+
+                getActivity().startActivity( new Intent( getContext(), FloatingActivity.class ) );
+//                getActivity().finish();
             }
         } );
         shareBtn.setOnClickListener( new View.OnClickListener() {

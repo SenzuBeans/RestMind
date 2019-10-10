@@ -45,7 +45,7 @@ public class VideoView extends FrameLayout {
     }
 
     private void init() {
-        inflate(getContext(), R.layout.page_video, this);
+        inflate(getContext(), R.layout.view_video, this);
     }
 
     private void workbench() {

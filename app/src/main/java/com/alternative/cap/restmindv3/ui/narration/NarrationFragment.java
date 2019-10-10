@@ -89,7 +89,7 @@ public class NarrationFragment extends Fragment implements NarrationSubAdapter.N
                         tempMediaList.add(dataSnapshot.child("sound").child(s).getValue(MediaItem.class));
                     }
                     mediaList.add(tempMediaList);
-                    Log.d("dodo", "onItemClicked: "+ mediaList.get(0).get(0).name);
+//                    Log.d("dodo", "onItemClicked: "+ mediaList.get(0).get(0).name);
 
                 }
                 updateAdapter(root);
@@ -106,15 +106,12 @@ public class NarrationFragment extends Fragment implements NarrationSubAdapter.N
 
     private void updateAdapter(View root) {
         narrationRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new NarrationAdapter(getContext(), header, mediaList, this);
-
-        narrationRecyclerView.setAdapter(adapter);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        hideNavigationBar();
+        if (adapter == null) {
+            adapter = new NarrationAdapter( getContext(), header, mediaList, this );
+            narrationRecyclerView.setAdapter( adapter );
+        }else{
+            adapter.notifyDataSetChanged();
+        }
     }
 
     private void hideNavigationBar() {

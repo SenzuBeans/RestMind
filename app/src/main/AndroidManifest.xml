@@ -10,12 +10,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity android:name=".activity.floating.FloatingActivity"></activity>
         <activity
             android:name=".activity.multi.NavigationHomePageActivity"
             android:label="@string/title_activity_navigation_home_page"
             android:theme="@style/NoAtionAppTheme" />
-
         <activity
             android:name=".activity.multi.MemberActivity"
             android:theme="@style/NoAtionAppTheme" />
@@ -32,14 +31,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service android:name=".activity.floating.FloatingAnimeService"/>
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="417946862185409" />
     </application>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 </manifest>
