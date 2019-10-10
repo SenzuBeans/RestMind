@@ -16,8 +16,6 @@ import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.activity.multi.MemberActivity;
 import com.alternative.cap.restmindv3.view.BundleSavedState;
 
-import me.rishabhkhanna.customtogglebutton.CustomToggleButton;
-
 public class Page4Tutorial extends FrameLayout {
 
     public Page4Tutorial(Context context) {

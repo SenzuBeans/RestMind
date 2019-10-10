@@ -21,6 +21,7 @@ public class FloatingAnimeService extends Service {
 
     WindowManager wm;
     LinearLayout ll;
+    AnimationView animationView;
 
     @Nullable
     @Override
@@ -35,15 +36,16 @@ public class FloatingAnimeService extends Service {
 
         wm = (WindowManager) getSystemService( WINDOW_SERVICE );
 
-        ll = new AnimationView( this );
+        ll = new LinearLayout( this );
+        animationView = new AnimationView( this );
         ll.setBackgroundColor( Color.RED );
         LinearLayout.LayoutParams layoutParameteres = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, 400 );
-//        ll.setBackgroundColor( Color.argb( 66, 255, 0, 0 ) );
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT );
+        ll.setBackgroundColor( Color.argb( 0, 0, 0, 0 ) );
         ll.setLayoutParams( layoutParameteres );
 
         final WindowManager.LayoutParams parameters = new WindowManager.LayoutParams(
-                500, 200, WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+                200, 200, WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT );
 
@@ -51,12 +53,12 @@ public class FloatingAnimeService extends Service {
         parameters.x = 0;
         parameters.y = 0;
 
-        Button stop = new Button( this );
-        stop.setText( "Stop" );
-        ViewGroup.LayoutParams btnParameters = new ViewGroup.LayoutParams( ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT );
-        stop.setLayoutParams( btnParameters );
-
-        ll.addView( stop );
+//        Button stop = new Button( this );
+//        stop.setText( "Stop" );
+//        ViewGroup.LayoutParams btnParameters = new ViewGroup.LayoutParams( ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT );
+//        stop.setLayoutParams( btnParameters );
+//
+        ll.addView( animationView );
         wm.addView( ll, parameters );
 
         ll.setOnTouchListener( new View.OnTouchListener() {
@@ -83,7 +85,6 @@ public class FloatingAnimeService extends Service {
                         updatedParameters.y = (int) (y + (event.getRawY() - pressedY));
 
                         wm.updateViewLayout( ll, updatedParameters );
-
                     default:
                         break;
                 }
@@ -92,14 +93,14 @@ public class FloatingAnimeService extends Service {
             }
         } );
 
-        stop.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                wm.removeView( ll );
-                stopSelf();
+//        stop.setOnClickListener( new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                wm.removeView( ll );
+//                stopSelf();
 //                System.exit( 0 );
-            }
-        } );
+//            }
+//        } );
     }
 
     @Override
