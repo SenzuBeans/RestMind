@@ -1,5 +1,6 @@
 package com.alternative.cap.restmindv3.ui.background;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,9 +14,11 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.alternative.cap.restmindv3.R;
+import com.alternative.cap.restmindv3.manager.Contextor;
 import com.alternative.cap.restmindv3.util.VideoItem;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
@@ -26,6 +29,7 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -33,6 +37,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.takusemba.spotlight.OnSpotlightStateChangedListener;
 import com.takusemba.spotlight.Spotlight;
 import com.takusemba.spotlight.shape.Circle;
 import com.takusemba.spotlight.target.SimpleTarget;
@@ -41,6 +46,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class BackgroundFragment extends Fragment {
+
+    private SharedPreferences shared;
 
     private TextureView backgroundVideo;
     private SimpleExoPlayer backgroundPlayer;
@@ -67,23 +74,33 @@ public class BackgroundFragment extends Fragment {
     private SimpleTarget leftTarget;
     private SimpleTarget rightTarget;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        init(savedInstanceState);
+    }
+
+    private void init(Bundle savedInstanceState) {
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        database = FirebaseDatabase.getInstance();
+        videoRef = database.getReference().child("video");
+        videoList = new ArrayList<>();
+        shared = getContext().getSharedPreferences("BackgroundWT", 0);
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_background, container, false);
-        init(root, savedInstanceState);
+        initInstance(root, savedInstanceState);
         workbench(root, savedInstanceState);
         return root;
     }
 
-    private void init(View root, Bundle savedInstanceState) {
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        database = FirebaseDatabase.getInstance();
-        videoRef = database.getReference().child("video");
+    private void initInstance(View root, Bundle savedInstanceState) {
+
 
         backgroundVideo = root.findViewById(R.id.backgroundVideoView);
         backgroundId = root.findViewById(R.id.backgroundID);
 
-        videoList = new ArrayList<>();
 
         Random random = new Random();
         int x = random.nextInt(1000);
@@ -127,12 +144,36 @@ public class BackgroundFragment extends Fragment {
             @Override
             public void onGlobalLayout() {
                 backgroundVideo.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                Spotlight.with(getActivity())
-                        .setOverlayColor(R.color.spotlight_bg)
-                        .setAnimation(new DecelerateInterpolator(1f))
-                        .setTargets(tapTarget)
-                        .setClosedOnTouchedOutside(true)
-                        .start();
+                boolean isBackgroundWT = shared.getBoolean("isBackgroundWT", false);
+                if (!isBackgroundWT) {
+                    Spotlight spotlight = Spotlight.with(getActivity());
+                    spotlight.setOverlayColor(R.color.spotlight_bg);
+                    spotlight.setAnimation(new DecelerateInterpolator(1f));
+                    spotlight.setTargets(tapTarget);
+                    spotlight.setClosedOnTouchedOutside(true);
+
+                    spotlight.setOnSpotlightStateListener(new OnSpotlightStateChangedListener() {
+                        @Override
+                        public void onStarted() {
+
+                        }
+
+                        @Override
+                        public void onEnded() {
+                            Snackbar.make(backgroundVideo, "Don't show walkthrough again!!!", Snackbar.LENGTH_LONG).setAction("Confirm!", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    SharedPreferences.Editor editor = shared.edit();
+                                    editor.putBoolean("isBackgroundWT", true);
+                                    editor.commit();
+                                    Snackbar.make(backgroundVideo, "Walkthrough will not again!!!", Snackbar.LENGTH_SHORT).show();
+                                }
+                            }).show();
+                        }
+                    });
+                    spotlight.start();
+                }
+
             }
         });
 
