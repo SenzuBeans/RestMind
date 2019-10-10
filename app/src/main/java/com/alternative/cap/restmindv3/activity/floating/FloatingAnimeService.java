@@ -15,6 +15,8 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 
+import com.alternative.cap.restmindv3.view.AnimationView;
+
 public class FloatingAnimeService extends Service {
 
     WindowManager wm;
@@ -33,15 +35,15 @@ public class FloatingAnimeService extends Service {
 
         wm = (WindowManager) getSystemService( WINDOW_SERVICE );
 
-        ll = new LinearLayout( this );
+        ll = new AnimationView( this );
         ll.setBackgroundColor( Color.RED );
         LinearLayout.LayoutParams layoutParameteres = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, 400 );
-        ll.setBackgroundColor( Color.argb( 66, 255, 0, 0 ) );
+//        ll.setBackgroundColor( Color.argb( 66, 255, 0, 0 ) );
         ll.setLayoutParams( layoutParameteres );
 
         final WindowManager.LayoutParams parameters = new WindowManager.LayoutParams(
-                500, 200, WindowManager.LayoutParams.TYPE_PHONE,
+                500, 200, WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT );
 
