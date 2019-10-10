@@ -1,9 +1,12 @@
 package com.alternative.cap.restmindv3.util;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.firebase.database.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
-public class StepListItem {
+public class StepListItem implements Parcelable  {
 
     public String rawId;
     public String artist;
@@ -18,6 +21,24 @@ public class StepListItem {
         this.image_link = image_link;
     }
 
+
+    protected StepListItem(Parcel in) {
+        rawId = in.readString();
+        artist = in.readString();
+        image_link = in.readString();
+    }
+
+    public static final Creator<StepListItem> CREATOR = new Creator<StepListItem>() {
+        @Override
+        public StepListItem createFromParcel(Parcel in) {
+            return new StepListItem( in );
+        }
+
+        @Override
+        public StepListItem[] newArray(int size) {
+            return new StepListItem[size];
+        }
+    };
 
     public String getRawId() {
         return rawId;
@@ -41,5 +62,17 @@ public class StepListItem {
 
     public void setImage_link(String image_link) {
         this.image_link = image_link;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString( rawId );
+        parcel.writeString( artist );
+        parcel.writeString( image_link );
     }
 }

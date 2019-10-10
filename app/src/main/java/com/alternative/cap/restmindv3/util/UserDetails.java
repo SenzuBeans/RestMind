@@ -1,5 +1,7 @@
 package com.alternative.cap.restmindv3.util;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.ArrayMap;
 
 import com.google.firebase.database.Exclude;
@@ -8,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserDetails {
+public class UserDetails implements Parcelable {
 
     public String name;
     public String email;
@@ -30,6 +32,26 @@ public class UserDetails {
         this.breath_log = breath_log;
         this.step_log = step_log;
     }
+
+    protected UserDetails(Parcel in) {
+        name = in.readString();
+        email = in.readString();
+        breath_log = in.createTypedArrayList( BreathLogItem.CREATOR );
+        step_log = in.createTypedArrayList( StepLogItem.CREATOR );
+        temp_steam = in.readInt();
+    }
+
+    public static final Creator<UserDetails> CREATOR = new Creator<UserDetails>() {
+        @Override
+        public UserDetails createFromParcel(Parcel in) {
+            return new UserDetails( in );
+        }
+
+        @Override
+        public UserDetails[] newArray(int size) {
+            return new UserDetails[size];
+        }
+    };
 
     public String getName() {
         return name;
@@ -61,5 +83,19 @@ public class UserDetails {
 
     public void setStep_log(ArrayList<StepLogItem> step_log) {
         this.step_log = step_log;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString( name );
+        parcel.writeString( email );
+        parcel.writeTypedList( breath_log );
+        parcel.writeTypedList( step_log );
+        parcel.writeInt( temp_steam );
     }
 }
