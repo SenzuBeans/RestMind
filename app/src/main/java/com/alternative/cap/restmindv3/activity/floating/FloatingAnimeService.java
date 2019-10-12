@@ -93,14 +93,14 @@ public class FloatingAnimeService extends Service {
             }
         } );
 
-//        stop.setOnClickListener( new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                wm.removeView( ll );
-//                stopSelf();
+        ll.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wm.removeView( ll );
+                stopSelf();
 //                System.exit( 0 );
-//            }
-//        } );
+            }
+        } );
     }
 
     @Override

@@ -21,13 +21,13 @@ import java.io.InputStream;
 
 public class AnimationView extends LinearLayout {
 
-    private final int FRAME_W = 75;
+    private final int FRAME_W = 76;
     private final int FRAME_H = 67;
     private final int NB_FRAME = 8;
     private final int COUNT_X = 8;
     private final int COUNT_Y = 1;
     private final int FRAME_DURATION = 120;
-    private final int SCALE_FACTOR = 10;
+    private final int SCALE_FACTOR = 5;
 
     private ImageView img;
     private Bitmap[] bmps;
@@ -68,7 +68,7 @@ public class AnimationView extends LinearLayout {
                     Log.d( "dodo", "workbench: animation : "+ j +" : "+(FRAME_W * j + FRAME_W) + " : " + birdBmp.getWidth());
 
                     bmps[currentFrame] = Bitmap.createBitmap( birdBmp
-                            , FRAME_W * j , FRAME_H *i
+                            , (FRAME_W * j) +1 , FRAME_H *i
                             , FRAME_W
                             , FRAME_H );
 
