@@ -17,15 +17,18 @@ import com.alternative.cap.restmindv3.util.BreathLogItem;
 import com.alternative.cap.restmindv3.util.SettingListener;
 import com.alternative.cap.restmindv3.util.UserDetails;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -47,10 +50,12 @@ public class ProfileFragment extends Fragment {
     private TextView profileUserEmail;
     private BarChart barChart;
     private TextView barResult;
+    private PieChart pieChart;
 
     private DatabaseReference databaseReference;
     private DatabaseReference reference;
     private FirebaseUser user;
+    private UserDetails userDetails;
 
     private ArrayList<BreathLogItem> log;
     private ArrayList<BarEntry> yVels;
@@ -102,7 +107,10 @@ public class ProfileFragment extends Fragment {
         barChart = rootView.findViewById( R.id.barChart );
         barResult = rootView.findViewById( R.id.barResult );
 
+        pieChart = rootView.findViewById(R.id.pieChart);
+
         initBarChart();
+        initPieChart();
     }
 
     private void checkRegis(View rootView, Bundle savedInstanceState) {
@@ -126,17 +134,14 @@ public class ProfileFragment extends Fragment {
 
     private void workbench(View rootView, Bundle savedInstanceState) {
         backBtn( rootView );
-
-        //Get Data
         getData();
-
     }
 
     private void getData() {
         reference.addValueEventListener( new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                UserDetails userDetails = dataSnapshot.child( user.getUid() ).getValue( UserDetails.class );
+                userDetails = dataSnapshot.child( user.getUid() ).getValue( UserDetails.class );
                 profileUserName.setText( user.getDisplayName() );
                 profileUserEmail.setText( user.getEmail() );
                 if (log == null){
@@ -144,7 +149,11 @@ public class ProfileFragment extends Fragment {
                 }
                 log = userDetails.breath_log;
                 setBarChartData();
-
+                if (userDetails.totalTime == null){
+                    userDetails.updateTotalTime(0);
+                    userDetails.updateMissTime(0);
+                }
+                setPieChartData();
             }
 
             @Override
@@ -187,6 +196,10 @@ public class ProfileFragment extends Fragment {
 
     }
 
+    private void initPieChart() {
+        pieChart.setBackgroundColor(Color.WHITE);
+    }
+
     private void setBarChartData() {
         if (log != null) {
             yVels = new ArrayList<>();
@@ -211,6 +224,18 @@ public class ProfileFragment extends Fragment {
             barChart.notifyDataSetChanged();
             barChart.invalidate();
         }
+    }
+
+    private void setPieChartData(){
+        ArrayList<PieEntry> summaryTime = new ArrayList<PieEntry>();
+        summaryTime.add(new PieEntry(Float.parseFloat(userDetails.totalTime) , 0));
+        summaryTime.add(new PieEntry(Float.parseFloat(userDetails.missTime) , 1));
+        PieDataSet dataSet = new PieDataSet(summaryTime , "summary time over all time");
+
+        PieData data = new PieData( dataSet);
+        pieChart.setData(data);
+        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        pieChart.animateXY(5000, 5000);
     }
 
     private void backBtn(View rootView) {

@@ -174,12 +174,21 @@ public class NarrationPlayerFragment extends Fragment {
         });
     }
 
+    private void updateDataList(ArrayList<MediaItem> dataList) {
+        for (MediaItem item : dataList) {
+            narrationMediaSource = new ProgressiveMediaSource.Factory(narrationDataSourceFactory)
+                    .createMediaSource(Uri.parse(item.link_2));
+            narrationConcatenatingMediaSource.addMediaSource(narrationMediaSource);
+        }
+        narrationPlayer.prepare(narrationConcatenatingMediaSource);
+    }
+
     private void loadAnimation() {
         narrationPlayerName.setText(dataList.get(narrationPlayer.getCurrentWindowIndex()).name);
         narrationPlayerArtist.setText(dataList.get(narrationPlayer.getCurrentWindowIndex()).artist);
 
         Glide.with(cons)
-                .load(dataList.get(narrationPlayer.getCurrentWindowIndex()).image_link)
+                .load(dataList.get(narrationPlayer.getCurrentWindowIndex()).image_link_2)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(narrationPlayerCover);
 
@@ -219,14 +228,6 @@ public class NarrationPlayerFragment extends Fragment {
         });
     }
 
-    private void updateDataList(ArrayList<MediaItem> dataList) {
-        for (MediaItem item : dataList) {
-            narrationMediaSource = new ProgressiveMediaSource.Factory(narrationDataSourceFactory)
-                    .createMediaSource(Uri.parse(item.link));
-            narrationConcatenatingMediaSource.addMediaSource(narrationMediaSource);
-        }
-        narrationPlayer.prepare(narrationConcatenatingMediaSource);
-    }
 
     @Override
     public void onStop() {

@@ -4,7 +4,9 @@ import android.app.Service;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.os.Build;
 import android.os.IBinder;
+import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,6 +24,9 @@ public class FloatingAnimeService extends Service {
     WindowManager wm;
     LinearLayout ll;
     AnimationView animationView;
+    int LAYOUT_FLAG;
+    GestureDetector gestureDetector;
+
 
     @Nullable
     @Override
@@ -33,21 +38,36 @@ public class FloatingAnimeService extends Service {
     public void onCreate() {
         // TODO Auto-generated method stub
         super.onCreate();
+//        gestureDetector = new GestureDetector(FloatingAnimeService.this, FloatingAnimeService.this);
+        initInstance();
+        workbench();
 
-        wm = (WindowManager) getSystemService( WINDOW_SERVICE );
 
-        ll = new LinearLayout( this );
-        animationView = new AnimationView( this );
-        ll.setBackgroundColor( Color.RED );
+    }
+
+    private void initInstance() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            LAYOUT_FLAG = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        } else {
+            LAYOUT_FLAG = WindowManager.LayoutParams.TYPE_PHONE;
+        }
+    }
+
+    private void workbench() {
+        wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+
+        ll = new LinearLayout(this);
+        animationView = new AnimationView(this);
+        ll.setBackgroundColor(Color.RED);
         LinearLayout.LayoutParams layoutParameteres = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT );
-        ll.setBackgroundColor( Color.argb( 0, 0, 0, 0 ) );
-        ll.setLayoutParams( layoutParameteres );
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        ll.setBackgroundColor(Color.argb(0, 0, 0, 0));
+        ll.setLayoutParams(layoutParameteres);
 
         final WindowManager.LayoutParams parameters = new WindowManager.LayoutParams(
-                200, 200, WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+                100, 100, LAYOUT_FLAG,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                PixelFormat.TRANSLUCENT );
+                PixelFormat.TRANSLUCENT);
 
         parameters.gravity = Gravity.CENTER | Gravity.CENTER;
         parameters.x = 0;
@@ -58,12 +78,12 @@ public class FloatingAnimeService extends Service {
 //        ViewGroup.LayoutParams btnParameters = new ViewGroup.LayoutParams( ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT );
 //        stop.setLayoutParams( btnParameters );
 //
-        ll.addView( animationView );
-        wm.addView( ll, parameters );
+        ll.addView(animationView);
+        wm.addView(ll, parameters);
 
-        ll.setOnTouchListener( new View.OnTouchListener() {
+        ll.setOnTouchListener(new View.OnTouchListener() {
             WindowManager.LayoutParams updatedParameters = parameters;
-            int x,y;
+            int x, y;
             float pressedX, pressedY;
 
             @Override
@@ -84,23 +104,25 @@ public class FloatingAnimeService extends Service {
                         updatedParameters.x = (int) (x + (event.getRawX() - pressedX));
                         updatedParameters.y = (int) (y + (event.getRawY() - pressedY));
 
-                        wm.updateViewLayout( ll, updatedParameters );
+                        wm.updateViewLayout(ll, updatedParameters);
                     default:
                         break;
                 }
 
                 return false;
             }
-        } );
+        });
 
-        ll.setOnClickListener( new View.OnClickListener() {
+        ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                wm.removeView( ll );
+                wm.removeView(ll);
                 stopSelf();
 //                System.exit( 0 );
             }
-        } );
+        });
+
+
     }
 
     @Override
@@ -108,4 +130,5 @@ public class FloatingAnimeService extends Service {
         super.onDestroy();
         stopSelf();
     }
+
 }

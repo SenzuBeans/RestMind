@@ -19,6 +19,7 @@ import com.alternative.cap.restmindv3.activity.multi.MemberActivity;
 import com.alternative.cap.restmindv3.manager.Contextor;
 import com.alternative.cap.restmindv3.ui.setting.sub_setting.ChangePassword;
 import com.alternative.cap.restmindv3.ui.setting.sub_setting.ContactSupport;
+import com.alternative.cap.restmindv3.ui.setting.sub_setting.Notification.NotificationActivity;
 import com.alternative.cap.restmindv3.ui.setting.sub_setting.NotificationsFragment;
 import com.alternative.cap.restmindv3.ui.setting.sub_setting.ProfileFragment;
 import com.alternative.cap.restmindv3.ui.setting.sub_setting.ShareWithFriends;
@@ -108,7 +109,7 @@ public class SettingFragment extends Fragment
                         .commit();
             }
         } );
-        //ทุกอันที่ต่อใช้ R.id.settingContainerLayout อันเดียว ไม่ต้องสร้างเพิ่ม วางซ้ำไปเลย อย่างอื่นถูกล่ะ
+
         profileBtn.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,8 +129,9 @@ public class SettingFragment extends Fragment
 //                        .add( R.id.settingContainerLayout, NotificationsFragment.newInstance(SettingFragment.this) )
 //                        .addToBackStack( null )
 //                        .commit();
+                startActivity(new Intent(getContext(), NotificationActivity.class));
 
-                getActivity().startActivity( new Intent( getContext(), FloatingActivity.class ) );
+//                getActivity().startActivity( new Intent( getContext(), FloatingActivity.class ) );
 //                getActivity().finish();
             }
         } );
