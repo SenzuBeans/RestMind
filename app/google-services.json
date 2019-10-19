@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "65938830665-4phcmlseupa70ofsihonmfn5algbdce6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alternative.cap.restmindv3",
+            "certificate_hash": "34d4d6b6cda43b37f3209ac207fc9f41335ed2c1"
+          }
+        },
+        {
           "client_id": "65938830665-aqhks053m1j5er509laqj5vm7ohna61f.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
