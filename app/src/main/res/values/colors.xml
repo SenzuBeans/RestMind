@@ -15,6 +15,7 @@
 
     <color name="spinnerText">#DBDBDB</color>
     <color name="bg_graph">#202020</color>
+    <color name="circleProgress">#BA48C2</color>
 
 
     <color name="spotlight_bg">#C6292929</color>

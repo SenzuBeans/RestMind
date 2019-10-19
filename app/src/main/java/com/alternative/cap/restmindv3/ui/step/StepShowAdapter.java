@@ -67,7 +67,7 @@ public class StepShowAdapter extends RecyclerView.Adapter<StepShowAdapter.StepVi
             holder.root.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Snackbar.make(view, "This step are not allow to listen", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(view, "You need to finish previous step first.", Snackbar.LENGTH_SHORT).show();
                 }
             });
         }

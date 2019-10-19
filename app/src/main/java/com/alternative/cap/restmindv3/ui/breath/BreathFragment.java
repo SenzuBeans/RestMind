@@ -1,5 +1,6 @@
 package com.alternative.cap.restmindv3.ui.breath;
 
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
@@ -163,6 +164,7 @@ public class BreathFragment extends Fragment {
     private void workbench(View rootView, Bundle savedInstanceState) {
         hideNavigationBar();
 
+        seekBarInit(rootView);
         playerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -218,6 +220,11 @@ public class BreathFragment extends Fragment {
                 }
             }
         });
+
+
+    }
+
+    private void seekBarInit(View rootView) {
 
 
     }
