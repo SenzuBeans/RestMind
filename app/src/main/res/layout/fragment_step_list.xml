@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.step.StepListFragment"
+    android:background="@drawable/music_screen_mobile">
+
+    <FrameLayout
+        android:id="@+id/stepListContentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:id="@+id/stepListLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+          <androidx.appcompat.widget.Toolbar
+             android:layout_width="match_parent"
+             android:layout_height="?attr/actionBarSize"
+             android:background="@color/colorTransparent">
+
+              <ImageButton
+                  android:id="@+id/stepBackBtn"
+                  android:layout_width="wrap_content"
+                  android:layout_height="match_parent"
+                  android:background="@color/colorTransparent"
+                  app:srcCompat="@drawable/ic_arrow_back_24dp" />
+
+         </androidx.appcompat.widget.Toolbar>
+
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorTransparent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:padding="3dp"
+                android:id="@+id/stepListRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>

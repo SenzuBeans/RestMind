@@ -1,12 +1,13 @@
 package com.alternative.cap.restmindv3.fragment;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,15 +15,23 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.alternative.cap.restmindv3.R;
+import com.alternative.cap.restmindv3.util.BreathLogItem;
+import com.alternative.cap.restmindv3.util.StepLogItem;
 import com.alternative.cap.restmindv3.util.UserDetails;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
 public class RegisterFragment extends Fragment {
 
-    private static Intent data;
+    static RegisterListener listener;
+
     private DatabaseReference databaseReference;
     private DatabaseReference reference;
     private FirebaseUser user;
@@ -35,9 +44,9 @@ public class RegisterFragment extends Fragment {
     public RegisterFragment() {
     }
 
-    public static RegisterFragment newInstance(Intent imputData) {
+    public static RegisterFragment newInstance(RegisterListener passingListener) {
         Bundle args = new Bundle();
-        data = imputData;
+        listener = passingListener;
         RegisterFragment fragment = new RegisterFragment();
         fragment.setArguments(args);
         return fragment;
@@ -70,6 +79,8 @@ public class RegisterFragment extends Fragment {
     }
 
     private void workbench(View rootView, Bundle savedInstanceState){
+        userNameEditText.requestFocus();
+        
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,18 +95,36 @@ public class RegisterFragment extends Fragment {
                     emailEditText.requestFocus();
                     return;
                 }
+                ArrayList<BreathLogItem> breathLog = new ArrayList<>();
+                ArrayList<StepLogItem> stepLog = new ArrayList<>();
 
                 userDetails = new UserDetails(userName, email);
+                userDetails.setBreath_log(breathLog);
+                userDetails.setStep_log(stepLog);
+
                 reference.child(user.getUid()).setValue(userDetails);
 
-                RegisterBtnClickListener listener = (RegisterBtnClickListener) getActivity();
-                listener.onRegisterClicked(data);
+
+                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                        .setDisplayName(userName).build();
+
+                user.updateEmail(email);
+                user.updateProfile(profileUpdates)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    listener.onRegis();
+                                    getChildFragmentManager().popBackStack();
+                                }
+                            }
+                        });
             }
         });
     }
 
-    public interface RegisterBtnClickListener{
-        void onRegisterClicked(Intent inputData);
+    public interface RegisterListener{
+        void onRegis();
     }
 
 }

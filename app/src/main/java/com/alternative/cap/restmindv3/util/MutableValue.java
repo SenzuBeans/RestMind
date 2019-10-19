@@ -2,22 +2,30 @@ package com.alternative.cap.restmindv3.util;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class MutableValue {
+public class MutableValue implements Parcelable {
 
-    private static int heightRecyclerViewValue;
-    private static long[] breathData = {3000,1000,3000,0};
+    private static long[] breathData = {3000,1000,3000,300000};
 
     public MutableValue() {
     }
 
-    public int getHeightRecyclerViewValue() {
-        return heightRecyclerViewValue;
+    protected MutableValue(Parcel in) {
     }
 
-    public void setHeightRecyclerViewValue(int heightValue) {
-        heightRecyclerViewValue = heightValue;
-    }
+    public static final Creator<MutableValue> CREATOR = new Creator<MutableValue>() {
+        @Override
+        public MutableValue createFromParcel(Parcel in) {
+            return new MutableValue( in );
+        }
+
+        @Override
+        public MutableValue[] newArray(int size) {
+            return new MutableValue[size];
+        }
+    };
 
     public long[] getBreathData() {
         return breathData;
@@ -27,17 +35,13 @@ public class MutableValue {
         breathData = passingBreathData;
     }
 
-    public Bundle onSave(){
-        Bundle bundle = new Bundle();
-        bundle.putInt("heightRecyclerViewValue", heightRecyclerViewValue);
-        return bundle;
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void onRestore(Bundle savedInstance){
-        heightRecyclerViewValue = savedInstance.getInt("heightRecyclerViewValue");
-    }
-
-    public float convertDpToPixel(float dp, Context context){
-        return dp * context.getResources().getDisplayMetrics().density;
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
     }
 }

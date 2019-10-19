@@ -9,13 +9,12 @@ import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.activity.multi.MemberActivity;
 import com.alternative.cap.restmindv3.view.BundleSavedState;
-
-import me.rishabhkhanna.customtogglebutton.CustomToggleButton;
 
 public class Page4Tutorial extends FrameLayout {
 
@@ -44,7 +43,7 @@ public class Page4Tutorial extends FrameLayout {
         initInstance();
     }
 
-    private CustomToggleButton tutorialLoginBtn;
+    private Button tutorialLoginBtn;
 
     private void init(){
         inflate(getContext(), R.layout.page_tutorial_4 , this);

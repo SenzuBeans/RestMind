@@ -2,6 +2,7 @@ package com.alternative.cap.restmindv3.activity.single;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,14 +14,19 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.alternative.cap.restmindv3.R;
+import com.alternative.cap.restmindv3.util.UserDetails;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskExecutors;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.concurrent.TimeUnit;
 
@@ -37,7 +43,10 @@ public class PhoneAuthActivity extends AppCompatActivity {
     private EditText codeEntryEditText;
     private Button loginBtn;
 
+    private DatabaseReference reference;
+    private FirebaseUser user;
     private FirebaseAuth mAuth;
+    private UserDetails userDetails;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,6 +65,8 @@ public class PhoneAuthActivity extends AppCompatActivity {
         resentTextView = findViewById(R.id.resentTextView);
         codeEntryEditText = findViewById(R.id.codeEntryEditText);
         loginBtn = findViewById(R.id.loginBtn);
+
+        reference = FirebaseDatabase.getInstance().getReference().child("users");
     }
 
     private void workbench(Bundle savedInstanceState) {
@@ -68,7 +79,7 @@ public class PhoneAuthActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String verificationCode = codeEntryEditText.getText().toString().trim();
-                if (verificationCode.isEmpty() || verificationCode.length() < 6){
+                if (verificationCode.isEmpty() || verificationCode.length() < 6) {
                     codeEntryEditText.setError("Entry code");
                     codeEntryEditText.requestFocus();
                     return;
@@ -85,7 +96,7 @@ public class PhoneAuthActivity extends AppCompatActivity {
         });
     }
 
-    private void verifyCode(String code){
+    private void verifyCode(String code) {
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verifyId, code);
         signInWithCredential(credential);
     }
@@ -95,22 +106,41 @@ public class PhoneAuthActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
+
+                    user = FirebaseAuth.getInstance().getCurrentUser();
+                    if (user.getDisplayName() == null) {
+                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                .setDisplayName("VISITOR").build();
+
+                        user.updateProfile(profileUpdates)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Log.d("dodo", "onComplete: " + user.getDisplayName());
+                                        }
+                                    }
+                                });
+
+                        userDetails = new UserDetails("VISITOR", "non");
+                        reference.child(user.getUid()).setValue(userDetails);
+                    }
                     Intent intent = new Intent();
                     intent.putExtra("userPhoneNumber", phoneNumber);
                     setResult(RESULT_OK, intent);
                     finish();
-                }else{
+                } else {
                     Toast.makeText(PhoneAuthActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
 
-    private void sendVerificationCode(String number){
+    private void sendVerificationCode(String number) {
         Toast.makeText(PhoneAuthActivity.this, number, Toast.LENGTH_LONG).show();
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 number,
-                15,
+                45,
                 TimeUnit.SECONDS,
                 TaskExecutors.MAIN_THREAD,
                 mCallBack
