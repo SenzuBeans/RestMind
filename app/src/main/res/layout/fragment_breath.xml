@@ -59,13 +59,17 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                app:cs_progress="100"
+                app:cs_progress="0"
+                app:cs_max = "100"
                 app:cs_lock_enabled="false"
                 app:cs_negative_enabled="true"
                 app:cs_disable_progress_glow = "true"
                 app:cs_circle_style="round"
                 app:cs_circle_stroke_width="8dp"
-                app:cs_pointer_stroke_width="24dp"/>
+                app:cs_pointer_stroke_width="24dp"
+                app:cs_circle_color = "#33D26AF0"
+                app:cs_circle_progress_color = "#4DD051F5"
+                app:cs_pointer_color = "#DAAEF3"/>
 
 <!--            app:cs_circle_fill = "color"-->
 <!--            app:cs_circle_color = "color"-->
