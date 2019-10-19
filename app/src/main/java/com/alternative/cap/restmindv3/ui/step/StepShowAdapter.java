@@ -48,7 +48,7 @@ public class StepShowAdapter extends RecyclerView.Adapter<StepShowAdapter.StepVi
     public void onBindViewHolder(@NonNull StepViewHolder holder, int position) {
         holder.stepName.setText(dataList.get(position).name);
         holder.stepArtist.setText(dataList.get(position).artist);
-        holder.setImage(dataList.get(position).image_link);
+        holder.setImage(dataList.get(position).image_link_2);
 
         if (position <= current){
 //            holder.root.setBackground(ContextCompat.getDrawable(cons, R.drawable.background_step));
