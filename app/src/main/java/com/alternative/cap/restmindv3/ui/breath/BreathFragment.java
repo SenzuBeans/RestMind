@@ -2,7 +2,6 @@ package com.alternative.cap.restmindv3.ui.breath;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -117,8 +116,14 @@ public class BreathFragment extends Fragment {
                             if (timerResume) {
                                 log.get(i).updateTotalTime(timer - ((timerView.getMinute()*60000)+(timerView.getSecond()*1000)));
                                 log.get(i).updateDismissTime(((timerView.getMinute()*60000)+(timerView.getSecond()*1000)));
+
+                                userDetails.updateTotalTime(timer - ((timerView.getMinute()*60000)+(timerView.getSecond()*1000)));
+                                userDetails.updateMissTime(((timerView.getMinute()*60000)+(timerView.getSecond()*1000)));
                             } else {
                                 log.get(i).updateTotalTime(timer);
+
+                                userDetails.updateTotalTime(timer);
+                                userDetails.updateMissTime(0);
                             }
                             isUpdate = true;
                         }
@@ -128,8 +133,12 @@ public class BreathFragment extends Fragment {
                         if (timerResume) {
                             log.add(new BreathLogItem(currentDate, ((timer -((timerView.getMinute()*60000)+(timerView.getSecond()*1000))) / 60000) + ""
                                     , (timerView.getMinute()) + ""));
+                            userDetails.updateTotalTime(timer - ((timerView.getMinute()*60000)+(timerView.getSecond()*1000)));
+                            userDetails.updateMissTime(((timerView.getMinute()*60000)+(timerView.getSecond()*1000)));
                         } else {
                             log.add(new BreathLogItem(currentDate, (timer / 60000) + ""));
+                            userDetails.updateTotalTime(timer);
+                            userDetails.updateMissTime(0);
                         }
                     }
 
@@ -137,12 +146,23 @@ public class BreathFragment extends Fragment {
                         log.remove(0);
                     }
 
+                    for (int i = 0; i < log.size(); i++){
+                        if (Integer.parseInt(log.get(i).date) - Integer.parseInt(log.get(log.size()-1).date) > 7){
+                            log.get(i).setTotalTime("0");
+                            log.get(i).setDismissTime("0");
+                        }
+                    }
+
                 } else {
                     log = new ArrayList<>();
                     if (timerResume) {
                         log.add(new BreathLogItem(currentDate, ((timer - ((timerView.getMinute()*60000)+(timerView.getSecond()*1000))) / 60000) + "", (timerView.getMinute()) + ""));
+                        userDetails.updateTotalTime(timer - ((timerView.getMinute()*60000)+(timerView.getSecond()*1000)));
+                        userDetails.updateMissTime(((timerView.getMinute()*60000)+(timerView.getSecond()*1000)));
                     } else {
                         log.add(new BreathLogItem(currentDate, (timer / 60000) + ""));
+                        userDetails.updateTotalTime(timer);
+                        userDetails.updateMissTime(0);
                     }
                 }
 

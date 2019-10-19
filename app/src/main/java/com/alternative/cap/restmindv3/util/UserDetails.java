@@ -16,6 +16,8 @@ public class UserDetails implements Parcelable {
     public String email;
     public ArrayList<BreathLogItem> breath_log;
     public ArrayList<StepLogItem> step_log;
+    public String totalTime;
+    public String missTime;
     public int temp_steam;
 
     public UserDetails() {
@@ -33,18 +35,29 @@ public class UserDetails implements Parcelable {
         this.step_log = step_log;
     }
 
+    public UserDetails(String name, String email, ArrayList<BreathLogItem> breath_log, ArrayList<StepLogItem> step_log, String totalTime, String missTime) {
+        this.name = name;
+        this.email = email;
+        this.breath_log = breath_log;
+        this.step_log = step_log;
+        this.totalTime = totalTime;
+        this.missTime = missTime;
+    }
+
     protected UserDetails(Parcel in) {
         name = in.readString();
         email = in.readString();
-        breath_log = in.createTypedArrayList( BreathLogItem.CREATOR );
-        step_log = in.createTypedArrayList( StepLogItem.CREATOR );
+        breath_log = in.createTypedArrayList(BreathLogItem.CREATOR);
+        step_log = in.createTypedArrayList(StepLogItem.CREATOR);
+        totalTime = in.readString();
+        missTime = in.readString();
         temp_steam = in.readInt();
     }
 
     public static final Creator<UserDetails> CREATOR = new Creator<UserDetails>() {
         @Override
         public UserDetails createFromParcel(Parcel in) {
-            return new UserDetails( in );
+            return new UserDetails(in);
         }
 
         @Override
@@ -85,17 +98,55 @@ public class UserDetails implements Parcelable {
         this.step_log = step_log;
     }
 
+    public String getTotalTime() {
+        return totalTime;
+    }
+
+    public void updateTotalTime(String totalTime) {
+        this.totalTime = totalTime;
+    }
+
+    public void updateTotalTime(long totalTime) {
+        int minte = (int) (totalTime/60000);
+        if (this.totalTime == null || this.totalTime == "0"){
+            this.totalTime = minte+ "";
+        }else{
+            int temp = Integer.parseInt(this.totalTime);
+            this.totalTime = (temp + minte) +"";
+        }
+    }
+
+    public String getMissTime() {
+        return missTime;
+    }
+
+    public void updateMissTime(String missTime) {
+        this.missTime = missTime;
+    }
+
+    public void updateMissTime(long missTime) {
+        int minte = (int) (missTime/60000);
+        if (this.missTime == null || this.missTime == "0"){
+            this.missTime = minte+ "";
+        }else{
+            int temp = Integer.parseInt(this.missTime);
+            this.missTime = (temp + minte) +"";
+        }
+    }
+
     @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString( name );
-        parcel.writeString( email );
-        parcel.writeTypedList( breath_log );
-        parcel.writeTypedList( step_log );
-        parcel.writeInt( temp_steam );
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(email);
+        dest.writeTypedList(breath_log);
+        dest.writeTypedList(step_log);
+        dest.writeString(totalTime);
+        dest.writeString(missTime);
+        dest.writeInt(temp_steam);
     }
 }
