@@ -43,7 +43,7 @@ public class NarrationSubAdapter extends RecyclerView.Adapter<NarrationSubAdapte
 
     @Override
     public void onBindViewHolder(@NonNull NarrationSubViewHolder holder, int position) {
-        holder.setDetail(dataList.get(position).image_link, dataList.get(position).name);
+        holder.setDetail(dataList.get(position).image_link_2, dataList.get(position).name);
         holder.artistMedia.setText(dataList.get(position).artist);
         holder.root.setOnClickListener( new View.OnClickListener() {
             @Override
