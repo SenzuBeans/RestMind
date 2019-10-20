@@ -16,7 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.setting.sub_setting.Notification.NotificationActivity"></activity>
+        <activity android:name=".ui.setting.sub_setting.Profile.RankingActivity"></activity>
+        <activity android:name=".ui.setting.sub_setting.Notification.NotificationActivity" />
         <activity android:name=".activity.floating.FloatingActivity" />
         <activity
             android:name=".activity.multi.NavigationHomePageActivity"
@@ -40,7 +41,7 @@
         </activity>
 
         <service android:name=".activity.floating.FloatingAnimeService" />
-        <service android:name=".ui.setting.sub_setting.Notification.NotificationService"/>
+        <service android:name=".ui.setting.sub_setting.Notification.NotificationService" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

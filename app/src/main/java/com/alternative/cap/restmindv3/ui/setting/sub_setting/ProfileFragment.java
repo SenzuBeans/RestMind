@@ -1,11 +1,13 @@
 package com.alternative.cap.restmindv3.ui.setting.sub_setting;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.fragment.RegisterFragment;
+import com.alternative.cap.restmindv3.ui.setting.sub_setting.Profile.RankingActivity;
 import com.alternative.cap.restmindv3.util.BreathLogItem;
 import com.alternative.cap.restmindv3.util.SettingListener;
 import com.alternative.cap.restmindv3.util.UserDetails;
@@ -46,6 +49,7 @@ public class ProfileFragment extends Fragment {
 
     static SettingListener listener;
 
+    private ImageView profileImage;
     private TextView profileUserName;
     private TextView profileUserEmail;
     private BarChart barChart;
@@ -99,8 +103,9 @@ public class ProfileFragment extends Fragment {
 
 
     private void initInsance(View rootView, Bundle savedInstanceState) {
-        reference.child( user.getUid() ).child( "temp_steam" ).setValue( x );
+            reference.child( user.getUid() ).child( "temp_steam" ).setValue( x );
 
+        profileImage = rootView.findViewById(R.id.profilePicture);
         profileUserName = rootView.findViewById( R.id.profileUserName );
         profileUserEmail = rootView.findViewById( R.id.profileUserEmail );
 
@@ -135,6 +140,12 @@ public class ProfileFragment extends Fragment {
     private void workbench(View rootView, Bundle savedInstanceState) {
         backBtn( rootView );
         getData();
+        profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), RankingActivity.class));
+            }
+        });
     }
 
     private void getData() {
