@@ -1,6 +1,7 @@
 package com.alternative.cap.restmindv3.ui.step;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.util.MediaItem;
+import com.alternative.cap.restmindv3.util.StepLogItem;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.mikhaellopez.circularimageview.CircularImageView;
@@ -23,12 +25,14 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.MediaL
     StepListAdapterListener listener;
     private ArrayList<ArrayList<MediaItem>> dataList;
     private ArrayList<String[]> headerList;
+    private ArrayList<StepLogItem> stepLogItems;
 
-    public StepListAdapter(StepListFragment passingListener, ArrayList<ArrayList<MediaItem>>  passingDataList, ArrayList<String[]>  passingHeaderList, Context context) {
+    public StepListAdapter(StepListFragment passingListener, ArrayList<ArrayList<MediaItem>> passingDataList, ArrayList<String[]> passingHeaderList, ArrayList<StepLogItem> passingStepItems, Context context) {
         cons = context;
         this.listener = passingListener;
         this.dataList = passingDataList;
         this.headerList = passingHeaderList;
+        this.stepLogItems = passingStepItems;
     }
 
     @Override
@@ -48,6 +52,7 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.MediaL
                 listener.onItemClicked(headerList.get(position)[0], dataList.get(position));
             }
         });
+        holder.setStepCount(headerList.get(position)[0],stepLogItems, dataList.get(position).size());
     }
 
     @Override
@@ -61,6 +66,7 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.MediaL
         private CircularImageView stepListCover;
         private TextView stepName;
         private TextView stepArtist;
+        private TextView stepCount;
 
         public MediaListViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -68,6 +74,7 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.MediaL
             stepListCover = stepItem.findViewById(R.id.musicCover);
             stepName = stepItem.findViewById(R.id.stepName);
             stepArtist = stepItem.findViewById(R.id.stepArtist);
+            stepCount = stepItem.findViewById(R.id.stepCount);
         }
 
         public void setMediaCover(String uri) {
@@ -75,6 +82,22 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.MediaL
                     .load(uri)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(stepListCover);
+        }
+
+        public void setStepCount(String s, ArrayList<StepLogItem> stepLogItems, int size) {
+            boolean check = false;
+            for (StepLogItem si: stepLogItems){
+                if (si.stepId.equals(s)){
+                    stepCount.setText((Integer.parseInt(si.stepCount)+1)+"/"+size);
+                    check = true;
+                    break;
+                }
+            }
+            Log.d("dodo", "setStepCount: "+ stepLogItems.get(0).stepId);
+
+            if (!check){
+                stepCount.setText(1+"/"+size);
+            }
         }
     }
 
