@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.util.MediaItem;
+import com.alternative.cap.restmindv3.util.StepItem;
 import com.alternative.cap.restmindv3.util.StepLogItem;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,10 +36,11 @@ public class StepShowFragment extends Fragment
     private static StepListener listener;
     private static ArrayList<MediaItem> dataList;
     private static String header;
+    private static String author;
     private static Context cons;
     private static int current;
 
-    private TextView stepHeader;
+    private TextView stepHeader,stepAuthor;
     private RecyclerView stepShowRecyclerView;
     private StepShowAdapter adapter;
 
@@ -53,14 +55,15 @@ public class StepShowFragment extends Fragment
     public StepShowFragment() {
     }
 
-    public static StepShowFragment newInstance(String passingHeader, ArrayList<MediaItem> passingDataList, Context context, StepListener passingListener) {
+    public static StepShowFragment newInstance(String passingAuthor, String passingHeader, ArrayList<MediaItem> passingDataList, Context context, StepListener passingListener) {
 
         Bundle args = new Bundle();
 
         listener = passingListener;
         dataList = passingDataList;
         cons = context;
-        header = passingHeader;
+        author = passingAuthor;
+        StepShowFragment.header = passingHeader;
         current = 0;
 
         StepShowFragment fragment = new StepShowFragment();
@@ -91,7 +94,7 @@ public class StepShowFragment extends Fragment
     private void initInstance(View rootView, Bundle savedInstanceState) {
         stepShowRecyclerView = rootView.findViewById(R.id.stepShowRecyclerView);
         stepHeader = rootView.findViewById(R.id.stepHeader);
-
+        stepAuthor = rootView.findViewById(R.id.stepAuthor);
         stepShowLayout = rootView.findViewById(R.id.stepShowLayout);
         stepShowContentContainer = rootView.findViewById(R.id.stepShowContentContainer);
 
@@ -102,21 +105,18 @@ public class StepShowFragment extends Fragment
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                UserDetails userDetails = dataSnapshot.child("users").child(user.getUid()).getValue(UserDetails.class);
-
 
                 for (DataSnapshot ds : dataSnapshot.child(user.getUid()).child("step_log").getChildren()) {
                     StepLogItem item = ds.getValue(StepLogItem.class);
 
                     if (item.stepId.equals(header)) {
                         current = Integer.parseInt(item.stepCount);
+
                         break;
                     }
                 }
 
                 adapter = new StepShowAdapter(dataList, current, getContext(), StepShowFragment.this::onClickedItem);
-//                Log.d("dodo", "onDataChange: ssss :" + current);
-
                 stepShowRecyclerView.setLayoutManager(new LinearLayoutManager(cons));
                 stepShowRecyclerView.setAdapter(adapter);
                 database.getReference().removeEventListener(valueEventListener);
@@ -141,6 +141,7 @@ public class StepShowFragment extends Fragment
         });
 
         stepHeader.setText(header);
+        stepAuthor.setText(author);
 
     }
 

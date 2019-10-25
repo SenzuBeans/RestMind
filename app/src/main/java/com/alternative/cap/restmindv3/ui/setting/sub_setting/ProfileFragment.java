@@ -193,7 +193,7 @@ public class ProfileFragment extends Fragment {
         barChart.getAxisLeft().setTextColor( Color.WHITE );
         barChart.getXAxis().setTextColor( Color.WHITE );
 
-        barChart.setBackgroundColor( Color.BLACK );
+        barChart.setBackgroundColor( Color.TRANSPARENT );
         barChart.setGridBackgroundColor( Color.DKGRAY );
 
         barChart.setDrawGridBackground( true );
@@ -208,7 +208,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void initPieChart() {
-        pieChart.setBackgroundColor(Color.WHITE);
+        pieChart.setBackgroundColor(Color.TRANSPARENT);
     }
 
     private void setBarChartData() {
@@ -241,12 +241,13 @@ public class ProfileFragment extends Fragment {
         ArrayList<PieEntry> summaryTime = new ArrayList<PieEntry>();
         summaryTime.add(new PieEntry(Float.parseFloat(userDetails.totalTime) , 0));
         summaryTime.add(new PieEntry(Float.parseFloat(userDetails.missTime) , 1));
-        PieDataSet dataSet = new PieDataSet(summaryTime , "summary time over all time");
+        PieDataSet dataSet = new PieDataSet(summaryTime , "Percent of success/lose");
 
         PieData data = new PieData( dataSet);
         pieChart.setData(data);
         dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-        pieChart.animateXY(5000, 5000);
+        dataSet.setValueTextSize( 16.0f );
+        pieChart.animateXY(1000, 1000);
     }
 
     private void backBtn(View rootView) {

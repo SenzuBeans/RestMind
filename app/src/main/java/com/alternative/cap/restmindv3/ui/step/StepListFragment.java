@@ -1,7 +1,6 @@
 package com.alternative.cap.restmindv3.ui.step;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -125,12 +124,6 @@ public class StepListFragment extends Fragment implements StepListAdapter.StepLi
     private void workbench(View rootView, Bundle savedInstanceState) {
         getStep();
 
-        rootView.findViewById(R.id.stepBackBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getFragmentManager().popBackStack();
-            }
-        });
     }
 
     @Override
@@ -168,12 +161,12 @@ public class StepListFragment extends Fragment implements StepListAdapter.StepLi
     }
 
     @Override
-    public void onItemClicked(String passingHeader, ArrayList<MediaItem> passingDataList) {
+    public void onItemClicked(String passingHeader, ArrayList<MediaItem> passingDataList, String passingAuther) {
         stepListLayout.setVisibility(View.GONE);
         stepListContentContainer.setVisibility(View.VISIBLE);
 
         getChildFragmentManager().beginTransaction()
-                .add(R.id.stepListContentContainer, StepShowFragment.newInstance(passingHeader, passingDataList, getContext(), new StepShowFragment.StepListener() {
+                .add(R.id.stepListContentContainer, StepShowFragment.newInstance(passingAuther,passingHeader, passingDataList, getContext(), new StepShowFragment.StepListener() {
                     @Override
                     public void onDestroy() {
                         stepListLayout.setVisibility(View.VISIBLE);
