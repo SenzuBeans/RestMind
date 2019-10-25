@@ -140,36 +140,36 @@ public class BackgroundFragment extends Fragment {
         backgroundVideo.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                backgroundVideo.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                boolean isBackgroundWT = shared.getBoolean("isBackgroundWT", false);
-                if (!isBackgroundWT) {
-                    Spotlight spotlight = Spotlight.with(getActivity());
-                    spotlight.setOverlayColor(R.color.spotlight_bg);
-                    spotlight.setAnimation(new DecelerateInterpolator(1f));
-                    spotlight.setTargets(tapTarget);
-                    spotlight.setClosedOnTouchedOutside(true);
-
-                    spotlight.setOnSpotlightStateListener(new OnSpotlightStateChangedListener() {
-                        @Override
-                        public void onStarted() {
-
-                        }
-
-                        @Override
-                        public void onEnded() {
-                            Snackbar.make(backgroundVideo, "Don't show walkthrough again!!!", Snackbar.LENGTH_LONG).setAction("Confirm!", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    SharedPreferences.Editor editor = shared.edit();
-                                    editor.putBoolean("isBackgroundWT", true);
-                                    editor.commit();
-                                    Snackbar.make(backgroundVideo, "Walkthrough will not again!!!", Snackbar.LENGTH_SHORT).show();
-                                }
-                            }).show();
-                        }
-                    });
-                    spotlight.start();
-                }
+//                backgroundVideo.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+//                boolean isBackgroundWT = shared.getBoolean("isBackgroundWT", false);
+//                if (!isBackgroundWT) {
+//                    Spotlight spotlight = Spotlight.with(getActivity());
+//                    spotlight.setOverlayColor(R.color.spotlight_bg);
+//                    spotlight.setAnimation(new DecelerateInterpolator(1f));
+//                    spotlight.setTargets(tapTarget);
+//                    spotlight.setClosedOnTouchedOutside(true);
+//
+//                    spotlight.setOnSpotlightStateListener(new OnSpotlightStateChangedListener() {
+//                        @Override
+//                        public void onStarted() {
+//
+//                        }
+//
+//                        @Override
+//                        public void onEnded() {
+//                            Snackbar.make(backgroundVideo, "Don't show walkthrough again!!!", Snackbar.LENGTH_LONG).setAction("Confirm!", new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//                                    SharedPreferences.Editor editor = shared.edit();
+//                                    editor.putBoolean("isBackgroundWT", true);
+//                                    editor.commit();
+//                                    Snackbar.make(backgroundVideo, "Walkthrough will not again!!!", Snackbar.LENGTH_SHORT).show();
+//                                }
+//                            }).show();
+//                        }
+//                    });
+//                    spotlight.start();
+//                }
 
             }
         });
@@ -190,7 +190,7 @@ public class BackgroundFragment extends Fragment {
         }
 
         if (backgroundPlayer != null) {
-            backgroundPlayer.setPlayWhenReady(false);
+            backgroundPlayer.setPlayWhenReady(true);
 //            backgroundVideo.hideController();
         }
 
@@ -201,7 +201,7 @@ public class BackgroundFragment extends Fragment {
     private void updateDataList(ArrayList<VideoItem> dataList) {
         for (VideoItem item : dataList) {
             backgroundMediaSource = new ProgressiveMediaSource.Factory(backgroundDataSourceFactory)
-                    .createMediaSource(Uri.parse(item.link));
+                    .createMediaSource(Uri.parse(item.link_2));
             backgroundConcatenatingMediaSource.addMediaSource(backgroundMediaSource);
         }
 
@@ -261,7 +261,7 @@ public class BackgroundFragment extends Fragment {
                         break;
                     case MotionEvent.ACTION_UP:
                         if (clicked) {
-                            focusPlayer();
+//                            focusPlayer();
                         } else if (isMoveLeft) {
                             if (backgroundPlayer.getCurrentWindowIndex() == 0) {
                                 backgroundPlayer.seekTo(videoList.size() - 1, 0);

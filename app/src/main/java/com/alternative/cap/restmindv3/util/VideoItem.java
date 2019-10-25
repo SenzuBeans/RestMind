@@ -15,16 +15,18 @@ public class VideoItem implements Parcelable {
     public String name;
     public String artist;
     public String link;
+    public String link_2;
     public long use_count;
     public long temp_steam;
 
     public VideoItem() {
     }
 
-    public VideoItem(String name, String artist, String link, long use_count, long temp_steam) {
+    public VideoItem(String name, String artist, String link, String link_2, long use_count, long temp_steam) {
         this.name = name;
         this.artist = artist;
         this.link = link;
+        this.link_2 = link_2;
         this.use_count = use_count;
         this.temp_steam = temp_steam;
     }
@@ -33,6 +35,7 @@ public class VideoItem implements Parcelable {
         name = in.readString();
         artist = in.readString();
         link = in.readString();
+        link_2 = in.readString();
         use_count = in.readLong();
         temp_steam = in.readLong();
     }
@@ -40,7 +43,7 @@ public class VideoItem implements Parcelable {
     public static final Creator<VideoItem> CREATOR = new Creator<VideoItem>() {
         @Override
         public VideoItem createFromParcel(Parcel in) {
-            return new VideoItem( in );
+            return new VideoItem(in);
         }
 
         @Override
@@ -49,28 +52,18 @@ public class VideoItem implements Parcelable {
         }
     };
 
-    @Exclude
-    public Map<String, Object> toMap(){
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("name", name);
-        result.put("artist", artist);
-        result.put("link", link);
-        result.put("use_count", use_count);
-        result.put("temp_steam", temp_steam);
-        return result;
-    }
-
     @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString( name );
-        parcel.writeString( artist );
-        parcel.writeString( link );
-        parcel.writeLong( use_count );
-        parcel.writeLong( temp_steam );
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(artist);
+        dest.writeString(link);
+        dest.writeString(link_2);
+        dest.writeLong(use_count);
+        dest.writeLong(temp_steam);
     }
 }
