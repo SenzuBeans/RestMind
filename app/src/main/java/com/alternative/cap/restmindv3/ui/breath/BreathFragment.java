@@ -45,7 +45,6 @@ public class BreathFragment extends Fragment {
     private CircularImageView circularImageView;
     private MediaPlayer breathSongPlayer;
     private CountdownView timerView;
-    private Button playerBtn;
     private TextView breathStatusTextView;
     private CircularSeekBar circularSeekBar;
 
@@ -88,7 +87,6 @@ public class BreathFragment extends Fragment {
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         circularImageView = rootView.findViewById(R.id.circularImageView);
-        playerBtn = rootView.findViewById(R.id.playerBtn);
         breathStatusTextView = rootView.findViewById(R.id.breathStatusTextView);
         timerView = rootView.findViewById(R.id.breathTimer);
         circularSeekBar = rootView.findViewById(R.id.circularSeekBar);
@@ -115,11 +113,11 @@ public class BreathFragment extends Fragment {
                     for (int i = 0; i < log.size(); i++) {
                         if (log.get(i).date.equals(currentDate)) {
                             if (timerResume) {
-                                log.get(i).updateTotalTime(timer - ((timerView.getMinute()*60000)+(timerView.getSecond()*1000)));
-                                log.get(i).updateDismissTime(((timerView.getMinute()*60000)+(timerView.getSecond()*1000)));
+                                log.get(i).updateTotalTime(timer - ((timerView.getMinute() * 60000) + (timerView.getSecond() * 1000)));
+                                log.get(i).updateDismissTime(((timerView.getMinute() * 60000) + (timerView.getSecond() * 1000)));
 
-                                userDetails.updateTotalTime(timer - ((timerView.getMinute()*60000)+(timerView.getSecond()*1000)));
-                                userDetails.updateMissTime(((timerView.getMinute()*60000)+(timerView.getSecond()*1000)));
+                                userDetails.updateTotalTime(timer - ((timerView.getMinute() * 60000) + (timerView.getSecond() * 1000)));
+                                userDetails.updateMissTime(((timerView.getMinute() * 60000) + (timerView.getSecond() * 1000)));
                             } else {
                                 log.get(i).updateTotalTime(timer);
 
@@ -132,10 +130,10 @@ public class BreathFragment extends Fragment {
 
                     if (!isUpdate) {
                         if (timerResume) {
-                            log.add(new BreathLogItem(currentDate, ((timer -((timerView.getMinute()*60000)+(timerView.getSecond()*1000))) / 60000) + ""
+                            log.add(new BreathLogItem(currentDate, ((timer - ((timerView.getMinute() * 60000) + (timerView.getSecond() * 1000))) / 60000) + ""
                                     , (timerView.getMinute()) + ""));
-                            userDetails.updateTotalTime(timer - ((timerView.getMinute()*60000)+(timerView.getSecond()*1000)));
-                            userDetails.updateMissTime(((timerView.getMinute()*60000)+(timerView.getSecond()*1000)));
+                            userDetails.updateTotalTime(timer - ((timerView.getMinute() * 60000) + (timerView.getSecond() * 1000)));
+                            userDetails.updateMissTime(((timerView.getMinute() * 60000) + (timerView.getSecond() * 1000)));
                         } else {
                             log.add(new BreathLogItem(currentDate, (timer / 60000) + ""));
                             userDetails.updateTotalTime(timer);
@@ -147,8 +145,8 @@ public class BreathFragment extends Fragment {
                         log.remove(0);
                     }
 
-                    for (int i = 0; i < log.size(); i++){
-                        if (Integer.parseInt(log.get(i).date) - Integer.parseInt(log.get(log.size()-1).date) > 7){
+                    for (int i = 0; i < log.size(); i++) {
+                        if (Integer.parseInt(log.get(i).date) - Integer.parseInt(log.get(log.size() - 1).date) > 7) {
                             log.get(i).setTotalTime("0");
                             log.get(i).setDismissTime("0");
                         }
@@ -157,9 +155,9 @@ public class BreathFragment extends Fragment {
                 } else {
                     log = new ArrayList<>();
                     if (timerResume) {
-                        log.add(new BreathLogItem(currentDate, ((timer - ((timerView.getMinute()*60000)+(timerView.getSecond()*1000))) / 60000) + "", (timerView.getMinute()) + ""));
-                        userDetails.updateTotalTime(timer - ((timerView.getMinute()*60000)+(timerView.getSecond()*1000)));
-                        userDetails.updateMissTime(((timerView.getMinute()*60000)+(timerView.getSecond()*1000)));
+                        log.add(new BreathLogItem(currentDate, ((timer - ((timerView.getMinute() * 60000) + (timerView.getSecond() * 1000))) / 60000) + "", (timerView.getMinute()) + ""));
+                        userDetails.updateTotalTime(timer - ((timerView.getMinute() * 60000) + (timerView.getSecond() * 1000)));
+                        userDetails.updateMissTime(((timerView.getMinute() * 60000) + (timerView.getSecond() * 1000)));
                     } else {
                         log.add(new BreathLogItem(currentDate, (timer / 60000) + ""));
                         userDetails.updateTotalTime(timer);
@@ -184,8 +182,7 @@ public class BreathFragment extends Fragment {
     private void workbench(View rootView, Bundle savedInstanceState) {
         hideNavigationBar();
 
-        seekBarInit(rootView);
-        playerBtn.setOnClickListener(new View.OnClickListener() {
+        circularImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!isSongPlaying) {
@@ -198,7 +195,6 @@ public class BreathFragment extends Fragment {
                             @Override
                             public void onInterval(CountdownView cv, long remainTime) {
                                 circularSeekBar.setProgress(cv.getRemainTime());
-//                                Log.d("dodo", "onInterval: " + cv.getRemainTime());
                             }
                         });
                         timerView.setOnCountdownEndListener(new CountdownView.OnCountdownEndListener() {
@@ -244,11 +240,6 @@ public class BreathFragment extends Fragment {
 
     }
 
-    private void seekBarInit(View rootView) {
-
-
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -268,36 +259,13 @@ public class BreathFragment extends Fragment {
         breathSongPlayer.start();
         breathSongPlayer.setLooping(true);
         animationPlayer(true);
-        playerBtn.setText("Stop");
         isSongPlaying = true;
-//        updateSeekBar.start();
         if (timerResume) {
-            timerView.start((timerView.getMinute()*60000)+(timerView.getSecond()*1000));
+            timerView.start((timerView.getMinute() * 60000) + (timerView.getSecond() * 1000));
         } else {
             timerView.start(timer);
         }
     }
-
-//    public void run() {
-//
-//        int currentPosition = (timerView.getMinute()*60000)+(timerView.getSecond()*1000);
-//        int total = (int) timer;
-//
-//
-//        while (timerView != null && isSongPlaying && currentPosition < total) {
-//            try {
-//                Thread.sleep(1000);
-//                currentPosition = (timerView.getMinute()*60000)+(timerView.getSecond()*1000);
-//            } catch (InterruptedException e) {
-//                return;
-//            } catch (Exception e) {
-//                return;
-//            }
-//
-//            circularSeekBar.setProgress((timerView.getMinute()*60000)+(timerView.getSecond()*1000));
-//
-//        }
-//    }
 
     private void stopRunningBreath(boolean timerState) {
         if (isSongPlaying) {
@@ -305,8 +273,6 @@ public class BreathFragment extends Fragment {
             breathSongPlayer.stop();
             breathSongPlayer.release();
             animationPlayer(false);
-//            updateSeekBar.interrupt();
-            playerBtn.setText("Play");
             timerView.stop();
             isSongPlaying = false;
         }

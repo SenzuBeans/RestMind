@@ -101,7 +101,7 @@ public class NarrationFragment extends Fragment implements NarrationSubAdapter.N
 
     private void updateAdapter(View root) {
         narrationRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        if (adapter == null) {
+        if (narrationRecyclerView.getAdapter() == null) {
             adapter = new NarrationAdapter( getContext(), narrationHeader, narrationList, this );
             narrationRecyclerView.setAdapter( adapter );
         }else{
