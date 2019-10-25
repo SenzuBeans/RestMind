@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,7 +25,7 @@ public class NarrationSubAdapter extends RecyclerView.Adapter<NarrationSubAdapte
 
     private static NarrationSubListener listener;
     private Context cons;
-    private ArrayList<MediaItem>  dataList;
+    private ArrayList<MediaItem> dataList;
     private String header;
 
     public NarrationSubAdapter(Context context, ArrayList<MediaItem> data, NarrationSubListener passingListener, String passingHeader) {
@@ -43,19 +44,24 @@ public class NarrationSubAdapter extends RecyclerView.Adapter<NarrationSubAdapte
 
     @Override
     public void onBindViewHolder(@NonNull NarrationSubViewHolder holder, int position) {
+        holder.swap(true);
         holder.setDetail(dataList.get(position).image_link_2, dataList.get(position).name);
         holder.artistMedia.setText(dataList.get(position).artist);
-        holder.root.setOnClickListener( new View.OnClickListener() {
+        holder.root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 listener.onItemClicked(dataList, position, header);
             }
-        } );
+        });
     }
 
     @Override
     public int getItemCount() {
-        return dataList.size();
+        if (dataList.size() > 15) {
+            return 15;
+        } else {
+            return dataList.size();
+        }
     }
 
     public class NarrationSubViewHolder extends RecyclerView.ViewHolder {
@@ -64,6 +70,8 @@ public class NarrationSubAdapter extends RecyclerView.Adapter<NarrationSubAdapte
         private ImageView coverImage;
         private TextView nameNarration;
         private TextView artistMedia;
+        private LinearLayout mediaLayout;
+        private LinearLayout moreLayout;
 
         public NarrationSubViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -71,22 +79,34 @@ public class NarrationSubAdapter extends RecyclerView.Adapter<NarrationSubAdapte
             coverImage = itemView.findViewById(R.id.narrationMediaCoverImage);
             nameNarration = itemView.findViewById(R.id.narrationMediaName);
             artistMedia = itemView.findViewById(R.id.narrationMediaArtist);
+            mediaLayout = itemView.findViewById(R.id.narrationSubMediaLayout);
+            moreLayout = itemView.findViewById(R.id.narrationSubMoreLayout);
         }
 
-        public void setDetail(String imageLink, String name){
-//            RequestOptions requestOptions = new RequestOptions();
-//            requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(16));
+        public void setDetail(String imageLink, String name) {
             Glide.with(cons)
                     .load(imageLink)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .apply( RequestOptions.bitmapTransform( new RoundedCorners( 16 ) ) )
+                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(16)))
                     .into(coverImage);
 
             nameNarration.setText(name);
         }
+
+        public void swap(boolean b) {
+            if (b) {
+                mediaLayout.setVisibility(View.VISIBLE);
+                moreLayout.setVisibility(View.GONE);
+            } else {
+                moreLayout.setVisibility(View.VISIBLE);
+                mediaLayout.setVisibility(View.GONE);
+            }
+        }
     }
 
-    public interface NarrationSubListener{
+    public interface NarrationSubListener {
         void onItemClicked(ArrayList<MediaItem> passingDataList, int current, String passingHeader);
+
+        void onMoreClicked(ArrayList<MediaItem> passingDataList, String passingHeader);
     }
 }

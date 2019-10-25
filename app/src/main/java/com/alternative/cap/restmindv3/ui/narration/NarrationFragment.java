@@ -131,4 +131,21 @@ public class NarrationFragment extends Fragment implements NarrationSubAdapter.N
                 .addToBackStack(null)
                 .commit();
     }
+
+    @Override
+    public void onMoreClicked(ArrayList<MediaItem> passingDataList, String passingHeader) {
+        narrationRecyclerView.setVisibility(View.GONE);
+        narrationContentContainer.setVisibility(View.VISIBLE);
+        getChildFragmentManager().beginTransaction()
+                .addToBackStack(null)
+                .add(R.id.narrationContentContainer, NarrationListFragment.newInstance(passingDataList, passingHeader, new NarrationListFragment.NarrationListListener(){
+                    @Override
+                    public void onDestroy(){
+                        narrationRecyclerView.setVisibility(View.VISIBLE);
+                        narrationContentContainer.setVisibility(View.GONE);
+                    }
+                }, this))
+                .commit();
+    }
+
 }

@@ -115,7 +115,7 @@ public class StepShowFragment extends Fragment
                 }
 
                 adapter = new StepShowAdapter(dataList, current, getContext(), StepShowFragment.this::onClickedItem);
-                Log.d("dodo", "onDataChange: ssss :" + current);
+//                Log.d("dodo", "onDataChange: ssss :" + current);
 
                 stepShowRecyclerView.setLayoutManager(new LinearLayoutManager(cons));
                 stepShowRecyclerView.setAdapter(adapter);
