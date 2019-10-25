@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -67,6 +68,7 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.MediaL
         private TextView stepName;
         private TextView stepArtist;
         private TextView stepCount;
+        private ProgressBar stepProgress;
 
         public MediaListViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -75,6 +77,7 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.MediaL
             stepName = stepItem.findViewById(R.id.stepName);
             stepArtist = stepItem.findViewById(R.id.stepArtist);
             stepCount = stepItem.findViewById(R.id.stepCount);
+            stepProgress = stepItem.findViewById(R.id.stepProgress);
         }
 
         public void setMediaCover(String uri) {
@@ -89,14 +92,18 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.MediaL
             for (StepLogItem si: stepLogItems){
                 if (si.stepId.equals(s)){
                     stepCount.setText((Integer.parseInt(si.stepCount)+1)+"/"+size);
+                    stepProgress.setMax(size);
+                    stepProgress.setProgress(Integer.parseInt(si.stepCount) + 1);
                     check = true;
                     break;
                 }
             }
-            Log.d("dodo", "setStepCount: "+ stepLogItems.get(0).stepId);
-
+//            Log.d("dodo", "setStepCount: "+ stepLogItems.get(0).stepId);
+//
             if (!check){
                 stepCount.setText(1+"/"+size);
+                stepProgress.setMax(size);
+                stepProgress.setProgress(1);
             }
         }
     }

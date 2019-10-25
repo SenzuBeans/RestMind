@@ -125,12 +125,12 @@ public class StepListFragment extends Fragment implements StepListAdapter.StepLi
     private void workbench(View rootView, Bundle savedInstanceState) {
         getStep();
 
-        rootView.findViewById( R.id.stepBackBtn).setOnClickListener(new View.OnClickListener() {
+        rootView.findViewById(R.id.stepBackBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getFragmentManager().popBackStack();
             }
-        } );
+        });
     }
 
     @Override
@@ -141,16 +141,20 @@ public class StepListFragment extends Fragment implements StepListAdapter.StepLi
 
     private void hideNavigationBar() {
         this.getActivity().getWindow().getDecorView()
-                .setSystemUiVisibility( View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                .setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                         View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN |
                         View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
     }
 
     public void doStuff() {
-
-        stepListAdapter = new StepListAdapter(StepListFragment.this, dataList, headerList, stepLogItems, getContext());
-        stepListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        stepListRecyclerView.setAdapter(stepListAdapter);
+        if (stepListRecyclerView.getAdapter() != null) {
+            stepListAdapter = new StepListAdapter(StepListFragment.this, dataList, headerList, stepLogItems, getContext());
+            stepListAdapter.notifyDataSetChanged();
+        } else {
+            stepListAdapter = new StepListAdapter(StepListFragment.this, dataList, headerList, stepLogItems, getContext());
+            stepListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            stepListRecyclerView.setAdapter(stepListAdapter);
+        }
     }
 
     public void getStep() {
@@ -174,6 +178,7 @@ public class StepListFragment extends Fragment implements StepListAdapter.StepLi
                     public void onDestroy() {
                         stepListLayout.setVisibility(View.VISIBLE);
                         stepListContentContainer.setVisibility(View.GONE);
+                        getStep();
                     }
                 }))
                 .addToBackStack(null)
