@@ -75,6 +75,7 @@ public class BreathLogItem implements Parcelable {
     }
 
     public void updateDismissTime(long time) {
+
         int minte = (int) (time/60);
         int current = Integer.parseInt(this.dismissTime);
         this.dismissTime = (current + ((minte+1000) / 1000)) + "";
