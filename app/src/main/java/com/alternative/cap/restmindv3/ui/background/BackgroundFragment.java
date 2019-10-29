@@ -201,7 +201,7 @@ public class BackgroundFragment extends Fragment {
     private void updateDataList(ArrayList<VideoItem> dataList) {
         for (VideoItem item : dataList) {
             backgroundMediaSource = new ProgressiveMediaSource.Factory(backgroundDataSourceFactory)
-                    .createMediaSource(Uri.parse(item.link_2));
+                    .createMediaSource(Uri.parse(item.link));
             backgroundConcatenatingMediaSource.addMediaSource(backgroundMediaSource);
         }
 

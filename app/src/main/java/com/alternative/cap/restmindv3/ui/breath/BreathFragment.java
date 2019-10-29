@@ -1,8 +1,9 @@
 package com.alternative.cap.restmindv3.ui.breath;
 
-import android.graphics.Color;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -10,7 +11,6 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,7 +19,10 @@ import androidx.fragment.app.Fragment;
 
 import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.util.BreathLogItem;
-import com.alternative.cap.restmindv3.util.MutableValue;
+import com.alternative.cap.restmindv3.util.BreathSongList;
+import com.alternative.cap.restmindv3.util.BreathingMutableValue;
+import com.alternative.cap.restmindv3.util.MediaItem;
+import com.alternative.cap.restmindv3.util.NarrationItem;
 import com.alternative.cap.restmindv3.util.UserDetails;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -32,6 +35,7 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Random;
 
@@ -41,6 +45,7 @@ import me.tankery.lib.circularseekbar.CircularSeekBar;
 
 public class BreathFragment extends Fragment {
 
+//    BreathSongList data;
 
     private CircularImageView circularImageView;
     private MediaPlayer breathSongPlayer;
@@ -49,7 +54,7 @@ public class BreathFragment extends Fragment {
     private CircularSeekBar circularSeekBar;
 
     private String[] STATE = {"inhale", "hold", "exhale"};
-    private MutableValue passingBreathData;
+    private BreathingMutableValue passingBreathData;
     private long[] breathData;
     private boolean timerResume = false;
     private boolean isSongPlaying = false;
@@ -62,6 +67,7 @@ public class BreathFragment extends Fragment {
 
     private DatabaseReference databaseReference;
     private DatabaseReference reference;
+    private FirebaseDatabase database;
     private FirebaseUser user;
     private ValueEventListener valueEventListener;
 
@@ -71,7 +77,7 @@ public class BreathFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        passingBreathData = new MutableValue();
+        passingBreathData = new BreathingMutableValue();
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -85,6 +91,7 @@ public class BreathFragment extends Fragment {
         databaseReference = FirebaseDatabase.getInstance().getReference();
         reference = databaseReference.child("users");
         user = FirebaseAuth.getInstance().getCurrentUser();
+        database = FirebaseDatabase.getInstance();
 
         circularImageView = rootView.findViewById(R.id.circularImageView);
         breathStatusTextView = rootView.findViewById(R.id.breathStatusTextView);
@@ -96,8 +103,6 @@ public class BreathFragment extends Fragment {
                 return true;
             }
         });
-
-//        updateSeekBar = new Thread(this);
 
         valueEventListener = new ValueEventListener() {
             @Override
@@ -120,6 +125,7 @@ public class BreathFragment extends Fragment {
                                 userDetails.updateMissTime(((timerView.getMinute() * 60000) + (timerView.getSecond() * 1000)));
                             } else {
                                 log.get(i).updateTotalTime(timer);
+                                log.get(i).updateDismissTime(0);
 
                                 userDetails.updateTotalTime(timer);
                                 userDetails.updateMissTime(0);
@@ -146,9 +152,14 @@ public class BreathFragment extends Fragment {
                     }
 
                     for (int i = 0; i < log.size(); i++) {
-                        if (Integer.parseInt(log.get(i).date) - Integer.parseInt(log.get(log.size() - 1).date) > 7) {
-                            log.get(i).setTotalTime("0");
-                            log.get(i).setDismissTime("0");
+                        if (Integer.parseInt(log.get(log.size() - 1).date) >= Integer.parseInt(log.get(i).date) ) {
+                            if (Integer.parseInt(log.get(log.size() - 1).date) - Integer.parseInt(log.get(i).date) > 7) {
+                                log.remove(0);
+                            }
+                        }else{
+                            if ((Integer.parseInt(log.get(log.size() - 1).date)+ 30) - Integer.parseInt(log.get(i).date)  > 7) {
+                                log.remove(0);
+                            }
                         }
                     }
 
@@ -207,7 +218,6 @@ public class BreathFragment extends Fragment {
                 } else {
                     stopRunningBreath(true);
                 }
-//                Log.d("dodo", "onClick: "+timerView.getRemainTime());
             }
         });
 
@@ -237,7 +247,6 @@ public class BreathFragment extends Fragment {
             }
         });
 
-
     }
 
     @Override
@@ -255,15 +264,19 @@ public class BreathFragment extends Fragment {
 
     private void startRunningBreath() {
         recallBreathData();
-        breathSongPlayer = MediaPlayer.create(getContext(), R.raw.oo);
-        breathSongPlayer.start();
-        breathSongPlayer.setLooping(true);
-        animationPlayer(true);
-        isSongPlaying = true;
-        if (timerResume) {
-            timerView.start((timerView.getMinute() * 60000) + (timerView.getSecond() * 1000));
+        if (BreathSongList.dataList == null) {
+            callMediaData();
         } else {
-            timerView.start(timer);
+            breathSongPlayer = MediaPlayer.create(getContext(), Uri.parse(BreathSongList.dataList.get(BreathSongList.current).link_2));
+            breathSongPlayer.start();
+            breathSongPlayer.setLooping(true);
+            animationPlayer(true);
+            isSongPlaying = true;
+            if (timerResume) {
+                timerView.start((timerView.getMinute() * 60000) + (timerView.getSecond() * 1000));
+            } else {
+                timerView.start(timer);
+            }
         }
     }
 
@@ -302,6 +315,43 @@ public class BreathFragment extends Fragment {
         hold = breathData[1];
         exhale = breathData[2];
         timer = breathData[3];
+    }
+
+    private void callMediaData() {
+        database.getReference().child("users").child(user.getUid()).child("temp_steam").setValue(x);
+        database.getReference().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                NarrationItem narrationItem = dataSnapshot.child("LOG").child("BREATH").getValue(NarrationItem.class);
+                ArrayList<String> narrationId = new ArrayList(Arrays.asList(narrationItem.rawId.split(",")));
+                ArrayList<MediaItem> tempMediaList = new ArrayList<>();
+
+                for (String s : narrationId) {
+                    tempMediaList.add(dataSnapshot.child("sound").child(s).getValue(MediaItem.class));
+
+                }
+
+                BreathSongList.setDataList(tempMediaList);
+//                Log.d("dodo", "onDataChange: data " + narrationId.get(0));
+
+                breathSongPlayer = MediaPlayer.create(getContext(), Uri.parse(BreathSongList.dataList.get(BreathSongList.current).link_2));
+                breathSongPlayer.start();
+                breathSongPlayer.setLooping(true);
+                animationPlayer(true);
+                isSongPlaying = true;
+                if (timerResume) {
+                    timerView.start((timerView.getMinute() * 60000) + (timerView.getSecond() * 1000));
+                } else {
+                    timerView.start(timer);
+                }
+                database.getReference().removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void animationPlayer(boolean state) {

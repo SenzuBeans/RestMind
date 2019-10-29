@@ -11,11 +11,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alternative.cap.restmindv3.R;
+import com.alternative.cap.restmindv3.util.BreathSongList;
 import com.alternative.cap.restmindv3.util.MediaItem;
 
 import java.util.ArrayList;
 
 public class NarrationAdapter extends RecyclerView.Adapter<NarrationAdapter.NarrationViewHolder> {
+
 
     private NarrationSubAdapter.NarrationSubListener listener;
     private Context cons;
@@ -52,7 +54,7 @@ public class NarrationAdapter extends RecyclerView.Adapter<NarrationAdapter.Narr
 
     @Override
     public int getItemCount() {
-        return headerName.size();
+        return headerName.size() - 1;
     }
 
     public class NarrationViewHolder extends RecyclerView.ViewHolder {
