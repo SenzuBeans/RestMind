@@ -141,6 +141,7 @@ public class MemberActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(MemberActivity.this, "user : " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
+                            reference.child(user.getUid()).setValue(new UserDetails(user.getDisplayName(), user.getEmail()));
                             Intent intent = new Intent(MemberActivity.this, NavigationHomePageActivity.class);
                             startActivity(intent);
                             finish();

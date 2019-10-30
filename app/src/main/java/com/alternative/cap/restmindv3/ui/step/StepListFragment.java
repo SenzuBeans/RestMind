@@ -18,6 +18,7 @@ import com.alternative.cap.restmindv3.R;
 ;
 import com.alternative.cap.restmindv3.util.MediaItem;
 import com.alternative.cap.restmindv3.util.StepListItem;
+import com.alternative.cap.restmindv3.util.StepLogItem;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -34,6 +35,7 @@ public class StepListFragment extends Fragment implements StepListAdapter.StepLi
     private ArrayList<ArrayList<MediaItem>> dataList;
     private ArrayList<String[]> headerList;
     private ArrayList<MediaItem> tempMediaList;
+    private ArrayList<StepLogItem> stepLogItems;
 
     private StepListAdapter stepListAdapter;
     private RecyclerView stepListRecyclerView;
@@ -66,6 +68,7 @@ public class StepListFragment extends Fragment implements StepListAdapter.StepLi
     private void init(Bundle savedInstanceState) {
         dataList = new ArrayList<ArrayList<MediaItem>>();
         headerList = new ArrayList<>();
+        stepLogItems = new ArrayList<>();
         user = FirebaseAuth.getInstance().getCurrentUser();
         database = FirebaseDatabase.getInstance();
     }
@@ -88,6 +91,12 @@ public class StepListFragment extends Fragment implements StepListAdapter.StepLi
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot ds : dataSnapshot.child("users").child(user.getUid()).child("step_log").getChildren()) {
+                    StepLogItem item = ds.getValue(StepLogItem.class);
+                    stepLogItems.add(item);
+                }
+
                 for (DataSnapshot ds : dataSnapshot.child("step").getChildren()) {
                     StepListItem item = ds.getValue(StepListItem.class);
                     headerList.add(new String[]{ds.getKey(), item.artist, item.image_link});
@@ -97,10 +106,8 @@ public class StepListFragment extends Fragment implements StepListAdapter.StepLi
 
                     for (String s : mediaId) {
                         tempMediaList.add(dataSnapshot.child("sound").child(s).getValue(MediaItem.class));
-//                        Log.d("dodo", "onItemClicked: "+ tempMediaList.get(tempMediaList.size()-1).name);
                     }
                     dataList.add(tempMediaList);
-                    Log.d("dodo", "onItemClicked: "+ dataList.get(0).get(0).name);
 
                 }
                 doStuff();
@@ -118,12 +125,12 @@ public class StepListFragment extends Fragment implements StepListAdapter.StepLi
     private void workbench(View rootView, Bundle savedInstanceState) {
         getStep();
 
-        rootView.findViewById( R.id.stepBackBtn).setOnClickListener(new View.OnClickListener() {
+        rootView.findViewById(R.id.stepBackBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getFragmentManager().popBackStack();
             }
-        } );
+        });
     }
 
     @Override
@@ -134,16 +141,20 @@ public class StepListFragment extends Fragment implements StepListAdapter.StepLi
 
     private void hideNavigationBar() {
         this.getActivity().getWindow().getDecorView()
-                .setSystemUiVisibility( View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                .setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                         View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN |
                         View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
     }
 
     public void doStuff() {
-
-        stepListAdapter = new StepListAdapter(StepListFragment.this, dataList, headerList, getContext());
-        stepListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        stepListRecyclerView.setAdapter(stepListAdapter);
+        if (stepListRecyclerView.getAdapter() != null) {
+            stepListAdapter = new StepListAdapter(StepListFragment.this, dataList, headerList, stepLogItems, getContext());
+            stepListAdapter.notifyDataSetChanged();
+        } else {
+            stepListAdapter = new StepListAdapter(StepListFragment.this, dataList, headerList, stepLogItems, getContext());
+            stepListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            stepListRecyclerView.setAdapter(stepListAdapter);
+        }
     }
 
     public void getStep() {
@@ -167,6 +178,7 @@ public class StepListFragment extends Fragment implements StepListAdapter.StepLi
                     public void onDestroy() {
                         stepListLayout.setVisibility(View.VISIBLE);
                         stepListContentContainer.setVisibility(View.GONE);
+                        getStep();
                     }
                 }))
                 .addToBackStack(null)

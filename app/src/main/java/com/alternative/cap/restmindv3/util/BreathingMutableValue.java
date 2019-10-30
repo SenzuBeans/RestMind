@@ -1,29 +1,27 @@
 package com.alternative.cap.restmindv3.util;
 
-import android.content.Context;
-import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class MutableValue implements Parcelable {
+public class BreathingMutableValue implements Parcelable {
 
     private static long[] breathData = {3000,1000,3000,300000};
 
-    public MutableValue() {
+    public BreathingMutableValue() {
     }
 
-    protected MutableValue(Parcel in) {
+    protected BreathingMutableValue(Parcel in) {
     }
 
-    public static final Creator<MutableValue> CREATOR = new Creator<MutableValue>() {
+    public static final Creator<BreathingMutableValue> CREATOR = new Creator<BreathingMutableValue>() {
         @Override
-        public MutableValue createFromParcel(Parcel in) {
-            return new MutableValue( in );
+        public BreathingMutableValue createFromParcel(Parcel in) {
+            return new BreathingMutableValue( in );
         }
 
         @Override
-        public MutableValue[] newArray(int size) {
-            return new MutableValue[size];
+        public BreathingMutableValue[] newArray(int size) {
+            return new BreathingMutableValue[size];
         }
     };
 

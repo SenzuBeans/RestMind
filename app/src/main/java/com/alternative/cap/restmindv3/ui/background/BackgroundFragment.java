@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.manager.Contextor;
 import com.alternative.cap.restmindv3.util.VideoItem;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -54,15 +56,12 @@ public class BackgroundFragment extends Fragment {
     private MediaSource backgroundMediaSource;
     private ConcatenatingMediaSource backgroundConcatenatingMediaSource;
     private DefaultDataSourceFactory backgroundDataSourceFactory;
-    private TextView backgroundId;
+    private ProgressBar backgroundProgress;
 
     private ArrayList<VideoItem> videoList;
 
-    private int currentVideo = 0;
     private float touchingPoint = 0;
     private boolean clicked;
-    private boolean isPlay = false;
-    private boolean isStart = true;
     private boolean isMoveLeft;
     private boolean isMoveRight;
 
@@ -71,8 +70,6 @@ public class BackgroundFragment extends Fragment {
     private DatabaseReference videoRef;
 
     private SimpleTarget tapTarget;
-    private SimpleTarget leftTarget;
-    private SimpleTarget rightTarget;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,7 +96,7 @@ public class BackgroundFragment extends Fragment {
 
 
         backgroundVideo = root.findViewById(R.id.backgroundVideoView);
-        backgroundId = root.findViewById(R.id.backgroundID);
+        backgroundProgress = root.findViewById(R.id.progress_bar);
 
 
         Random random = new Random();
@@ -143,36 +140,36 @@ public class BackgroundFragment extends Fragment {
         backgroundVideo.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                backgroundVideo.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                boolean isBackgroundWT = shared.getBoolean("isBackgroundWT", false);
-                if (!isBackgroundWT) {
-                    Spotlight spotlight = Spotlight.with(getActivity());
-                    spotlight.setOverlayColor(R.color.spotlight_bg);
-                    spotlight.setAnimation(new DecelerateInterpolator(1f));
-                    spotlight.setTargets(tapTarget);
-                    spotlight.setClosedOnTouchedOutside(true);
-
-                    spotlight.setOnSpotlightStateListener(new OnSpotlightStateChangedListener() {
-                        @Override
-                        public void onStarted() {
-
-                        }
-
-                        @Override
-                        public void onEnded() {
-                            Snackbar.make(backgroundVideo, "Don't show walkthrough again!!!", Snackbar.LENGTH_LONG).setAction("Confirm!", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    SharedPreferences.Editor editor = shared.edit();
-                                    editor.putBoolean("isBackgroundWT", true);
-                                    editor.commit();
-                                    Snackbar.make(backgroundVideo, "Walkthrough will not again!!!", Snackbar.LENGTH_SHORT).show();
-                                }
-                            }).show();
-                        }
-                    });
-                    spotlight.start();
-                }
+//                backgroundVideo.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+//                boolean isBackgroundWT = shared.getBoolean("isBackgroundWT", false);
+//                if (!isBackgroundWT) {
+//                    Spotlight spotlight = Spotlight.with(getActivity());
+//                    spotlight.setOverlayColor(R.color.spotlight_bg);
+//                    spotlight.setAnimation(new DecelerateInterpolator(1f));
+//                    spotlight.setTargets(tapTarget);
+//                    spotlight.setClosedOnTouchedOutside(true);
+//
+//                    spotlight.setOnSpotlightStateListener(new OnSpotlightStateChangedListener() {
+//                        @Override
+//                        public void onStarted() {
+//
+//                        }
+//
+//                        @Override
+//                        public void onEnded() {
+//                            Snackbar.make(backgroundVideo, "Don't show walkthrough again!!!", Snackbar.LENGTH_LONG).setAction("Confirm!", new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//                                    SharedPreferences.Editor editor = shared.edit();
+//                                    editor.putBoolean("isBackgroundWT", true);
+//                                    editor.commit();
+//                                    Snackbar.make(backgroundVideo, "Walkthrough will not again!!!", Snackbar.LENGTH_SHORT).show();
+//                                }
+//                            }).show();
+//                        }
+//                    });
+//                    spotlight.start();
+//                }
 
             }
         });
@@ -193,7 +190,7 @@ public class BackgroundFragment extends Fragment {
         }
 
         if (backgroundPlayer != null) {
-            backgroundPlayer.setPlayWhenReady(false);
+            backgroundPlayer.setPlayWhenReady(true);
 //            backgroundVideo.hideController();
         }
 
@@ -207,6 +204,17 @@ public class BackgroundFragment extends Fragment {
                     .createMediaSource(Uri.parse(item.link));
             backgroundConcatenatingMediaSource.addMediaSource(backgroundMediaSource);
         }
+
+        backgroundPlayer.addListener(new Player.EventListener() {
+            @Override
+            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                if (playbackState == ExoPlayer.STATE_BUFFERING){
+                    backgroundProgress.setVisibility(View.VISIBLE);
+                } else {
+                    backgroundProgress.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
 
         backgroundPlayer.prepare(backgroundConcatenatingMediaSource);
     }
@@ -253,7 +261,7 @@ public class BackgroundFragment extends Fragment {
                         break;
                     case MotionEvent.ACTION_UP:
                         if (clicked) {
-                            focusPlayer();
+//                            focusPlayer();
                         } else if (isMoveLeft) {
                             if (backgroundPlayer.getCurrentWindowIndex() == 0) {
                                 backgroundPlayer.seekTo(videoList.size() - 1, 0);

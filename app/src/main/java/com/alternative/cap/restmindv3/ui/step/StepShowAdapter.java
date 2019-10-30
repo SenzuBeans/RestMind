@@ -48,17 +48,15 @@ public class StepShowAdapter extends RecyclerView.Adapter<StepShowAdapter.StepVi
     public void onBindViewHolder(@NonNull StepViewHolder holder, int position) {
         holder.stepName.setText(dataList.get(position).name);
         holder.stepArtist.setText(dataList.get(position).artist);
-        holder.setImage(dataList.get(position).image_link);
+        holder.setImage(dataList.get(position).image_link_2);
 
         if (position <= current){
-//            holder.root.setBackground(ContextCompat.getDrawable(cons, R.drawable.background_step));
             holder.stepName.setTextColor(Color.WHITE);
             holder.stepArtist.setTextColor(Color.WHITE);
             holder.root.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     listener.onClickedItem(position, current);
-//                    Snackbar.make(view, "This step are allow to listen", Snackbar.LENGTH_SHORT).show();
                 }
             });
         }else{

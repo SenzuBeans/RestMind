@@ -5,11 +5,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
+import android.widget.FrameLayout;
+import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -47,6 +51,9 @@ public class NarrationPlayerFragment extends Fragment {
     private TextView narrationPlayerHeader;
     private TextView narrationPlayerName;
     private TextView narrationPlayerArtist;
+    private RatingBar narrationRatingBar;
+    private FrameLayout narrationRatingContent;
+    private RelativeLayout narrationMainContent;
 
     private static MusicListener listener;
 
@@ -115,9 +122,47 @@ public class NarrationPlayerFragment extends Fragment {
         narrationPlayerHeader = rootView.findViewById(R.id.stepPlayerHeader);
         narrationPlayerName = rootView.findViewById(R.id.stepPlayerName);
         narrationPlayerArtist = rootView.findViewById(R.id.stepPlayerArtist);
+
+        narrationRatingBar = rootView.findViewById(R.id.narrationRatingBar);
+        narrationRatingContent = rootView.findViewById(R.id.narrationRatingContent);
+        narrationMainContent = rootView.findViewById(R.id.narrationMainContent);
     }
 
     private void workplace(View rootView, Bundle savedInstanceState) {
+        setPlayer();
+
+        narrationRatingBar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_UP:
+                        swapContent(true);
+                        break;
+                }
+                return true;
+            }
+        });
+    }
+
+    private void swapContent(boolean b) {
+        if (b) {
+            narrationRatingContent.setVisibility(View.VISIBLE);
+            getChildFragmentManager().beginTransaction()
+                    .add(R.id.narrationRatingContent, RatingFragment.newInstance(new RatingFragment.RatingListener() {
+                        @Override
+                        public void onCancel() {
+                            swapContent(false);
+                        }
+                    }, dataList.get(narrationPlayer.getCurrentWindowIndex())))
+                    .addToBackStack(null)
+                    .commit();
+        } else {
+            narrationRatingContent.setVisibility(View.GONE);
+            narrationRatingBar.setRating(setRating(dataList.get(narrationPlayer.getCurrentWindowIndex())));
+        }
+    }
+
+    private void setPlayer() {
         narrationPlayerHeader.setText(header);
 
         if (narrationPlayer == null) {
@@ -135,6 +180,7 @@ public class NarrationPlayerFragment extends Fragment {
             narrationPlayer.seekTo(currentSound, 0);
             narrationPlayer.setPlayWhenReady(true);
         }
+
         narrationPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
         narrationController.setVisibilityListener(new PlayerControlView.VisibilityListener() {
             @Override
@@ -155,11 +201,11 @@ public class NarrationPlayerFragment extends Fragment {
             @Override
             public void onPositionDiscontinuity(int reason) {
                 int newIndex = narrationPlayer.getCurrentWindowIndex();
-                if (newIndex != currentSound){
+                if (newIndex != currentSound) {
                     stopAnimation();
                     loadAnimation();
                     currentSound = newIndex;
-                    Log.d("dodo", "onPositionDiscontinuity: " + currentSound);
+//                    Log.d("dodo", "onPositionDiscontinuity: " + currentSound);
                 }
             }
         });
@@ -186,13 +232,14 @@ public class NarrationPlayerFragment extends Fragment {
     private void loadAnimation() {
         narrationPlayerName.setText(dataList.get(narrationPlayer.getCurrentWindowIndex()).name);
         narrationPlayerArtist.setText(dataList.get(narrationPlayer.getCurrentWindowIndex()).artist);
+        narrationRatingBar.setRating(setRating(dataList.get(narrationPlayer.getCurrentWindowIndex())));
 
         Glide.with(cons)
                 .load(dataList.get(narrationPlayer.getCurrentWindowIndex()).image_link_2)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(narrationPlayerCover);
 
-        anim = new RotateAnimation(0, 360, narrationPlayerCover.getPivotX(), narrationPlayerCover.getPivotY());
+        anim = new RotateAnimation(0, 360, narrationPlayerCover.getPivotX() + 1, narrationPlayerCover.getPivotY() + 1);
         anim.setInterpolator(new LinearInterpolator());
         anim.setDuration(15000);
         anim.setAnimationListener(new Animation.AnimationListener() {
@@ -216,6 +263,14 @@ public class NarrationPlayerFragment extends Fragment {
         isAnimationPlaying = true;
     }
 
+    private float setRating(MediaItem item) {
+        if (item.rating_score == 0) {
+            return 0;
+        } else {
+            return item.rating_score / item.rating_count;
+        }
+    }
+
     private void stopAnimation() {
         getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -227,7 +282,6 @@ public class NarrationPlayerFragment extends Fragment {
             }
         });
     }
-
 
     @Override
     public void onStop() {

@@ -7,6 +7,7 @@ import android.util.ArrayMap;
 import com.google.firebase.database.Exclude;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,6 +44,21 @@ public class UserDetails implements Parcelable {
         this.totalTime = totalTime;
         this.missTime = missTime;
     }
+
+    public static Comparator<UserDetails> userDetailsComparator = new Comparator<UserDetails>() {
+        @Override
+        public int compare(UserDetails o1, UserDetails o2) {
+            if (o1.totalTime != null && o2.totalTime!= null) {
+                return o1.totalTime.compareTo(o2.totalTime);
+            }else if (o1.totalTime == null && o2.totalTime != null){
+                return -1;
+            }else if (o1.totalTime != null && o2.totalTime == null){
+                return 1;
+            }else{
+                return 0;
+            }
+        }
+    };
 
     protected UserDetails(Parcel in) {
         name = in.readString();

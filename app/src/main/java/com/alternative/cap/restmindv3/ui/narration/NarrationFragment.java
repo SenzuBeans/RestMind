@@ -72,6 +72,7 @@ public class NarrationFragment extends Fragment implements NarrationSubAdapter.N
 
     private void workbench(View root, Bundle savedInstanceState) {
         hideNavigationBar();
+        narrationRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         database.getReference().child("users").child(user.getUid()).child("temp_steam").setValue(x);
         database.getReference().addValueEventListener(new ValueEventListener() {
             @Override
@@ -88,7 +89,14 @@ public class NarrationFragment extends Fragment implements NarrationSubAdapter.N
                     }
                     narrationList.add(tempMediaList);
                 }
-                updateAdapter(root);
+                if (narrationRecyclerView.getAdapter() == null) {
+                    adapter = new NarrationAdapter( getContext(), narrationHeader, narrationList, NarrationFragment.this );
+                    narrationRecyclerView.setAdapter( adapter );
+                }else{
+                    adapter.notifyDataSetChanged();
+                }
+
+                database.getReference().removeEventListener(this);
             }
 
             @Override
@@ -99,21 +107,23 @@ public class NarrationFragment extends Fragment implements NarrationSubAdapter.N
 
     }
 
-    private void updateAdapter(View root) {
-        narrationRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        if (adapter == null) {
-            adapter = new NarrationAdapter( getContext(), narrationHeader, narrationList, this );
-            narrationRecyclerView.setAdapter( adapter );
-        }else{
-            adapter.notifyDataSetChanged();
-        }
-    }
-
     private void hideNavigationBar() {
         this.getActivity().getWindow().getDecorView()
                 .setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                         View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN |
                         View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
     }
 
     @Override
@@ -131,4 +141,21 @@ public class NarrationFragment extends Fragment implements NarrationSubAdapter.N
                 .addToBackStack(null)
                 .commit();
     }
+
+    @Override
+    public void onMoreClicked(ArrayList<MediaItem> passingDataList, String passingHeader) {
+        narrationRecyclerView.setVisibility(View.GONE);
+        narrationContentContainer.setVisibility(View.VISIBLE);
+        getChildFragmentManager().beginTransaction()
+                .addToBackStack(null)
+                .add(R.id.narrationContentContainer, NarrationListFragment.newInstance(passingDataList, passingHeader, new NarrationListFragment.NarrationListListener(){
+                    @Override
+                    public void onDestroy(){
+                        narrationRecyclerView.setVisibility(View.VISIBLE);
+                        narrationContentContainer.setVisibility(View.GONE);
+                    }
+                }, this))
+                .commit();
+    }
+
 }

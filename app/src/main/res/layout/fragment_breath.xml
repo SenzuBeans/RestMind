@@ -42,6 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.6"
+            android:paddingBottom="100dp"
             android:gravity="center">
 
             <com.mikhaellopez.circularimageview.CircularImageView
@@ -71,11 +72,6 @@
                 app:cs_circle_progress_color = "#4DD051F5"
                 app:cs_pointer_color = "#DAAEF3"/>
 
-<!--            app:cs_circle_fill = "color"-->
-<!--            app:cs_circle_color = "color"-->
-<!--            app:cs_circle_progress_color = "color"-->
-<!--            app:cs_pointer_color = "color"-->
-<!--            app:cs_pointer_halo_color = "color"-->
 
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/circularImageView"
@@ -123,21 +119,21 @@
                 />
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:layout_weight="0.2"
-            android:gravity="center">
+<!--        <RelativeLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="20dp"-->
+<!--            android:layout_weight="0.2"-->
+<!--            android:gravity="center">-->
 
-            <Button
-                android:id="@+id/playerBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/btn_rounded2"
-                android:text="play"
-                android:textColor="#fff"/>
-        </RelativeLayout>
+<!--            <Button-->
+<!--                android:id="@+id/playerBtn"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@drawable/btn_rounded2"-->
+<!--                android:text="play"-->
+<!--                android:textColor="#fff"/>-->
+<!--        </RelativeLayout>-->
     </LinearLayout>
 
     <LinearLayout
