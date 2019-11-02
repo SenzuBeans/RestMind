@@ -49,27 +49,27 @@ import java.util.Random;
 
 public class BackgroundFragment extends Fragment {
 
-    private SharedPreferences shared;
-
-    private TextureView backgroundVideo;
-    private SimpleExoPlayer backgroundPlayer;
-    private MediaSource backgroundMediaSource;
-    private ConcatenatingMediaSource backgroundConcatenatingMediaSource;
-    private DefaultDataSourceFactory backgroundDataSourceFactory;
-    private ProgressBar backgroundProgress;
-
-    private ArrayList<VideoItem> videoList;
-
-    private float touchingPoint = 0;
-    private boolean clicked;
-    private boolean isMoveLeft;
-    private boolean isMoveRight;
-
-    private FirebaseUser user;
-    private FirebaseDatabase database;
-    private DatabaseReference videoRef;
-
-    private SimpleTarget tapTarget;
+//    private SharedPreferences shared;
+//
+//    private TextureView backgroundVideo;
+//    private SimpleExoPlayer backgroundPlayer;
+//    private MediaSource backgroundMediaSource;
+//    private ConcatenatingMediaSource backgroundConcatenatingMediaSource;
+//    private DefaultDataSourceFactory backgroundDataSourceFactory;
+//    private ProgressBar backgroundProgress;
+//
+//    private ArrayList<VideoItem> videoList;
+//
+//    private float touchingPoint = 0;
+//    private boolean clicked;
+//    private boolean isMoveLeft;
+//    private boolean isMoveRight;
+//
+//    private FirebaseUser user;
+//    private FirebaseDatabase database;
+//    private DatabaseReference videoRef;
+//
+//    private SimpleTarget tapTarget;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,11 +78,11 @@ public class BackgroundFragment extends Fragment {
     }
 
     private void init(Bundle savedInstanceState) {
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        database = FirebaseDatabase.getInstance();
-        videoRef = database.getReference().child("video");
-        videoList = new ArrayList<>();
-        shared = getContext().getSharedPreferences("BackgroundWT", 0);
+//        user = FirebaseAuth.getInstance().getCurrentUser();
+//        database = FirebaseDatabase.getInstance();
+//        videoRef = database.getReference().child("video");
+//        videoList = new ArrayList<>();
+//        shared = getContext().getSharedPreferences("BackgroundWT", 0);
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -95,51 +95,51 @@ public class BackgroundFragment extends Fragment {
     private void initInstance(View root, Bundle savedInstanceState) {
 
 
-        backgroundVideo = root.findViewById(R.id.backgroundVideoView);
-        backgroundProgress = root.findViewById(R.id.progress_bar);
-
-
-        Random random = new Random();
-        int x = random.nextInt(1000);
-        database.getReference().child("users").child(user.getUid()).child("temp_steam").setValue(x);
-
-        videoRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    VideoItem item = ds.getValue(VideoItem.class);
-                    videoList.add(item);
-                }
-                doStuff();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        tapTarget = new SimpleTarget.Builder(getActivity())
-                .setPoint(backgroundVideo)
-                .setShape(new Circle(0f))
-                .setTitle("How to use")
-                .setDescription("\nThere have three commanded." +
-                        "\n\n\n\t\t\tSingle Tap Screen" +
-                        "\n\n\t - for play and pause Background Video" +
-                        "\n\n\n\t\t\tSlide Right on Screen" +
-                        "\n\n\t - for move to next Background Video" +
-                        "\n\n\n\t\t\tSlide Left on Screen" +
-                        "\n\n\t - for move to previous Background Video")
-                .build();
+//        backgroundVideo = root.findViewById(R.id.backgroundVideoView);
+//        backgroundProgress = root.findViewById(R.id.progress_bar);
+//
+//
+//        Random random = new Random();
+//        int x = random.nextInt(1000);
+//        database.getReference().child("users").child(user.getUid()).child("temp_steam").setValue(x);
+//
+//        videoRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+//                    VideoItem item = ds.getValue(VideoItem.class);
+//                    videoList.add(item);
+//                }
+//                doStuff();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//
+//        tapTarget = new SimpleTarget.Builder(getActivity())
+//                .setPoint(backgroundVideo)
+//                .setShape(new Circle(0f))
+//                .setTitle("How to use")
+//                .setDescription("\nThere have three commanded." +
+//                        "\n\n\n\t\t\tSingle Tap Screen" +
+//                        "\n\n\t - for play and pause Background Video" +
+//                        "\n\n\n\t\t\tSlide Right on Screen" +
+//                        "\n\n\t - for move to next Background Video" +
+//                        "\n\n\n\t\t\tSlide Left on Screen" +
+//                        "\n\n\t - for move to previous Background Video")
+//                .build();
 
     }
 
     private void workbench(View root, Bundle savedInstanceState) {
         hideNavigationBar();
 
-        backgroundVideo.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
+//        backgroundVideo.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @Override
+//            public void onGlobalLayout() {
 //                backgroundVideo.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 //                boolean isBackgroundWT = shared.getBoolean("isBackgroundWT", false);
 //                if (!isBackgroundWT) {
@@ -172,52 +172,51 @@ public class BackgroundFragment extends Fragment {
 //                }
 
             }
-        });
+//        });
+//        }
 
-    }
+//    private void setPlayer() {
+//
+//        if (backgroundPlayer == null) {
+//            backgroundPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), new DefaultTrackSelector());
+////            backgroundVideo.setPlayer(backgroundPlayer);
+//
+//            backgroundDataSourceFactory = new DefaultDataSourceFactory(getContext(), Util.getUserAgent(getContext(), "Background Player"));
+//            if (backgroundConcatenatingMediaSource == null)
+//                backgroundConcatenatingMediaSource = new ConcatenatingMediaSource();
+//
+//            updateDataList(videoList);
+//        }
+//
+//        if (backgroundPlayer != null) {
+//            backgroundPlayer.setPlayWhenReady(true);
+////            backgroundVideo.hideController();
+//        }
+//
+//        backgroundPlayer.setRepeatMode(Player.REPEAT_MODE_ONE);
+//        backgroundPlayer.setVideoTextureView(backgroundVideo);
+//    }
 
-    private void setPlayer() {
-
-        if (backgroundPlayer == null) {
-            backgroundPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), new DefaultTrackSelector());
-//            backgroundVideo.setPlayer(backgroundPlayer);
-
-            backgroundDataSourceFactory = new DefaultDataSourceFactory(getContext(), Util.getUserAgent(getContext(), "Background Player"));
-            if (backgroundConcatenatingMediaSource == null)
-                backgroundConcatenatingMediaSource = new ConcatenatingMediaSource();
-
-            updateDataList(videoList);
-        }
-
-        if (backgroundPlayer != null) {
-            backgroundPlayer.setPlayWhenReady(true);
-//            backgroundVideo.hideController();
-        }
-
-        backgroundPlayer.setRepeatMode(Player.REPEAT_MODE_ONE);
-        backgroundPlayer.setVideoTextureView(backgroundVideo);
-    }
-
-    private void updateDataList(ArrayList<VideoItem> dataList) {
-        for (VideoItem item : dataList) {
-            backgroundMediaSource = new ProgressiveMediaSource.Factory(backgroundDataSourceFactory)
-                    .createMediaSource(Uri.parse(item.link));
-            backgroundConcatenatingMediaSource.addMediaSource(backgroundMediaSource);
-        }
-
-        backgroundPlayer.addListener(new Player.EventListener() {
-            @Override
-            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-                if (playbackState == ExoPlayer.STATE_BUFFERING){
-                    backgroundProgress.setVisibility(View.VISIBLE);
-                } else {
-                    backgroundProgress.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
-
-        backgroundPlayer.prepare(backgroundConcatenatingMediaSource);
-    }
+//    private void updateDataList(ArrayList<VideoItem> dataList) {
+//        for (VideoItem item : dataList) {
+//            backgroundMediaSource = new ProgressiveMediaSource.Factory(backgroundDataSourceFactory)
+//                    .createMediaSource(Uri.parse(item.link));
+//            backgroundConcatenatingMediaSource.addMediaSource(backgroundMediaSource);
+//        }
+//
+//        backgroundPlayer.addListener(new Player.EventListener() {
+//            @Override
+//            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+//                if (playbackState == ExoPlayer.STATE_BUFFERING){
+//                    backgroundProgress.setVisibility(View.VISIBLE);
+//                } else {
+//                    backgroundProgress.setVisibility(View.INVISIBLE);
+//                }
+//            }
+//        });
+//
+//        backgroundPlayer.prepare(backgroundConcatenatingMediaSource);
+//    }
 
     @Override
     public void onResume() {
@@ -232,64 +231,64 @@ public class BackgroundFragment extends Fragment {
                         View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
     }
 
-    private void doStuff() {
-        setPlayer();
-        backgroundVideo.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch (motionEvent.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        touchingPoint = motionEvent.getX();
-                        clicked = true;
-                        isMoveLeft = false;
-                        isMoveRight = false;
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        if (motionEvent.getX() < touchingPoint && Math.abs(motionEvent.getX() - touchingPoint) > 200f) {
-                            Log.d("dodo", "onTouch: left" + motionEvent.getX());
-                            isMoveLeft = true;
-                            isMoveRight = false;
-                            touchingPoint = motionEvent.getX();
-                            clicked = false;
-                        } else if (motionEvent.getX() > touchingPoint && Math.abs(motionEvent.getX() - touchingPoint) > 200f) {
-                            Log.d("dodo", "onTouch: right" + motionEvent.getX());
-                            isMoveRight = true;
-                            isMoveLeft = false;
-                            touchingPoint = motionEvent.getX();
-                            clicked = false;
-                        }
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        if (clicked) {
-//                            focusPlayer();
-                        } else if (isMoveLeft) {
-                            if (backgroundPlayer.getCurrentWindowIndex() == 0) {
-                                backgroundPlayer.seekTo(videoList.size() - 1, 0);
-                            } else {
-                                backgroundPlayer.previous();
-                            }
-                        } else if (isMoveRight) {
-                            if (backgroundPlayer.getCurrentWindowIndex() == videoList.size() - 1) {
-                                backgroundPlayer.seekTo(0, 0);
-                            } else {
-                                backgroundPlayer.next();
-                            }
-                        }
-                        break;
-                }
-                return true;
-            }
-        });
-    }
+//    private void doStuff() {
+//        setPlayer();
+//        backgroundVideo.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                switch (motionEvent.getAction()) {
+//                    case MotionEvent.ACTION_DOWN:
+//                        touchingPoint = motionEvent.getX();
+//                        clicked = true;
+//                        isMoveLeft = false;
+//                        isMoveRight = false;
+//                        break;
+//                    case MotionEvent.ACTION_MOVE:
+//                        if (motionEvent.getX() < touchingPoint && Math.abs(motionEvent.getX() - touchingPoint) > 200f) {
+//                            Log.d("dodo", "onTouch: left" + motionEvent.getX());
+//                            isMoveLeft = true;
+//                            isMoveRight = false;
+//                            touchingPoint = motionEvent.getX();
+//                            clicked = false;
+//                        } else if (motionEvent.getX() > touchingPoint && Math.abs(motionEvent.getX() - touchingPoint) > 200f) {
+//                            Log.d("dodo", "onTouch: right" + motionEvent.getX());
+//                            isMoveRight = true;
+//                            isMoveLeft = false;
+//                            touchingPoint = motionEvent.getX();
+//                            clicked = false;
+//                        }
+//                        break;
+//                    case MotionEvent.ACTION_UP:
+//                        if (clicked) {
+////                            focusPlayer();
+//                        } else if (isMoveLeft) {
+//                            if (backgroundPlayer.getCurrentWindowIndex() == 0) {
+//                                backgroundPlayer.seekTo(videoList.size() - 1, 0);
+//                            } else {
+//                                backgroundPlayer.previous();
+//                            }
+//                        } else if (isMoveRight) {
+//                            if (backgroundPlayer.getCurrentWindowIndex() == videoList.size() - 1) {
+//                                backgroundPlayer.seekTo(0, 0);
+//                            } else {
+//                                backgroundPlayer.next();
+//                            }
+//                        }
+//                        break;
+//                }
+//                return true;
+//            }
+//        });
+//    }
 
-    public void focusPlayer() {
-        if (backgroundVideo != null) {
-            if (backgroundPlayer.isPlaying()) {
-                backgroundPlayer.setPlayWhenReady(false);
-            } else {
-                backgroundPlayer.setPlayWhenReady(true);
-            }
-        }
-    }
+//    public void focusPlayer() {
+//        if (backgroundVideo != null) {
+//            if (backgroundPlayer.isPlaying()) {
+//                backgroundPlayer.setPlayWhenReady(false);
+//            } else {
+//                backgroundPlayer.setPlayWhenReady(true);
+//            }
+//        }
+//    }
 
 }
