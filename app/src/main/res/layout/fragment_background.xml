@@ -92,7 +92,7 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/heart_Beat"
+            android:src="@drawable/heart_beat"
             android:padding="3dp"
             android:background="@drawable/circle_bg_sounds"
             android:layout_margin="10dp">
@@ -120,6 +120,7 @@
         </ImageButton>
 
     </LinearLayout>
+
     <!--    <com.google.android.exoplayer2.ui.SimpleExoPlayerView-->
     <!--        android:id="@+id/backgroundVideoView"-->
     <!--        android:layout_width="match_parent"-->
