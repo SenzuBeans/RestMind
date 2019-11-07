@@ -21,13 +21,17 @@ import java.util.ArrayList;
 public class BackgroundAdapter extends RecyclerView.Adapter<BackgroundAdapter.BackgroundViewHolder> {
 
     Context cons;
+    private BackgroundAdapterListener listener;
     private ArrayList<MediaItem> mediaList;
     private int playingMedia;
+    private int path = 0;
 
-    public BackgroundAdapter(Context cons, ArrayList<MediaItem> mediaList, int playingMedia) {
+    public BackgroundAdapter(Context cons, ArrayList<MediaItem> mediaList, int playingMedia, BackgroundAdapterListener listener, int path) {
         this.cons = cons;
         this.mediaList = mediaList;
         this.playingMedia = playingMedia;
+        this.listener = listener;
+        this.path = path;
     }
 
     @Override
@@ -40,8 +44,17 @@ public class BackgroundAdapter extends RecyclerView.Adapter<BackgroundAdapter.Ba
     public void onBindViewHolder(BackgroundViewHolder holder, final int position) {
         holder.setData(mediaList.get(position));
         if (position == playingMedia){
-            holder.setSelect();
+            holder.setSelect(true);
         }
+        holder.root.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (position == playingMedia)
+                    listener.onItemSelect(-1, path);
+                else
+                    listener.onItemSelect(position, path);
+            }
+        });
     }
 
     @Override
@@ -78,8 +91,15 @@ public class BackgroundAdapter extends RecyclerView.Adapter<BackgroundAdapter.Ba
             bgBackImage.setBackgroundResource(R.drawable.btn_rounded2);
         }
 
-        public void setSelect(){
-            bgBackImage.setBackgroundResource(R.drawable.btn_rounded);
+        public void setSelect(boolean select){
+            if (select)
+                bgBackImage.setBackgroundResource(R.drawable.btn_rounded);
+            else
+                bgBackImage.setBackgroundResource(R.drawable.btn_rounded2);
         }
+    }
+
+    public interface BackgroundAdapterListener{
+        void onItemSelect(int itemSelect, int path);
     }
 }

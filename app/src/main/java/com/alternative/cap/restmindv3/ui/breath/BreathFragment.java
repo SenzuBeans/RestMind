@@ -334,7 +334,6 @@ public class BreathFragment extends Fragment {
                 }
 
                 BreathSongList.setDataList(tempMediaList);
-//                Log.d("dodo", "onDataChange: data " + narrationId.get(0));
 
                 breathSongPlayer = MediaPlayer.create(getContext(), Uri.parse(BreathSongList.dataList.get(BreathSongList.current).link_2));
                 breathSongPlayer.start();
