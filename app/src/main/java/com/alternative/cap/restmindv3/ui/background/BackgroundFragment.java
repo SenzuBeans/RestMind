@@ -42,7 +42,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-public class BackgroundFragment extends Fragment{
+public class BackgroundFragment extends Fragment
+    implements BackgroundAdapter.BackgroundAdapterListener {
 
     private ArrayList<MediaItem> mediaList1;
     private ArrayList<MediaItem> mediaList2;
@@ -111,7 +112,7 @@ public class BackgroundFragment extends Fragment{
                 }
 
                 mediaList1 = tempMediaList;
-                adapter1 = new BackgroundAdapter(getContext(), mediaList1, mediaSelect1);
+                adapter1 = new BackgroundAdapter(getContext(), mediaList1, mediaSelect1, BackgroundFragment.this::onItemSelect, 1);
 
                 bgSoundItem = dataSnapshot.child("LOG").child("BGSOUND2").getValue(NarrationItem.class);
                 bgSoundId = new ArrayList(Arrays.asList(bgSoundItem.rawId.split(",")));
@@ -122,7 +123,7 @@ public class BackgroundFragment extends Fragment{
                 }
 
                 mediaList2 = tempMediaList;
-                adapter2 = new BackgroundAdapter(getContext(), mediaList2, mediaSelect2);
+                adapter2 = new BackgroundAdapter(getContext(), mediaList2, mediaSelect2, BackgroundFragment.this::onItemSelect, 2);
 
 
                 bgSoundItem = dataSnapshot.child("LOG").child("BGSOUND3").getValue(NarrationItem.class);
@@ -134,7 +135,7 @@ public class BackgroundFragment extends Fragment{
                 }
 
                 mediaList3 = tempMediaList;
-                adapter3 = new BackgroundAdapter(getContext(), mediaList3, mediaSelect3);
+                adapter3 = new BackgroundAdapter(getContext(), mediaList3, mediaSelect3, BackgroundFragment.this::onItemSelect, 3);
 
                 updateRecyclerAdapter();
 
@@ -183,4 +184,8 @@ public class BackgroundFragment extends Fragment{
                         View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
     }
 
+    @Override
+    public void onItemSelect(int itemSelect, int path) {
+        
+    }
 }

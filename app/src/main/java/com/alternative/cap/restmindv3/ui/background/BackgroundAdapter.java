@@ -23,11 +23,15 @@ public class BackgroundAdapter extends RecyclerView.Adapter<BackgroundAdapter.Ba
     Context cons;
     private ArrayList<MediaItem> mediaList;
     private int playingMedia;
+    private BackgroundAdapterListener listener;
+    private int path = 0;
 
-    public BackgroundAdapter(Context cons, ArrayList<MediaItem> mediaList, int playingMedia) {
+    public BackgroundAdapter(Context cons, ArrayList<MediaItem> mediaList, int playingMedia, BackgroundAdapterListener listener, int i) {
         this.cons = cons;
         this.mediaList = mediaList;
         this.playingMedia = playingMedia;
+        this.listener = listener;
+        this.path = i;
     }
 
     @Override
@@ -42,6 +46,13 @@ public class BackgroundAdapter extends RecyclerView.Adapter<BackgroundAdapter.Ba
         if (position == playingMedia){
             holder.setSelect();
         }
+
+        holder.root.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     @Override
@@ -81,5 +92,9 @@ public class BackgroundAdapter extends RecyclerView.Adapter<BackgroundAdapter.Ba
         public void setSelect(){
             bgBackImage.setBackgroundResource(R.drawable.btn_rounded);
         }
+    }
+
+    public interface BackgroundAdapterListener{
+        void onItemSelect(int itemSelect, int path);
     }
 }
