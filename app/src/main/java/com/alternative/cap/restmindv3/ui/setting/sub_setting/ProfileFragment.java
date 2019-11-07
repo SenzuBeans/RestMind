@@ -204,6 +204,7 @@ public class ProfileFragment extends Fragment {
         barChart.getLegend().setEnabled( false );
 
         barChart.getXAxis().setLabelCount( 7, true );
+        barChart.setVisibleXRange(1,7);
 
     }
 
@@ -238,15 +239,24 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setPieChartData(){
-        ArrayList<PieEntry> summaryTime = new ArrayList<PieEntry>();
-        summaryTime.add(new PieEntry(Float.parseFloat(userDetails.totalTime) , 0));
-        summaryTime.add(new PieEntry(Float.parseFloat(userDetails.missTime) , 1));
-        PieDataSet dataSet = new PieDataSet(summaryTime , "summary time over all time");
+        float total = Float.parseFloat(userDetails.totalTime);
+        float miss = Float.parseFloat(userDetails.missTime);
+        float overAll = total + miss;
 
+        float setMiss = (miss / overAll) *100;
+        float setTotal = (total / overAll) * 100;
+
+        ArrayList<PieEntry> summaryTime = new ArrayList<PieEntry>();
+        summaryTime.add(new PieEntry(setTotal , "%"));
+        summaryTime.add(new PieEntry(setMiss, "%"));
+
+        PieDataSet dataSet = new PieDataSet(summaryTime , "of summary time over all time");
+        dataSet.setValueTextColor(Color.WHITE);
         PieData data = new PieData( dataSet);
         pieChart.setData(data);
         dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-        pieChart.animateXY(5000, 5000);
+        pieChart.animateXY(100, 100);
+        pieChart.getDescription().setEnabled(false);
     }
 
     private void backBtn(View rootView) {
