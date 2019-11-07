@@ -142,8 +142,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/btn_rounded7"
             android:gravity="center"
-            android:orientation="vertical"
-            android:layout_marginRight="5dp">
+            android:orientation="vertical">
 
             <io.github.deweyreed.scrollhmspicker.ScrollHmsPicker
                 android:id="@+id/timePicker"
@@ -155,7 +154,8 @@
                 app:shp_normal_color="#D84B4A4A"
                 app:shp_selected_color="#FFF"
                 app:shp_show_seconds="false"
-                app:shp_minutes="5" />
+                app:shp_minutes="5"
+                />
 
         </LinearLayout>
 
@@ -170,7 +170,7 @@
                 android:id="@+id/breathSongSelectRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                 />
+                android:padding="3dp" />
 
         </LinearLayout>
     </LinearLayout>

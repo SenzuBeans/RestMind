@@ -49,7 +49,7 @@ public class FloatingAnimeService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             LAYOUT_FLAG = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         } else {
-//            LAYOUT_FLAG = WindowManager.LayoutParams.TYPE_PHONE;
+            LAYOUT_FLAG = WindowManager.LayoutParams.TYPE_PHONE;
         }
     }
 
