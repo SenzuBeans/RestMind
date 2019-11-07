@@ -283,6 +283,7 @@ public class BreathFragment extends Fragment {
                 timerView.start(timer);
             }
         }
+        fingerHint.setVisibility( View.GONE );
     }
 
     private void stopRunningBreath(boolean timerState) {
@@ -307,7 +308,6 @@ public class BreathFragment extends Fragment {
             }
         }
         fingerHint.setVisibility( View.VISIBLE );
-
     }
 
     private void updateBreathTime() {
@@ -330,7 +330,7 @@ public class BreathFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 NarrationItem narrationItem = dataSnapshot.child("LOG").child("BREATH").getValue(NarrationItem.class);
-                ArrayList<String> narrationId = new ArrayList(Arrays.asList(narrationItem.rawId.split(",")));
+                ArrayList<String> narrationId = new ArrayList<String>(Arrays.asList(narrationItem.rawId.split(",")));
                 ArrayList<MediaItem> tempMediaList = new ArrayList<>();
 
                 for (String s : narrationId) {

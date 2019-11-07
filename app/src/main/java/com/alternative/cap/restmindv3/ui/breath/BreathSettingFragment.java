@@ -142,7 +142,7 @@ public class BreathSettingFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 NarrationItem narrationItem = dataSnapshot.child("LOG").child("BREATH").getValue(NarrationItem.class);
-                ArrayList<String> narrationId = new ArrayList(Arrays.asList(narrationItem.rawId.split(",")));
+                ArrayList<String> narrationId = new ArrayList<String>(Arrays.asList(narrationItem.rawId.split(",")));
                 ArrayList<MediaItem> tempMediaList = new ArrayList<>();
 
                 for (String s : narrationId) {

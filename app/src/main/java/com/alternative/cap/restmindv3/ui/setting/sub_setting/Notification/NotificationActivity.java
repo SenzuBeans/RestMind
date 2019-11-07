@@ -34,25 +34,7 @@ public class NotificationActivity extends AppCompatActivity {
         notificationHideBtn = findViewById(R.id.notificationHideBtn);
         notificationEditText = findViewById(R.id.notificationEditText);
 
-        notificationShowBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startService(v);
-            }
-        });
 
-        notificationHideBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopService(v);
-            }
-        });
-    }
-
-    public void startService(View v){
-        String input = notificationEditText.getText().toString();
-        Intent serviceIntent = new Intent(this, NotificationService.class);
-        serviceIntent.putExtra("inputExtra", input);
 
         startService(serviceIntent);
     }

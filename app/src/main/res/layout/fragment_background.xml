@@ -10,8 +10,27 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+
+    <ImageView
+        android:layout_width="3dp"
+        android:layout_height="370dp"
+        android:layout_marginLeft="50dp"
+        android:src="@drawable/rectangle_footage">
+
+    </ImageView>
+
+
+    <LinearLayout
+        android:layout_width="350dp"
+        android:layout_height="400dp"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp">
+
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
+
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorTransparent">
 
@@ -29,12 +48,14 @@
                     android:background="@color/colorTransparent"
                     app:srcCompat="@drawable/ic_settings_24dp" />
 
+
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+
             android:orientation="horizontal"
             android:weightSum="3">
 
@@ -44,6 +65,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:padding="10dp" />
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/bgRecyclerView2"

@@ -92,7 +92,7 @@ public class AnimationView extends LinearLayout {
             }
 
             if (Build.VERSION.SDK_INT < 16){
-                img.setBackgroundDrawable( animation );
+                //img.setBackgroundDrawable( animation );
             }else{
                 img.setBackground( animation );
             }

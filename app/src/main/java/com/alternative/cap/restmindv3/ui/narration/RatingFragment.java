@@ -4,6 +4,7 @@ package com.alternative.cap.restmindv3.ui.narration;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -103,6 +104,13 @@ public class RatingFragment extends Fragment {
             }
         });
 
+    }
+
+
+    public  void  changeStarColor(){
+        LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
+        stars.setColorFilter( ContextCompat.getColor(getContext(), R.color.colorAccent ),
+                PorterDuff.Mode.SRC_ATOP);
     }
 
     public interface RatingListener{
