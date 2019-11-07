@@ -63,9 +63,9 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.RankingV
         public void setRanking(UserDetails userDetails){
             if (userDetails.totalTime != null) {
                 if (Integer.parseInt(userDetails.totalTime) > 50) {
-                    rankingImage.setImageResource(R.drawable.ic_email);
+                    rankingImage.setImageResource(R.drawable.ic_rank_dimond_class);
                 } else {
-                    rankingImage.setImageResource(R.drawable.ic_music);
+                    rankingImage.setImageResource(R.drawable.ic_rank_gold_class);
                 }
             }else{
                 rankingImage.setImageResource(R.drawable.ic_music);

@@ -20,10 +20,6 @@ import com.alternative.cap.restmindv3.activity.multi.NavigationHomePageActivity;
 public class NotificationActivity extends AppCompatActivity {
 
     private  final String CHANNEL_ID = "124";
-//    private Button notificationShowBtn;
-//    private Button notificationHideBtn;
-//    private EditText notificationEditText;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,56 +37,19 @@ public class NotificationActivity extends AppCompatActivity {
             }
         } );
 
-//        notificationShowBtn = findViewById(R.id.notificationShowBtn);
-//        notificationHideBtn = findViewById(R.id.notificationHideBtn);
-//        notificationEditText = findViewById(R.id.notificationEditText);
+        notificationShowBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startService(v);
+            }
+        });
 
+        notificationHideBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopService(v);
+            }
+        });
 
-        // Create an explicit intent for an Activity in your app
-//        Intent intent = new Intent(this, NavigationHomePageActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-//
-//        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-//                .setSmallIcon(R.drawable.image_logo_bottomshadow)
-//                .setContentTitle("test")
-//                .setContentText("test text at one line!")
-//                .setStyle(new NotificationCompat.BigTextStyle()
-//                        .bigText("test text at one line!"))
-//                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-//                .setAutoCancel(true);
-//
-//        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
-//        int notificationId = 1;
-//        notificationManagerCompat.notify(notificationId, builder.build());
-
-//        notificationShowBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startService(v);
-//            }
-//        });
-//
-//        notificationHideBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                stopService(v);
-//            }
-//        });
     }
-
-//    public void startService(View v){
-//        String input = notificationEditText.getText().toString();
-//        Intent serviceIntent = new Intent(this, NotificationService.class);
-//        serviceIntent.putExtra("inputExtra", input);
-//
-//        startService(serviceIntent);
-//    }
-//    public void stopService(View v){
-//        Intent serviceIntent = new Intent(this, NotificationService.class);
-//        stopService(serviceIntent);
-//    }
-
-
-
 }

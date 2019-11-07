@@ -5,168 +5,31 @@
     android:background="@drawable/sounds_bg">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="150dp"
-        android:layout_marginLeft="50dp">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="3">
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/moon_light"
-            android:padding="3dp"
-            android:background="@drawable/circle_bg_sounds"
-            android:layout_marginBottom="40dp">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/bgRecyclerView1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="10dp" />
 
-        </ImageButton>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/bgRecyclerView2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="10dp" />
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ocean"
-            android:padding="3dp"
-            android:background="@drawable/circle_bg_sounds"
-            android:layout_marginBottom="40dp">
-
-        </ImageButton>
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/orchestral"
-            android:padding="3dp"
-            android:background="@drawable/circle_bg_sounds"
-            android:layout_marginBottom="40dp">
-
-        </ImageButton>
-
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/bgRecyclerView3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="10dp" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="150dp"
-        android:layout_marginLeft="170dp">
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/whale"
-            android:padding="3dp"
-            android:background="@drawable/circle_bg_sounds"
-            android:layout_marginBottom="40dp">
-
-        </ImageButton>
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/bird"
-            android:padding="3dp"
-            android:background="@drawable/circle_bg_sounds"
-            android:layout_marginBottom="40dp">
-
-        </ImageButton>
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/frog"
-            android:padding="3dp"
-            android:background="@drawable/circle_bg_sounds"
-            android:layout_marginBottom="40dp">
-
-        </ImageButton>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="150dp"
-        android:layout_marginLeft="290dp">
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/heart_beat"
-            android:padding="3dp"
-            android:background="@drawable/circle_bg_sounds"
-            android:layout_marginBottom="40dp">
-
-        </ImageButton>
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/grandfather_clock"
-            android:padding="3dp"
-            android:background="@drawable/circle_bg_sounds"
-            android:layout_marginBottom="40dp">
-
-        </ImageButton>
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/melody"
-            android:padding="3dp"
-            android:background="@drawable/circle_bg_sounds"
-            android:layout_marginBottom="40dp">
-
-        </ImageButton>
-
-    </LinearLayout>
-
-    <!--    <com.google.android.exoplayer2.ui.SimpleExoPlayerView-->
-    <!--        android:id="@+id/backgroundVideoView"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent"-->
-    <!--        android:layout_gravity="center"-->
-    <!--        android:layout_alignParentTop="true"-->
-    <!--        android:layout_alignParentBottom="true"-->
-    <!--        android:layout_alignParentLeft="true"-->
-    <!--        android:layout_alignParentRight="true"/>-->
-
-<!--    <TextureView-->
-<!--        android:id="@+id/backgroundVideoView"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_centerHorizontal="true"-->
-<!--        android:layout_centerVertical="true" />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/backgroundID"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:background="@color/colorTransparent"-->
-<!--        android:gravity="left|top"-->
-<!--        android:padding="20dp"-->
-<!--        android:text="video id"-->
-<!--        android:textColor="@android:color/transparent"-->
-<!--        android:textSize="30dp" />-->
-
-<!--    <ProgressBar-->
-<!--        android:id="@+id/progress_bar"-->
-<!--        android:layout_width="48dp"-->
-<!--        android:layout_height="48dp"-->
-<!--        android:layout_centerHorizontal="true"-->
-<!--        android:layout_centerVertical="true"/>-->
-
-    <!--    <androidx.recyclerview.widget.RecyclerView-->
-    <!--        android:id="@+id/backgroundViewPager"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent" />-->
-
-    <!--    <com.chahinem.pageindicator.PageIndicator-->
-    <!--        android:id="@+id/backgroundIndicator"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_centerHorizontal="true"-->
-    <!--        android:layout_alignParentBottom="true"-->
-    <!--        android:layout_marginBottom="20dp"-->
-    <!--        />-->
 </RelativeLayout>
