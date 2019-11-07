@@ -6,29 +6,44 @@
     android:layout_height="match_parent"
     tools:context=".ui.setting.sub_setting.Notification.NotificationActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/bg_regtangle_outer"
+        tools:ignore="MissingConstraints">
+
+        <ImageButton
+            android:id="@+id/settingNotificationBackBtn2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/colorTransparent"
+            app:srcCompat="@drawable/ic_arrow_back_24dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Notification"
+            android:textSize="18dp"
+            android:textColor="#424242"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="30dp"
+            android:textAlignment="center">
+        </TextView>
+    </androidx.appcompat.widget.Toolbar>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
         android:gravity="center">
 
-        <EditText
-            android:id="@+id/notificationEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:hint="Input" />
-
-        <Button
-            android:id="@+id/notificationShowBtn"
+        <Switch
+            android:id="@+id/switch1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="show" />
+            android:text="Allow Notifications                          ">
 
-        <Button
-            android:id="@+id/notificationHideBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="hide" />
+        </Switch>
+
     </LinearLayout>
+
 </RelativeLayout>

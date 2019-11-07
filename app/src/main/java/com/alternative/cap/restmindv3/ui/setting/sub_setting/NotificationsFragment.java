@@ -74,32 +74,32 @@ public class NotificationsFragment extends Fragment {
         } );
 
 
-        Intent intent = new Intent(getContext(), NavigationHomePageActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, intent, 0);
+//        Intent intent = new Intent(getContext(), NavigationHomePageActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, intent, 0);
+//
+//        Intent snoozeIntent = new Intent(getContext(), NavigationHomePageActivity.class);
+//        snoozeIntent.setAction(ACTION_SNOOZE);
+//        snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
+//        PendingIntent snoozePendingIntent =
+//                PendingIntent.getBroadcast(getContext(), 0, snoozeIntent, 0);
+//
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), CHANNEL_ID)
+//                .setSmallIcon(R.drawable.image_logo_bottomshadow)
+//                .setContentTitle("test")
+//                .setContentText("test text at one line!")
+//                .setStyle(new NotificationCompat.BigTextStyle()
+//                        .bigText("test text at one line!"))
+//                .setContentIntent(pendingIntent)
+//                .addAction(R.drawable.ic_music, getString(R.string.snooze),
+//                        snoozePendingIntent)
+//                .setPriority(NotificationCompat.PRIORITY_HIGH);
+//
+//        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getContext());
+//        int notificationId = 1;
+//        notificationManagerCompat.notify(notificationId, builder.build());
 
-        Intent snoozeIntent = new Intent(getContext(), NavigationHomePageActivity.class);
-        snoozeIntent.setAction(ACTION_SNOOZE);
-        snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
-        PendingIntent snoozePendingIntent =
-                PendingIntent.getBroadcast(getContext(), 0, snoozeIntent, 0);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), CHANNEL_ID)
-                .setSmallIcon(R.drawable.image_logo_bottomshadow)
-                .setContentTitle("test")
-                .setContentText("test text at one line!")
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText("test text at one line!"))
-                .setContentIntent(pendingIntent)
-                .addAction(R.drawable.ic_music, getString(R.string.snooze),
-                        snoozePendingIntent)
-                .setPriority(NotificationCompat.PRIORITY_HIGH);
-
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getContext());
-        int notificationId = 1;
-        notificationManagerCompat.notify(notificationId, builder.build());
-
-        getFragmentManager().popBackStack();
+//        getFragmentManager().popBackStack();
     }
 
 

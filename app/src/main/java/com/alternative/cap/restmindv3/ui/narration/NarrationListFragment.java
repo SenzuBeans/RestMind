@@ -83,8 +83,18 @@ public class NarrationListFragment extends Fragment{
         adapter = new NarrationListAdapter(getContext(), dataList, header ,subListener);
         narrationListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         narrationListRecyclerView.setAdapter(adapter);
+        backBtn( rootView );
     }
 
+    private void backBtn(View rootView) {
+        rootView.findViewById( R.id.narrationListBackBtn ).setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getFragmentManager().popBackStack();
+                listener.onDestroy();
+            }
+        } );
+    }
 
     public interface NarrationListListener {
         void onDestroy();

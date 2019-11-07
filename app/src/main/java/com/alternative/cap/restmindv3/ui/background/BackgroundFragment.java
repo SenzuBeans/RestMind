@@ -75,6 +75,7 @@ public class BackgroundFragment extends Fragment
         mediaList1 = new ArrayList<>();
         mediaList2 = new ArrayList<>();
         mediaList3 = new ArrayList<>();
+
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -112,6 +113,7 @@ public class BackgroundFragment extends Fragment
                 }
 
                 mediaList1 = tempMediaList;
+
                 adapter1 = new BackgroundAdapter(getContext(), mediaList1, mediaSelect1, BackgroundFragment.this::onItemSelect, 1);
 
                 bgSoundItem = dataSnapshot.child("LOG").child("BGSOUND2").getValue(NarrationItem.class);
@@ -186,6 +188,7 @@ public class BackgroundFragment extends Fragment
 
     @Override
     public void onItemSelect(int itemSelect, int path) {
-        
+
     }
+
 }

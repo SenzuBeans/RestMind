@@ -17,7 +17,6 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.ArrayList;
 
-
 public class BackgroundAdapter extends RecyclerView.Adapter<BackgroundAdapter.BackgroundViewHolder> {
 
     Context cons;
@@ -94,7 +93,9 @@ public class BackgroundAdapter extends RecyclerView.Adapter<BackgroundAdapter.Ba
         }
     }
 
+
     public interface BackgroundAdapterListener{
         void onItemSelect(int itemSelect, int path);
     }
+
 }
