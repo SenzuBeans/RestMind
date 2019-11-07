@@ -1,9 +1,6 @@
 package com.alternative.cap.restmindv3.ui.narration;
 
 
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -85,7 +82,6 @@ public class RatingFragment extends Fragment {
         ratingBar = rootView.findViewById(R.id.ratingBar);
         rateBtn = rootView.findViewById(R.id.ratingRateBtn);
         cancelBtn = rootView.findViewById(R.id.ratingCancelBtn);
-        ratingBar = rootView.findViewById(R.id.ratingBar);
     }
 
     private void workbench(View rootView, Bundle savedInstanceState) {
@@ -108,15 +104,15 @@ public class RatingFragment extends Fragment {
             }
         });
 
-        changeStarColor();
-
     }
+
 
     public  void  changeStarColor(){
         LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
         stars.setColorFilter( ContextCompat.getColor(getContext(), R.color.colorAccent ),
                 PorterDuff.Mode.SRC_ATOP);
     }
+
     public interface RatingListener{
         void onCancel();
     }

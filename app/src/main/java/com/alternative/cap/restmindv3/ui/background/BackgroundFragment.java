@@ -1,13 +1,22 @@
 package com.alternative.cap.restmindv3.ui.background;
 
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,11 +47,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.takusemba.spotlight.target.SimpleTarget;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-public class BackgroundFragment extends Fragment{
+public class BackgroundFragment extends Fragment
+        implements BackgroundAdapter.BackgroundAdapterListener {
+
+    private MediaPlayer player1;
+    private MediaPlayer player2;
+    private MediaPlayer player3;
 
     private ArrayList<MediaItem> mediaList1;
     private ArrayList<MediaItem> mediaList2;
@@ -59,6 +74,16 @@ public class BackgroundFragment extends Fragment{
     private BackgroundAdapter adapter2;
     private BackgroundAdapter adapter3;
 
+    private ImageButton volumeSettingBtn;
+    private LinearLayout volumeLayout;
+    private LinearLayout toggleLayout;
+    private SeekBar seekVolume1;
+    private SeekBar seekVolume2;
+    private SeekBar seekVolume3;
+
+    private Animation fadeIn;
+    private Animation fadeOut;
+
     private FirebaseUser user;
     private FirebaseDatabase database;
 
@@ -74,7 +99,6 @@ public class BackgroundFragment extends Fragment{
         mediaList1 = new ArrayList<>();
         mediaList2 = new ArrayList<>();
         mediaList3 = new ArrayList<>();
-
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -92,6 +116,113 @@ public class BackgroundFragment extends Fragment{
         bgRecyclerView2.setLayoutManager(new LinearLayoutManager(getContext()));
         bgRecyclerView3 = root.findViewById(R.id.bgRecyclerView3);
         bgRecyclerView3.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        volumeSettingBtn = root.findViewById(R.id.volumeSettingBtn);
+        volumeLayout = root.findViewById(R.id.volumeSettingLayout);
+        toggleLayout = root.findViewById(R.id.volumeToggleLayout);
+        seekVolume1 = root.findViewById(R.id.seekVolumePlayer1);
+        seekVolume2 = root.findViewById(R.id.seekVolumePlayer2);
+        seekVolume3 = root.findViewById(R.id.seekVolumePlayer3);
+
+        fadeIn = new AlphaAnimation(0, 1);
+        fadeIn.setInterpolator(new DecelerateInterpolator()); //add this
+        fadeIn.setDuration(1000);
+
+        fadeOut = new AlphaAnimation(1, 0);
+        fadeOut.setInterpolator(new AccelerateInterpolator()); //and this
+        fadeOut.setDuration(1000);
+
+        volumeSettingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                volumeLayout.startAnimation(fadeIn);
+                volumeLayout.setVisibility(View.VISIBLE);
+            }
+        });
+
+        seekVolume1.setProgress(5);
+        seekVolume2.setProgress(5);
+        seekVolume3.setProgress(5);
+
+        updateVolume();
+
+        toggleLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                volumeLayout.startAnimation(fadeOut);
+                volumeLayout.getAnimation().setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        volumeLayout.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+                return true;
+            }
+        });
+    }
+
+    private void updateVolume() {
+        seekVolume1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (player1 != null)
+                    player1.setVolume((float) progress, (float) progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        seekVolume2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (player2 != null)
+                    player2.setVolume((float) progress, (float) progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        seekVolume3.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (player3 != null)
+                    player3.setVolume((float) progress, (float) progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 
     private void getData() {
@@ -112,8 +243,8 @@ public class BackgroundFragment extends Fragment{
                 }
 
                 mediaList1 = tempMediaList;
-                adapter1 = new BackgroundAdapter(getContext(), mediaList1, mediaSelect1);
-              
+                adapter1 = new BackgroundAdapter(getContext(), mediaList1, mediaSelect1, BackgroundFragment.this::onItemSelect, 1);
+
                 bgSoundItem = dataSnapshot.child("LOG").child("BGSOUND2").getValue(NarrationItem.class);
                 bgSoundId = new ArrayList<String>(Arrays.asList(bgSoundItem.rawId.split(",")));
                 tempMediaList = new ArrayList<>();
@@ -123,7 +254,7 @@ public class BackgroundFragment extends Fragment{
                 }
 
                 mediaList2 = tempMediaList;
-                adapter2 = new BackgroundAdapter(getContext(), mediaList2, mediaSelect2);
+                adapter2 = new BackgroundAdapter(getContext(), mediaList2, mediaSelect2, BackgroundFragment.this::onItemSelect, 2);
 
 
                 bgSoundItem = dataSnapshot.child("LOG").child("BGSOUND3").getValue(NarrationItem.class);
@@ -135,7 +266,7 @@ public class BackgroundFragment extends Fragment{
                 }
 
                 mediaList3 = tempMediaList;
-                adapter3 = new BackgroundAdapter(getContext(), mediaList3, mediaSelect3);
+                adapter3 = new BackgroundAdapter(getContext(), mediaList3, mediaSelect3, BackgroundFragment.this::onItemSelect, 3);
 
                 updateRecyclerAdapter();
 
@@ -151,21 +282,21 @@ public class BackgroundFragment extends Fragment{
     }
 
     private void updateRecyclerAdapter() {
-        if (bgRecyclerView1.getAdapter() == null){
+        if (bgRecyclerView1.getAdapter() == null) {
             bgRecyclerView1.setAdapter(adapter1);
-        }else{
+        } else {
             adapter1.setPlayingMedia(mediaSelect1);
             adapter1.notifyDataSetChanged();
         }
-        if (bgRecyclerView2.getAdapter() == null){
+        if (bgRecyclerView2.getAdapter() == null) {
             bgRecyclerView2.setAdapter(adapter2);
-        }else{
+        } else {
             adapter2.setPlayingMedia(mediaSelect2);
             adapter2.notifyDataSetChanged();
         }
-        if (bgRecyclerView3.getAdapter() == null){
+        if (bgRecyclerView3.getAdapter() == null) {
             bgRecyclerView3.setAdapter(adapter3);
-        }else{
+        } else {
             adapter3.setPlayingMedia(mediaSelect3);
             adapter3.notifyDataSetChanged();
         }
@@ -182,5 +313,111 @@ public class BackgroundFragment extends Fragment{
                 .setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                         View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN |
                         View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+    }
+
+    @Override
+    public void onItemSelect(int itemSelect, int path) {
+        if (path == 1)
+            mediaSelect1 = itemSelect;
+        else if (path == 2)
+            mediaSelect2 = itemSelect;
+        else if (path == 3)
+            mediaSelect3 = itemSelect;
+
+        updateRecyclerAdapter();
+        playerCheck();
+    }
+
+    private void playerCheck() {
+        if (player1 == null)
+            player1 = new MediaPlayer();
+        if (player2 == null)
+            player2 = new MediaPlayer();
+        if (player3 == null)
+            player3 = new MediaPlayer();
+        try {
+
+            if (mediaSelect1 > 0) {
+                if (player1.isPlaying()) {
+                    player1.pause();
+                    player1.release();
+                    player1 = new MediaPlayer();
+                }
+                player1.setDataSource(mediaList1.get(mediaSelect1).link_2);
+                player1.prepare();
+                player1.setLooping(true);
+                player1.start();
+                player1.setVolume(5f,5f);
+            } else {
+                player1.pause();
+                player1.release();
+                player1 = new MediaPlayer();
+            }
+
+            if (mediaSelect2 > 0) {
+                if (player2.isPlaying()) {
+                    player2.pause();
+                    player2.release();
+                    player2 = new MediaPlayer();
+                }
+                player2.setDataSource(mediaList2.get(mediaSelect2).link_2);
+                player2.prepare();
+                player2.setLooping(true);
+                player2.start();
+                player2.setVolume(5f,5f);
+
+            } else {
+                player2.pause();
+                player2.release();
+                player2 = new MediaPlayer();
+            }
+
+            if (mediaSelect3 > 0) {
+                if (player3.isPlaying()) {
+                    player3.pause();
+                    player3.release();
+                    player3 = new MediaPlayer();
+                }
+                player3.setDataSource(mediaList3.get(mediaSelect3).link_2);
+                player3.prepare();
+                player3.setLooping(true);
+                player3.start();
+                player3.setVolume(5f,5f);
+            } else {
+                player3.pause();
+                player3.release();
+                player3 = new MediaPlayer();
+            }
+
+            updateVolume();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void stopPlayer() {
+        if (player1 != null) {
+            player1.pause();
+            player1.release();
+        }
+        if (player1 != null) {
+            player2.pause();
+            player2.release();
+        }
+        if (player1 != null) {
+            player3.pause();
+            player3.release();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        stopPlayer();
+        super.onDestroy();
     }
 }

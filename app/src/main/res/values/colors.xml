@@ -13,6 +13,8 @@
 
     <color name="headbar">#a3a7ad</color>
 
+    <color name="toggle">#7CA7A7A7</color>
+
     <color name="spinnerText">#DBDBDB</color>
     <color name="bg_graph">#202020</color>
     <color name="circleProgress">#005DBD</color>

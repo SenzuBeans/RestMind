@@ -20,36 +20,29 @@ import com.alternative.cap.restmindv3.activity.multi.NavigationHomePageActivity;
 public class NotificationActivity extends AppCompatActivity {
 
     private  final String CHANNEL_ID = "124";
+    private Button notificationShowBtn;
+    private Button notificationHideBtn;
+    private EditText notificationEditText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
-        getWindow().getDecorView()
-                .setSystemUiVisibility( View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN |
-                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 
-        findViewById( R.id.settingNotificationBackBtn2 ).setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NotificationActivity.super.onBackPressed();
-            }
-        } );
+        notificationShowBtn = findViewById(R.id.notificationShowBtn);
+        notificationHideBtn = findViewById(R.id.notificationHideBtn);
+        notificationEditText = findViewById(R.id.notificationEditText);
 
-//        notificationShowBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startService(v);
-//            }
-//        });
-//
-//        notificationHideBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                stopService(v);
-//            }
-//        });
 
+
+        startService(serviceIntent);
     }
+    public void stopService(View v){
+        Intent serviceIntent = new Intent(this, NotificationService.class);
+        stopService(serviceIntent);
+    }
+
+
+
 }

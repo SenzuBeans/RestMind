@@ -43,7 +43,7 @@ public class BreathSongSelectAdapter extends RecyclerView.Adapter<BreathSongSele
         holder.root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(v, "เปลี่ยนเพลงเรียบร้อยแล้ว :)" , Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(v, dataList.get(position).name+ " has select for breath!" , Snackbar.LENGTH_SHORT).show();
                 BreathSongList.current = position;
                 notifyDataSetChanged();
             }

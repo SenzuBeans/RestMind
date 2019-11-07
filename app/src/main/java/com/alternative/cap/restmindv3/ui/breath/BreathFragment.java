@@ -203,7 +203,6 @@ public class BreathFragment extends Fragment {
             public void onClick(View view) {
                 if (!isSongPlaying) {
                     startRunningBreath();
-
                     if (timer > 0) {
                         circularSeekBar.setMax(timer);
                         circularSeekBar.setProgress(timer);
@@ -269,6 +268,7 @@ public class BreathFragment extends Fragment {
 
     private void startRunningBreath() {
         recallBreathData();
+        fingerHint.setVisibility( View.GONE );
         if (BreathSongList.dataList == null) {
             callMediaData();
         } else {
@@ -339,7 +339,6 @@ public class BreathFragment extends Fragment {
                 }
 
                 BreathSongList.setDataList(tempMediaList);
-//                Log.d("dodo", "onDataChange: data " + narrationId.get(0));
 
                 breathSongPlayer = MediaPlayer.create(getContext(), Uri.parse(BreathSongList.dataList.get(BreathSongList.current).link_2));
                 breathSongPlayer.start();

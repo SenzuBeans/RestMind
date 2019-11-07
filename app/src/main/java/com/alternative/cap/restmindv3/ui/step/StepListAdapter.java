@@ -1,6 +1,7 @@
 package com.alternative.cap.restmindv3.ui.step;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +50,7 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.MediaL
         holder.stepItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onItemClicked(headerList.get(position)[0], dataList.get(position) , headerList.get(position)[1]);
+                listener.onItemClicked(headerList.get(position)[0], dataList.get(position));
             }
         });
         holder.setStepCount(headerList.get(position)[0],stepLogItems, dataList.get(position).size());
@@ -108,6 +109,6 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.MediaL
     }
 
     public interface StepListAdapterListener {
-        void onItemClicked(String passingHeader, ArrayList<MediaItem> passingDataList, String s);
+        void onItemClicked(String passingHeader, ArrayList<MediaItem> passingDataList);
     }
 }
