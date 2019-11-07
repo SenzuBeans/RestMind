@@ -8,8 +8,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="50dp"
-        android:layout_marginLeft="30dp">
+        android:layout_marginTop="150dp"
+        android:layout_marginLeft="50dp">
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -17,7 +17,7 @@
             android:src="@drawable/moon_light"
             android:padding="3dp"
             android:background="@drawable/circle_bg_sounds"
-            android:layout_margin="10dp">
+            android:layout_marginBottom="40dp">
 
         </ImageButton>
 
@@ -27,7 +27,7 @@
             android:src="@drawable/ocean"
             android:padding="3dp"
             android:background="@drawable/circle_bg_sounds"
-            android:layout_margin="10dp">
+            android:layout_marginBottom="40dp">
 
         </ImageButton>
 
@@ -37,7 +37,7 @@
             android:src="@drawable/orchestral"
             android:padding="3dp"
             android:background="@drawable/circle_bg_sounds"
-            android:layout_margin="10dp">
+            android:layout_marginBottom="40dp">
 
         </ImageButton>
 
@@ -47,8 +47,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="50dp"
-        android:layout_marginLeft="150dp">
+        android:layout_marginTop="150dp"
+        android:layout_marginLeft="170dp">
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -56,7 +56,7 @@
             android:src="@drawable/whale"
             android:padding="3dp"
             android:background="@drawable/circle_bg_sounds"
-            android:layout_margin="10dp">
+            android:layout_marginBottom="40dp">
 
         </ImageButton>
 
@@ -66,7 +66,7 @@
             android:src="@drawable/bird"
             android:padding="3dp"
             android:background="@drawable/circle_bg_sounds"
-            android:layout_margin="10dp">
+            android:layout_marginBottom="40dp">
 
         </ImageButton>
 
@@ -76,7 +76,7 @@
             android:src="@drawable/frog"
             android:padding="3dp"
             android:background="@drawable/circle_bg_sounds"
-            android:layout_margin="10dp">
+            android:layout_marginBottom="40dp">
 
         </ImageButton>
 
@@ -86,8 +86,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="50dp"
-        android:layout_marginLeft="280dp">
+        android:layout_marginTop="150dp"
+        android:layout_marginLeft="290dp">
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -95,7 +95,7 @@
             android:src="@drawable/heart_beat"
             android:padding="3dp"
             android:background="@drawable/circle_bg_sounds"
-            android:layout_margin="10dp">
+            android:layout_marginBottom="40dp">
 
         </ImageButton>
 
@@ -105,7 +105,7 @@
             android:src="@drawable/grandfather_clock"
             android:padding="3dp"
             android:background="@drawable/circle_bg_sounds"
-            android:layout_margin="10dp">
+            android:layout_marginBottom="40dp">
 
         </ImageButton>
 
@@ -115,7 +115,7 @@
             android:src="@drawable/melody"
             android:padding="3dp"
             android:background="@drawable/circle_bg_sounds"
-            android:layout_margin="10dp">
+            android:layout_marginBottom="40dp">
 
         </ImageButton>
 
