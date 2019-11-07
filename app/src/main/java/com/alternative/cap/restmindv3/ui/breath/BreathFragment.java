@@ -151,13 +151,15 @@ public class BreathFragment extends Fragment {
                         log.remove(0);
                     }
 
+                    if ((Integer.parseInt(log.get(log.size() - 1).date)) < Integer.parseInt(log.get(0).date)) {
+                        BreathLogItem tempItem = log.get(log.size() - 1);
+                        log = new ArrayList<>();
+                        log.add(tempItem);
+                    }
+
                     for (int i = 0; i < log.size(); i++) {
                         if (Integer.parseInt(log.get(log.size() - 1).date) >= Integer.parseInt(log.get(i).date) ) {
                             if (Integer.parseInt(log.get(log.size() - 1).date) - Integer.parseInt(log.get(i).date) > 7) {
-                                log.remove(0);
-                            }
-                        }else{
-                            if ((Integer.parseInt(log.get(log.size() - 1).date)+ 30) - Integer.parseInt(log.get(i).date)  > 7) {
                                 log.remove(0);
                             }
                         }
