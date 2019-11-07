@@ -104,7 +104,7 @@ public class BackgroundFragment extends Fragment{
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 NarrationItem bgSoundItem = dataSnapshot.child("LOG").child("BGSOUND1").getValue(NarrationItem.class);
-                ArrayList<String> bgSoundId = new ArrayList(Arrays.asList(bgSoundItem.rawId.split(",")));
+                ArrayList<String> bgSoundId = new ArrayList<String>(Arrays.asList(bgSoundItem.rawId.split(",")));
                 ArrayList<MediaItem> tempMediaList = new ArrayList<>();
 
                 for (String s : bgSoundId) {
@@ -115,7 +115,7 @@ public class BackgroundFragment extends Fragment{
                 adapter1 = new BackgroundAdapter(getContext(), mediaList1, mediaSelect1);
               
                 bgSoundItem = dataSnapshot.child("LOG").child("BGSOUND2").getValue(NarrationItem.class);
-                bgSoundId = new ArrayList(Arrays.asList(bgSoundItem.rawId.split(",")));
+                bgSoundId = new ArrayList<String>(Arrays.asList(bgSoundItem.rawId.split(",")));
                 tempMediaList = new ArrayList<>();
 
                 for (String s : bgSoundId) {
@@ -127,7 +127,7 @@ public class BackgroundFragment extends Fragment{
 
 
                 bgSoundItem = dataSnapshot.child("LOG").child("BGSOUND3").getValue(NarrationItem.class);
-                bgSoundId = new ArrayList(Arrays.asList(bgSoundItem.rawId.split(",")));
+                bgSoundId = new ArrayList<String>(Arrays.asList(bgSoundItem.rawId.split(",")));
                 tempMediaList = new ArrayList<>();
 
                 for (String s : bgSoundId) {

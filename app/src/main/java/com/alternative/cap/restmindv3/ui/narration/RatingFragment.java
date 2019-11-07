@@ -7,6 +7,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -113,7 +114,7 @@ public class RatingFragment extends Fragment {
 
     public  void  changeStarColor(){
         LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
-        stars.getDrawable(2).setColorFilter( getResources().getColor( R.color.colorAccent ),
+        stars.setColorFilter( ContextCompat.getColor(getContext(), R.color.colorAccent ),
                 PorterDuff.Mode.SRC_ATOP);
     }
     public interface RatingListener{

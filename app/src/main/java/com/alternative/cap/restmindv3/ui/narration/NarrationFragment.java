@@ -81,7 +81,7 @@ public class NarrationFragment extends Fragment implements NarrationSubAdapter.N
                     narrationHeader.add(ds.getKey());
                     NarrationItem item = ds.getValue(NarrationItem.class);
 
-                    narrationId = new ArrayList(Arrays.asList(item.rawId.split(",")));
+                    narrationId = new ArrayList<String>(Arrays.asList(item.rawId.split(",")));
                     tempMediaList = new ArrayList<>();
 
                     for (String s : narrationId) {

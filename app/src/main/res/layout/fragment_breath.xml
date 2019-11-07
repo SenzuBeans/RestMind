@@ -92,6 +92,7 @@
                 android:textSize="30dp" />
 
             <ImageView
+                android:id="@+id/fingerHint"
                 android:layout_width="100dp"
                 android:layout_height="200dp"
                 android:layout_alignStart="@+id/circularImageView"

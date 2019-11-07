@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -52,6 +53,7 @@ public class BreathFragment extends Fragment {
     private CountdownView timerView;
     private TextView breathStatusTextView;
     private CircularSeekBar circularSeekBar;
+    private ImageView fingerHint;
 
     private String[] STATE = {"inhale", "hold", "exhale"};
     private BreathingMutableValue passingBreathData;
@@ -97,6 +99,7 @@ public class BreathFragment extends Fragment {
         breathStatusTextView = rootView.findViewById(R.id.breathStatusTextView);
         timerView = rootView.findViewById(R.id.breathTimer);
         circularSeekBar = rootView.findViewById(R.id.circularSeekBar);
+        fingerHint = rootView.findViewById( R.id.fingerHint );
         circularSeekBar.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -280,6 +283,7 @@ public class BreathFragment extends Fragment {
                 timerView.start(timer);
             }
         }
+        fingerHint.setVisibility( View.GONE );
     }
 
     private void stopRunningBreath(boolean timerState) {
@@ -303,6 +307,7 @@ public class BreathFragment extends Fragment {
                 timerResume = false;
             }
         }
+        fingerHint.setVisibility( View.VISIBLE );
     }
 
     private void updateBreathTime() {
@@ -325,7 +330,7 @@ public class BreathFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 NarrationItem narrationItem = dataSnapshot.child("LOG").child("BREATH").getValue(NarrationItem.class);
-                ArrayList<String> narrationId = new ArrayList(Arrays.asList(narrationItem.rawId.split(",")));
+                ArrayList<String> narrationId = new ArrayList<String>(Arrays.asList(narrationItem.rawId.split(",")));
                 ArrayList<MediaItem> tempMediaList = new ArrayList<>();
 
                 for (String s : narrationId) {

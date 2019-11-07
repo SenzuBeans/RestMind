@@ -37,19 +37,19 @@ public class NotificationActivity extends AppCompatActivity {
             }
         } );
 
-        notificationShowBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startService(v);
-            }
-        });
-
-        notificationHideBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopService(v);
-            }
-        });
+//        notificationShowBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startService(v);
+//            }
+//        });
+//
+//        notificationHideBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                stopService(v);
+//            }
+//        });
 
     }
 }
