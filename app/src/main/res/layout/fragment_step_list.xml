@@ -24,12 +24,12 @@
              android:layout_height="?attr/actionBarSize"
              android:background="@color/colorTransparent">
 
-              <ImageButton
-                  android:id="@+id/stepBackBtn"
-                  android:layout_width="wrap_content"
-                  android:layout_height="match_parent"
-                  android:background="@color/colorTransparent"
-                  app:srcCompat="@drawable/ic_arrow_back_24dp" />
+<!--              <ImageButton-->
+<!--                  android:id="@+id/stepBackBtn"-->
+<!--                  android:layout_width="wrap_content"-->
+<!--                  android:layout_height="match_parent"-->
+<!--                  android:background="@color/colorTransparent"-->
+<!--                  app:srcCompat="@drawable/ic_arrow_back_24dp" />-->
 
          </androidx.appcompat.widget.Toolbar>
 

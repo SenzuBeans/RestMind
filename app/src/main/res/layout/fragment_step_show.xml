@@ -34,20 +34,36 @@
                     app:srcCompat="@drawable/ic_arrow_back_24dp" />
 
 
-                    <TextView
+                <TextView
                         android:id="@+id/stepHeader"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="20dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="0.5"
-                        android:text="Step"
+                        android:text="Step name"
                         android:textSize="20dp"
                         android:textColor="#FFF"
                         android:padding="5dp"
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="12sp"
+                        app:autoSizeMaxTextSize="100sp"
+                        app:autoSizeStepGranularity="2sp"
                         android:background="@drawable/btn_rounded17"
                         />
-
-
+                <TextView
+                    android:id="@+id/stepAuthor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="0.5"
+                    android:text="Author"
+                    android:textSize="20dp"
+                    android:textColor="#FFF"
+                    android:padding="5dp"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="12sp"
+                    app:autoSizeMaxTextSize="100sp"
+                    app:autoSizeStepGranularity="2sp"
+                    android:background="@drawable/btn_rounded17" />
 
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>

@@ -22,8 +22,7 @@
                 android:id="@+id/stepPlayerHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="13dp"
-                android:layout_marginRight="13dp"
+                android:layout_marginRight="10dp"
                 android:background="@drawable/btn_rounded12"
                 android:gravity="center"
                 android:padding="5dp"
@@ -35,7 +34,7 @@
                 style="@style/Widget.AppCompat.RatingBar.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginRight="10dp"
                 android:numStars="5"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
@@ -124,8 +123,8 @@
     <FrameLayout
         android:id="@+id/narrationRatingContent"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
 </RelativeLayout>

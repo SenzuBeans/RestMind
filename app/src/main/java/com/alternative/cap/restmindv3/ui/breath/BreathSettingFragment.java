@@ -21,9 +21,9 @@ import com.alternative.cap.restmindv3.util.BreathingMutableValue;
 
 import com.alternative.cap.restmindv3.util.MediaItem;
 import com.alternative.cap.restmindv3.util.NarrationItem;
-import com.azoft.carousellayoutmanager.CarouselLayoutManager;
-import com.azoft.carousellayoutmanager.CarouselZoomPostLayoutListener;
-import com.azoft.carousellayoutmanager.CenterScrollListener;
+//import com.azoft.carousellayoutmanager.CarouselLayoutManager;
+//import com.azoft.carousellayoutmanager.CarouselZoomPostLayoutListener;
+//import com.azoft.carousellayoutmanager.CenterScrollListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;

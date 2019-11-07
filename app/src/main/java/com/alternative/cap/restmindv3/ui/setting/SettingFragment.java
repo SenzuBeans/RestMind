@@ -14,7 +14,6 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.alternative.cap.restmindv3.R;
-import com.alternative.cap.restmindv3.activity.floating.FloatingActivity;
 import com.alternative.cap.restmindv3.activity.multi.MemberActivity;
 import com.alternative.cap.restmindv3.manager.Contextor;
 import com.alternative.cap.restmindv3.ui.setting.sub_setting.ChangePassword;
