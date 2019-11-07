@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -52,6 +53,7 @@ public class BreathFragment extends Fragment {
     private CountdownView timerView;
     private TextView breathStatusTextView;
     private CircularSeekBar circularSeekBar;
+    private ImageView fingerHint;
 
     private String[] STATE = {"inhale", "hold", "exhale"};
     private BreathingMutableValue passingBreathData;
@@ -97,6 +99,7 @@ public class BreathFragment extends Fragment {
         breathStatusTextView = rootView.findViewById(R.id.breathStatusTextView);
         timerView = rootView.findViewById(R.id.breathTimer);
         circularSeekBar = rootView.findViewById(R.id.circularSeekBar);
+        fingerHint = rootView.findViewById( R.id.fingerHint );
         circularSeekBar.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -200,7 +203,6 @@ public class BreathFragment extends Fragment {
             public void onClick(View view) {
                 if (!isSongPlaying) {
                     startRunningBreath();
-
                     if (timer > 0) {
                         circularSeekBar.setMax(timer);
                         circularSeekBar.setProgress(timer);
@@ -266,6 +268,7 @@ public class BreathFragment extends Fragment {
 
     private void startRunningBreath() {
         recallBreathData();
+        fingerHint.setVisibility( View.GONE );
         if (BreathSongList.dataList == null) {
             callMediaData();
         } else {
@@ -303,6 +306,8 @@ public class BreathFragment extends Fragment {
                 timerResume = false;
             }
         }
+        fingerHint.setVisibility( View.VISIBLE );
+
     }
 
     private void updateBreathTime() {
