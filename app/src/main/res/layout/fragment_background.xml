@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/sounds_bg">
 
 
     <LinearLayout
@@ -13,24 +14,52 @@
 
     <ImageView
         android:layout_width="3dp"
-        android:layout_height="370dp"
-        android:layout_marginLeft="50dp"
-        android:src="@drawable/rectangle_footage">
+        android:layout_height="490dp"
+        android:src="@drawable/rectangle_footage"
+        android:layout_gravity="center_horizontal">
 
     </ImageView>
-
+    </LinearLayout>
 
     <LinearLayout
-        android:layout_width="350dp"
-        android:layout_height="400dp"
-        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <ImageView
+            android:layout_width="3dp"
+            android:layout_height="490dp"
+            android:src="@drawable/rectangle_footage"
+            android:layout_marginLeft="90dp">
+
+        </ImageView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <ImageView
+            android:layout_width="3dp"
+            android:layout_height="490dp"
+            android:src="@drawable/rectangle_footage"
+            android:layout_marginLeft="322dp">
+
+        </ImageView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:weightSum="3"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp">
+        android:layout_centerHorizontal="true">
 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
-
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorTransparent">
 
@@ -53,33 +82,31 @@
         </androidx.appcompat.widget.Toolbar>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-
+            android:layout_width="350dp"
+            android:layout_height="400dp"
             android:orientation="horizontal"
-            android:weightSum="3">
+            android:weightSum="3"
+            android:layout_marginTop="50dp"
+            android:layout_gravity="center_horizontal">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/bgRecyclerView1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="10dp" />
+                android:layout_weight="1" />
 
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/bgRecyclerView2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="10dp" />
+                android:layout_weight="1" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/bgRecyclerView3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="10dp" />
+                android:layout_weight="1" />
         </LinearLayout>
     </LinearLayout>
 
@@ -115,6 +142,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/player1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
@@ -125,7 +153,7 @@
                     android:id="@+id/seekVolumePlayer1"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:max="10"
+                    android:max="100"
                     android:paddingLeft="40dp"
                     android:paddingRight="40dp" />
 
@@ -138,6 +166,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/player2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
@@ -148,7 +177,7 @@
                     android:id="@+id/seekVolumePlayer2"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:max="10"
+                    android:max="100"
                     android:paddingLeft="40dp"
                     android:paddingRight="40dp" />
 
@@ -161,6 +190,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/player3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
@@ -171,7 +201,7 @@
                     android:id="@+id/seekVolumePlayer3"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:max="10"
+                    android:max="100"
                     android:paddingLeft="40dp"
                     android:paddingRight="40dp" />
 

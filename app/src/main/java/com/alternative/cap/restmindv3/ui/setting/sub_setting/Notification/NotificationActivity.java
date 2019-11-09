@@ -36,7 +36,7 @@ public class NotificationActivity extends AppCompatActivity {
 
 
 
-        startService(serviceIntent);
+//        startService(serviceIntent);
     }
     public void stopService(View v){
         Intent serviceIntent = new Intent(this, NotificationService.class);

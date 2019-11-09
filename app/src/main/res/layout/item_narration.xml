@@ -31,9 +31,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginBottom="2dp"
-                android:text="@string/all_list"
+                android:text="All"
                 android:textColor="#F43D6B"
-                android:textSize="17dp"
+                android:textSize="20dp"
                 android:clickable="true"/>
         </LinearLayout>
 
