@@ -125,12 +125,7 @@ public class StepListFragment extends Fragment implements StepListAdapter.StepLi
     private void workbench(View rootView, Bundle savedInstanceState) {
         getStep();
 
-        rootView.findViewById(R.id.stepBackBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getFragmentManager().popBackStack();
-            }
-        });
+
     }
 
     @Override
