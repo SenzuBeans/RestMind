@@ -101,7 +101,7 @@ public class StepListFragment extends Fragment implements StepListAdapter.StepLi
                     StepListItem item = ds.getValue(StepListItem.class);
                     headerList.add(new String[]{ds.getKey(), item.artist, item.image_link});
 
-                    ArrayList<String> mediaId = new ArrayList(Arrays.asList(item.rawId.split(",")));
+                    ArrayList<String> mediaId = new ArrayList<String>(Arrays.asList(item.rawId.split(",")));
                     tempMediaList = new ArrayList<>();
 
                     for (String s : mediaId) {
@@ -125,12 +125,7 @@ public class StepListFragment extends Fragment implements StepListAdapter.StepLi
     private void workbench(View rootView, Bundle savedInstanceState) {
         getStep();
 
-        rootView.findViewById(R.id.stepBackBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getFragmentManager().popBackStack();
-            }
-        });
+
     }
 
     @Override

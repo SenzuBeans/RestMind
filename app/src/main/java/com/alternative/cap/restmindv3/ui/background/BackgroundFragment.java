@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -66,6 +67,7 @@ public class BackgroundFragment extends Fragment
     private int mediaSelect1 = -1;
     private int mediaSelect2 = -1;
     private int mediaSelect3 = -1;
+    private final static int MAX_VOLUME = 100;
 
     private RecyclerView bgRecyclerView1;
     private RecyclerView bgRecyclerView2;
@@ -80,6 +82,10 @@ public class BackgroundFragment extends Fragment
     private SeekBar seekVolume1;
     private SeekBar seekVolume2;
     private SeekBar seekVolume3;
+
+    private TextView playerText1;
+    private TextView playerText2;
+    private TextView playerText3;
 
     private Animation fadeIn;
     private Animation fadeOut;
@@ -124,6 +130,10 @@ public class BackgroundFragment extends Fragment
         seekVolume2 = root.findViewById(R.id.seekVolumePlayer2);
         seekVolume3 = root.findViewById(R.id.seekVolumePlayer3);
 
+        playerText1 = root.findViewById( R.id.player1 );
+        playerText2 = root.findViewById( R.id.player2 );
+        playerText3 = root.findViewById( R.id.player3 );
+
         fadeIn = new AlphaAnimation(0, 1);
         fadeIn.setInterpolator(new DecelerateInterpolator()); //add this
         fadeIn.setDuration(1000);
@@ -140,9 +150,9 @@ public class BackgroundFragment extends Fragment
             }
         });
 
-        seekVolume1.setProgress(5);
-        seekVolume2.setProgress(5);
-        seekVolume3.setProgress(5);
+        seekVolume1.setProgress(100);
+        seekVolume2.setProgress(100);
+        seekVolume3.setProgress(100);
 
         updateVolume();
 
@@ -172,11 +182,28 @@ public class BackgroundFragment extends Fragment
     }
 
     private void updateVolume() {
+
+        if (mediaSelect1 >= 0){
+            playerText1.setText( mediaList1.get( mediaSelect1 ).name );
+        }else{
+            playerText1.setText( "no song" );
+        }
+        if (mediaSelect2 >= 0){
+            playerText2.setText( mediaList2.get( mediaSelect2 ).name );
+        }else{
+            playerText2.setText( "no song" );
+        }
+        if (mediaSelect3 >= 0){
+            playerText3.setText( mediaList3.get( mediaSelect3 ).name );
+        }else{
+            playerText3.setText( "no song" );
+        }
         seekVolume1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                float volume = (float) (1 - (Math.log(MAX_VOLUME - progress) / Math.log(MAX_VOLUME)));
                 if (player1 != null)
-                    player1.setVolume((float) progress, (float) progress);
+                    player1.setVolume(volume, volume);
             }
 
             @Override
@@ -192,8 +219,9 @@ public class BackgroundFragment extends Fragment
         seekVolume2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                float volume = (float) (1 - (Math.log(MAX_VOLUME - progress) / Math.log(MAX_VOLUME)));
                 if (player2 != null)
-                    player2.setVolume((float) progress, (float) progress);
+                    player2.setVolume(volume, volume);
             }
 
             @Override
@@ -209,8 +237,9 @@ public class BackgroundFragment extends Fragment
         seekVolume3.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                float volume = (float) (1 - (Math.log(MAX_VOLUME - progress) / Math.log(MAX_VOLUME)));
                 if (player3 != null)
-                    player3.setVolume((float) progress, (float) progress);
+                    player3.setVolume(volume, volume);
             }
 
             @Override
@@ -306,6 +335,7 @@ public class BackgroundFragment extends Fragment
     public void onResume() {
         super.onResume();
         hideNavigationBar();
+        updateVolume();
     }
 
     private void hideNavigationBar() {
@@ -326,6 +356,7 @@ public class BackgroundFragment extends Fragment
 
         updateRecyclerAdapter();
         playerCheck();
+        updateVolume();
     }
 
     private void playerCheck() {
@@ -337,7 +368,7 @@ public class BackgroundFragment extends Fragment
             player3 = new MediaPlayer();
         try {
 
-            if (mediaSelect1 > 0) {
+            if (mediaSelect1 >= 0) {
                 if (player1.isPlaying()) {
                     player1.pause();
                     player1.release();
@@ -354,7 +385,7 @@ public class BackgroundFragment extends Fragment
                 player1 = new MediaPlayer();
             }
 
-            if (mediaSelect2 > 0) {
+            if (mediaSelect2 >= 0) {
                 if (player2.isPlaying()) {
                     player2.pause();
                     player2.release();
@@ -372,7 +403,7 @@ public class BackgroundFragment extends Fragment
                 player2 = new MediaPlayer();
             }
 
-            if (mediaSelect3 > 0) {
+            if (mediaSelect3 >= 0) {
                 if (player3.isPlaying()) {
                     player3.pause();
                     player3.release();
@@ -393,6 +424,7 @@ public class BackgroundFragment extends Fragment
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     private void stopPlayer() {
