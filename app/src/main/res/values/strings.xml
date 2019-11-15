@@ -1,20 +1,13 @@
 <resources>
     <string name="app_name">RestMind</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-
     <string name="title_activity_navigation_home_page">NavigationHomePageActivity</string>
+    <string name="channel_name">RestMind</string>
+    <string name="channel_description">Notification</string>
+    <string name="snooze">snooze</string>
 
-
-    <!-- TODO: Remove or change this placeholder text -->
-
-    <!--
-    WARNING!!! WARNING!!! WARNING!!! WARNING!!! WARNING!!! WARNING!!! WARNING!!! WARNING!!!
-	WARNING!!! WARNING!!! WARNING!!! WARNING!!! WARNING!!! WARNING!!! WARNING!!! WARNING!!!
-	WARNING!!! WARNING!!! WARNING!!! WARNING!!! WARNING!!! WARNING!!! WARNING!!! WARNING!!!
-	WARNING!!! WARNING!!! WARNING!!! WARNING!!! WARNING!!! WARNING!!! WARNING!!! WARNING!!!
-	do NOT change these values!!! they are being used as id's!!!
--->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="all_list"><u><b>All List..</b></u></string>
 
 
 </resources>

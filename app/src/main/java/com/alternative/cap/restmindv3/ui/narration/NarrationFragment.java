@@ -1,7 +1,6 @@
 package com.alternative.cap.restmindv3.ui.narration;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -39,10 +37,10 @@ public class NarrationFragment extends Fragment implements NarrationSubAdapter.N
     private FirebaseUser user;
     private FirebaseDatabase database;
 
-    private ArrayList<String> header;// = new String[]{"test 1", "test 2"};
-    private ArrayList<String> mediaId;// = new String[][]{{"Song 1", "Song 2", "Song 3", "Song 4", "Song 5"},{"Song 6", "Song 7", "Song 8", "Song 9", "Song 10"}};
+    private ArrayList<String> narrationHeader;// = new String[]{"test 1", "test 2"};
+    private ArrayList<String> narrationId;// = new String[][]{{"Song 1", "Song 2", "Song 3", "Song 4", "Song 5"},{"Song 6", "Song 7", "Song 8", "Song 9", "Song 10"}};
     private ArrayList<MediaItem> tempMediaList;
-    private ArrayList<ArrayList<MediaItem>> mediaList;
+    private ArrayList<ArrayList<MediaItem>> narrationList;
 
     Random random = new Random();
     int x = random.nextInt(1000);
@@ -54,8 +52,8 @@ public class NarrationFragment extends Fragment implements NarrationSubAdapter.N
     }
 
     private void init(Bundle savedInstanceState) {
-        header = new ArrayList<>();
-        mediaList = new ArrayList<ArrayList<MediaItem>>();
+        narrationHeader = new ArrayList<>();
+        narrationList = new ArrayList<ArrayList<MediaItem>>();
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,26 +72,31 @@ public class NarrationFragment extends Fragment implements NarrationSubAdapter.N
 
     private void workbench(View root, Bundle savedInstanceState) {
         hideNavigationBar();
+        narrationRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         database.getReference().child("users").child(user.getUid()).child("temp_steam").setValue(x);
         database.getReference().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.child("narration").getChildren()) {
-                    header.add(ds.getKey());
+                    narrationHeader.add(ds.getKey());
                     NarrationItem item = ds.getValue(NarrationItem.class);
 
-                    mediaId = new ArrayList(Arrays.asList(item.rawId.split(",")));
+                    narrationId = new ArrayList<String>(Arrays.asList(item.rawId.split(",")));
                     tempMediaList = new ArrayList<>();
 
-                    for (String s : mediaId) {
+                    for (String s : narrationId) {
                         tempMediaList.add(dataSnapshot.child("sound").child(s).getValue(MediaItem.class));
                     }
-                    mediaList.add(tempMediaList);
-                    Log.d("dodo", "onItemClicked: "+ mediaList.get(0).get(0).name);
-
+                    narrationList.add(tempMediaList);
                 }
-                updateAdapter(root);
+                if (narrationRecyclerView.getAdapter() == null) {
+                    adapter = new NarrationAdapter( getContext(), narrationHeader, narrationList, NarrationFragment.this );
+                    narrationRecyclerView.setAdapter( adapter );
+                }else{
+                    adapter.notifyDataSetChanged();
+                }
 
+                database.getReference().removeEventListener(this);
             }
 
             @Override
@@ -104,24 +107,23 @@ public class NarrationFragment extends Fragment implements NarrationSubAdapter.N
 
     }
 
-    private void updateAdapter(View root) {
-        narrationRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new NarrationAdapter(getContext(), header, mediaList, this);
-
-        narrationRecyclerView.setAdapter(adapter);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        hideNavigationBar();
-    }
-
     private void hideNavigationBar() {
         this.getActivity().getWindow().getDecorView()
                 .setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                         View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN |
                         View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
     }
 
     @Override
@@ -139,4 +141,21 @@ public class NarrationFragment extends Fragment implements NarrationSubAdapter.N
                 .addToBackStack(null)
                 .commit();
     }
+
+    @Override
+    public void onMoreClicked(ArrayList<MediaItem> passingDataList, String passingHeader) {
+        narrationRecyclerView.setVisibility(View.GONE);
+        narrationContentContainer.setVisibility(View.VISIBLE);
+        getChildFragmentManager().beginTransaction()
+                .addToBackStack(null)
+                .add(R.id.narrationContentContainer, NarrationListFragment.newInstance(passingDataList, passingHeader, new NarrationListFragment.NarrationListListener(){
+                    @Override
+                    public void onDestroy(){
+                        narrationRecyclerView.setVisibility(View.VISIBLE);
+                        narrationContentContainer.setVisibility(View.GONE);
+                    }
+                }, this))
+                .commit();
+    }
+
 }

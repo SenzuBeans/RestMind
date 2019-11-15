@@ -1,12 +1,13 @@
 package com.alternative.cap.restmindv3.ui.setting.sub_setting;
 
+import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,20 +15,23 @@ import androidx.fragment.app.Fragment;
 
 import com.alternative.cap.restmindv3.R;
 import com.alternative.cap.restmindv3.fragment.RegisterFragment;
+import com.alternative.cap.restmindv3.ui.setting.sub_setting.Profile.RankingActivity;
 import com.alternative.cap.restmindv3.util.BreathLogItem;
 import com.alternative.cap.restmindv3.util.SettingListener;
 import com.alternative.cap.restmindv3.util.UserDetails;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -37,7 +41,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 
@@ -46,16 +49,23 @@ public class ProfileFragment extends Fragment {
 
     static SettingListener listener;
 
+    private ImageView profileImage;
     private TextView profileUserName;
     private TextView profileUserEmail;
-    private BarChart breathChart;
-    private TextView userResult;
+    private BarChart barChart;
+    private TextView barResult;
+    private PieChart pieChart;
+
     private DatabaseReference databaseReference;
     private DatabaseReference reference;
     private FirebaseUser user;
+    private UserDetails userDetails;
+
+    private ArrayList<BreathLogItem> log;
+    private ArrayList<BarEntry> yVels;
 
     Random random = new Random();
-    int x = random.nextInt(1000);
+    int x = random.nextInt( 1000 );
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -66,145 +76,196 @@ public class ProfileFragment extends Fragment {
         Bundle args = new Bundle();
         listener = passingListener;
         ProfileFragment fragment = new ProfileFragment();
-        fragment.setArguments(args);
+        fragment.setArguments( args );
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        init(savedInstanceState);
+        super.onCreate( savedInstanceState );
+        init( savedInstanceState );
     }
 
     private void init(Bundle savedInstanceState) {
         databaseReference = FirebaseDatabase.getInstance().getReference();
-        reference = databaseReference.child("users");
+        reference = databaseReference.child( "users" );
         user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
-        initInsance(rootView, savedInstanceState);
-        checkRegis(rootView, savedInstanceState);
+        View rootView = inflater.inflate( R.layout.fragment_profile, container, false );
+        initInsance( rootView, savedInstanceState );
+        checkRegis( rootView, savedInstanceState );
         return rootView;
     }
 
 
     private void initInsance(View rootView, Bundle savedInstanceState) {
-        reference.child(user.getUid()).child("temp_steam").setValue(x);
-        breathChart = rootView.findViewById(R.id.breathChart);
-        initChart();
-        profileUserName = rootView.findViewById(R.id.profileUserName);
-        profileUserEmail = rootView.findViewById(R.id.profileUserEmail);
-        userResult = rootView.findViewById(R.id.userResult );
+            reference.child( user.getUid() ).child( "temp_steam" ).setValue( x );
+
+        profileImage = rootView.findViewById(R.id.profilePicture);
+        profileUserName = rootView.findViewById( R.id.profileUserName );
+        profileUserEmail = rootView.findViewById( R.id.profileUserEmail );
+
+        barChart = rootView.findViewById( R.id.barChart );
+        barResult = rootView.findViewById( R.id.barResult );
+
+        pieChart = rootView.findViewById(R.id.pieChart);
+
+        initBarChart();
+        initPieChart();
     }
 
     private void checkRegis(View rootView, Bundle savedInstanceState) {
-        if (user.getDisplayName().equals("VISITOR")) {
-            rootView.findViewById(R.id.profileContentContainer).setVisibility(View.VISIBLE);
+        if (user.getDisplayName().equals( "VISITOR" )) {
+            rootView.findViewById( R.id.profileContentContainer ).setVisibility( View.VISIBLE );
             getChildFragmentManager().beginTransaction()
-                    .add(R.id.profileContentContainer, RegisterFragment.newInstance(new RegisterFragment.RegisterListener() {
+                    .add( R.id.profileContentContainer, RegisterFragment.newInstance( new RegisterFragment.RegisterListener() {
                         @Override
                         public void onRegis() {
-                            rootView.findViewById(R.id.profileContentContainer).setVisibility(View.GONE);
+                            rootView.findViewById( R.id.profileContentContainer ).setVisibility( View.GONE );
+                            getChildFragmentManager().popBackStack();
                         }
-                    }))
+                    } ) )
                     .commit();
         }
 
-        if (rootView.findViewById(R.id.profileContentContainer).getVisibility() == View.GONE){
-            workbench(rootView, savedInstanceState);
+        if (rootView.findViewById( R.id.profileContentContainer ).getVisibility() == View.GONE) {
+            workbench( rootView, savedInstanceState );
         }
     }
 
     private void workbench(View rootView, Bundle savedInstanceState) {
-        backBtn(rootView);
+        backBtn( rootView );
+        getData();
+        profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), RankingActivity.class));
+            }
+        });
+    }
 
-        reference.addValueEventListener(new ValueEventListener() {
+    private void getData() {
+        reference.addValueEventListener( new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                UserDetails userDetails = dataSnapshot.child(user.getUid()).getValue(UserDetails.class);
-                profileUserName.setText(userDetails.name);
-                profileUserEmail.setText(userDetails.email);
-                ArrayList<BreathLogItem> log = userDetails.breath_log;
-                setData(log);
-                breathChart.notifyDataSetChanged();
-                breathChart.invalidate();
+                userDetails = dataSnapshot.child( user.getUid() ).getValue( UserDetails.class );
+                profileUserName.setText( user.getDisplayName() );
+                profileUserEmail.setText( user.getEmail() );
+                if (log == null){
+                    log = new ArrayList<>(  );
+                }
+                log = userDetails.breath_log;
+                setBarChartData();
+                if (userDetails.totalTime == null){
+                    userDetails.updateTotalTime(0);
+                    userDetails.updateMissTime(0);
+                }
+                setPieChartData();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });
-
-
-
+        } );
     }
 
-    private void backBtn(View rootView) {
-        rootView.findViewById(R.id.settingProfileBackBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getFragmentManager().popBackStack();
-            }
-        });
-    }
-
-    private void initChart() {
-        breathChart.setNoDataText("Tap to refresh information");
-        breathChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+    private void initBarChart() {
+        barChart.setNoDataText( "Tap to refresh information" );
+        barChart.setOnChartValueSelectedListener( new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
-                e.getX();
-                e.getY();
-                userResult.setText("เดือนนี้..วันที่ "+(int)e.getX() +" คุณได้ฝึกกำหนดลมหายใจ "+(int)e.getY()+" นาที");
+                barResult.setText( "เดือนนี้..วันที่ " + (int) e.getX() + " \nคุณได้ฝึกกำหนดลมหายใจ " + (int) e.getY() + " นาที" );
             }
+
             @Override
             public void onNothingSelected() {
 
             }
-        });
-        breathChart.getXAxis().setEnabled(true);
-        breathChart.getAxisRight().setEnabled(false);
-        breathChart.getAxisLeft().setEnabled(true);
-        breathChart.getAxisLeft().setTextColor( Color.WHITE );
-        breathChart.getXAxis().setTextColor( Color.WHITE );
+        } );
+        barChart.getXAxis().setEnabled( true );
+        barChart.getAxisRight().setEnabled( false );
+        barChart.getAxisLeft().setEnabled( true );
+        barChart.getAxisLeft().setTextColor( Color.WHITE );
+        barChart.getXAxis().setTextColor( Color.WHITE );
 
+        barChart.setBackgroundColor( Color.BLACK );
+        barChart.setGridBackgroundColor( Color.DKGRAY );
 
-        breathChart.setBackgroundColor(Color.BLACK);
-        breathChart.setGridBackgroundColor(Color.DKGRAY);
+        barChart.setDrawGridBackground( true );
 
-        breathChart.setDrawGridBackground(true);
+        barChart.setDrawBorders( true );
+        barChart.getDescription().setEnabled( false );
+        barChart.setPinchZoom( false );
+        barChart.getLegend().setEnabled( false );
 
-        breathChart.setDrawBorders(true);
-        breathChart.getDescription().setEnabled(false);
-        breathChart.setPinchZoom(false);
-        breathChart.getLegend().setEnabled(false);
+        barChart.getXAxis().setLabelCount( 7, true );
+        barChart.setVisibleXRange(1,7);
+
     }
 
-    private void setData(ArrayList<BreathLogItem> log) {
+    private void initPieChart() {
+        pieChart.setBackgroundColor(Color.WHITE);
+    }
 
+    private void setBarChartData() {
         if (log != null) {
-            ArrayList<BarEntry> yVels = new ArrayList<>();
+            yVels = new ArrayList<>();
 
             for (int i = 0; i < log.size(); i++) {
-                yVels.add(new BarEntry((float) (Integer.parseInt(log.get(i).date)), (float) (Integer.parseInt(log.get(i).totalTime))));
+                yVels.add( new BarEntry( (float) (Integer.parseInt( log.get( i ).date )), (float) (Integer.parseInt( log.get( i ).totalTime )) ) );
             }
 
-            BarDataSet barDataSet = new BarDataSet(yVels, "");
-            barDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-            barDataSet.setColor(Color.YELLOW);
+            Log.d( "dodo", "onDataChange: " + log.get( 0 ).date );
 
 
-            BarData barData = new BarData(barDataSet);
-            barData.setDrawValues(false);
+            BarDataSet barDataSet = new BarDataSet( yVels, "" );
+            barDataSet.setAxisDependency( YAxis.AxisDependency.LEFT );
+            barDataSet.setColor( Color.YELLOW );
 
-            breathChart.setScaleEnabled(false);
-            breathChart.setData(barData);
+            BarData barData = new BarData( barDataSet );
+            barData.setDrawValues( false );
+
+            barChart.setScaleEnabled( false );
+            barChart.setData( barData );
+
+            barChart.notifyDataSetChanged();
+            barChart.invalidate();
         }
+    }
+
+    private void setPieChartData(){
+        float total = Float.parseFloat(userDetails.totalTime);
+        float miss = Float.parseFloat(userDetails.missTime);
+        float overAll = total + miss;
+
+        float setMiss = (miss / overAll) *100;
+        float setTotal = (total / overAll) * 100;
+
+        ArrayList<PieEntry> summaryTime = new ArrayList<PieEntry>();
+        summaryTime.add(new PieEntry(setTotal , "%"));
+        summaryTime.add(new PieEntry(setMiss, "%"));
+
+        PieDataSet dataSet = new PieDataSet(summaryTime , "of summary time over all time");
+        dataSet.setValueTextColor(Color.WHITE);
+        PieData data = new PieData( dataSet);
+        pieChart.setData(data);
+        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        pieChart.animateXY(100, 100);
+        pieChart.getDescription().setEnabled(false);
+    }
+
+    private void backBtn(View rootView) {
+        rootView.findViewById( R.id.settingProfileBackBtn ).setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getFragmentManager().popBackStack();
+            }
+        } );
     }
 
 

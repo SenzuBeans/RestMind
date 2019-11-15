@@ -2,40 +2,181 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/sounds_bg">
 
-    <VideoView
-        android:id="@+id/backgroundVideoView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"/>
 
-    <TextView
-        android:id="@+id/backgroundID"
-        android:padding="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="left|top"
-        android:textSize="30dp"
-        android:text="video id"
-        android:textColor="@android:color/transparent"
-        android:background="@color/colorTransparent" />
-
-<!--    <androidx.recyclerview.widget.RecyclerView-->
-<!--        android:id="@+id/backgroundViewPager"-->
+<!--    <LinearLayout-->
 <!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent" />-->
+<!--        android:layout_height="match_parent">-->
 
-<!--    <com.chahinem.pageindicator.PageIndicator-->
-<!--        android:id="@+id/backgroundIndicator"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_centerHorizontal="true"-->
-<!--        android:layout_alignParentBottom="true"-->
-<!--        android:layout_marginBottom="20dp"-->
-<!--        />-->
+<!--        <ImageView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:src="@drawable/sounds_bg_connect">-->
+
+<!--        </ImageView>-->
+
+<!--    </LinearLayout>-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:weightSum="3"
+        android:layout_centerHorizontal="true">
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorTransparent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="right"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/volumeSettingBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="3dp"
+                    android:tint="#FFF"
+                    android:background="@color/colorTransparent"
+                    app:srcCompat="@drawable/ic_settings_24dp" />
+
+
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+
+
+        <LinearLayout
+            android:layout_width="350dp"
+            android:layout_height="400dp"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            android:layout_gravity="center_horizontal">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/bgRecyclerView1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/bgRecyclerView2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/bgRecyclerView3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/volumeSettingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:gravity="bottom"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/volumeToggleLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:background="@color/toggle"
+            android:orientation="vertical"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/holo_orange_light"
+            android:orientation="vertical"
+            android:paddingBottom="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/player1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Player 1"
+                    android:textSize="18dp" />
+
+                <SeekBar
+                    android:id="@+id/seekVolumePlayer1"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:max="100"
+                    android:paddingLeft="40dp"
+                    android:paddingRight="40dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/player2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Player 2"
+                    android:textSize="18dp" />
+
+                <SeekBar
+                    android:id="@+id/seekVolumePlayer2"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:max="100"
+                    android:paddingLeft="40dp"
+                    android:paddingRight="40dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/player3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Player 3"
+                    android:textSize="18dp" />
+
+                <SeekBar
+                    android:id="@+id/seekVolumePlayer3"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:max="100"
+                    android:paddingLeft="40dp"
+                    android:paddingRight="40dp" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
 </RelativeLayout>

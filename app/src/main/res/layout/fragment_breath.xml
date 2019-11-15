@@ -42,6 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.6"
+            android:paddingBottom="100dp"
             android:gravity="center">
 
             <com.mikhaellopez.circularimageview.CircularImageView
@@ -50,6 +51,27 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:src="@drawable/citcle_bg" />
+
+
+            <me.tankery.lib.circularseekbar.CircularSeekBar
+                android:id="@+id/circularSeekBar"
+                android:layout_width="360dp"
+                android:layout_height="360dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                app:cs_progress="0"
+                app:cs_max = "100"
+                app:cs_lock_enabled="false"
+                app:cs_negative_enabled="true"
+                app:cs_disable_progress_glow = "true"
+                app:cs_circle_style="round"
+                app:cs_circle_stroke_width="8dp"
+                app:cs_pointer_stroke_width="24dp"
+                app:cs_circle_color = "#33D26AF0"
+                app:cs_circle_progress_color = "#4DD051F5"
+                app:cs_pointer_color = "#DAAEF3"/>
+
 
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/circularImageView"
@@ -68,6 +90,24 @@
                 android:gravity="center"
                 android:text="Ready"
                 android:textSize="30dp" />
+
+            <ImageView
+                android:id="@+id/fingerHint"
+                android:layout_width="100dp"
+                android:layout_height="200dp"
+                android:layout_alignStart="@+id/circularImageView"
+                android:layout_alignTop="@+id/circularImageView"
+                android:layout_alignEnd="@+id/circularImageView"
+                android:layout_alignBottom="@+id/circularImageView"
+                android:layout_marginStart="71dp"
+                android:layout_marginTop="110dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="-110dp"
+                android:src="@drawable/finger"
+                android:visibility="visible">
+
+            </ImageView>
+
 
         </RelativeLayout>
 
@@ -97,21 +137,21 @@
                 />
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:layout_weight="0.2"
-            android:gravity="center">
+<!--        <RelativeLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="20dp"-->
+<!--            android:layout_weight="0.2"-->
+<!--            android:gravity="center">-->
 
-            <Button
-                android:id="@+id/playerBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/btn_rounded2"
-                android:text="play"
-                android:textColor="#fff"/>
-        </RelativeLayout>
+<!--            <Button-->
+<!--                android:id="@+id/playerBtn"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@drawable/btn_rounded2"-->
+<!--                android:text="play"-->
+<!--                android:textColor="#fff"/>-->
+<!--        </RelativeLayout>-->
     </LinearLayout>
 
     <LinearLayout

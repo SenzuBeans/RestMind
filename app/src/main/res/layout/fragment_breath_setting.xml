@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    tools:context=".ui.breath.BreathSettingFragment"
+    android:layout_margin="10dp"
     android:background="@drawable/btn_rounded7"
-    android:layout_margin="10dp">
+    android:orientation="vertical"
+    tools:context=".ui.breath.BreathSettingFragment">
 
     <LinearLayout
         android:layout_width="350dp"
@@ -94,8 +94,8 @@
         android:layout_width="350dp"
         android:layout_height="wrap_content"
 
-        android:layout_margin="3dp"
         android:layout_gravity="center"
+        android:layout_margin="3dp"
         android:orientation="vertical">
 
         <TextView
@@ -130,26 +130,49 @@
             app:isb_track_progress_size="4dp" />
     </LinearLayout>
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:gravity="center"
-        android:orientation="vertical"
-        android:background="@drawable/btn_rounded7">
+        android:orientation="horizontal">
 
-        <io.github.deweyreed.scrollhmspicker.ScrollHmsPicker
-            android:id="@+id/timePicker"
-            android:layout_gravity="center"
-            android:gravity="center"
+        <LinearLayout
+            android:layout_weight="0.5"
             android:layout_width="wrap_content"
-            android:layout_height="120dp"
-            app:shp_show_seconds="false"
-            app:shp_auto_step="true"
-            app:shp_normal_color="#D84B4A4A"
-            app:shp_selected_color="#FFF"/>
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_rounded7"
+            android:gravity="center"
+            android:orientation="vertical">
 
+            <io.github.deweyreed.scrollhmspicker.ScrollHmsPicker
+                android:id="@+id/timePicker"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                app:shp_auto_step="true"
+                app:shp_normal_color="#D84B4A4A"
+                app:shp_selected_color="#FFF"
+                app:shp_show_seconds="false"
+                app:shp_minutes="5"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_weight="0.5"
+            android:layout_width="wrap_content"
+            android:layout_height="150dp"
+            android:layout_marginTop="3dp"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/breathSongSelectRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp" />
+
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -163,22 +186,23 @@
             android:id="@+id/breathSettingSetBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Let's breathe"
-            android:textSize="15dp"
-            android:textColor="#3F3F3F"
-            android:layout_weight="0.1"
             android:layout_margin="20dp"
-            android:background="@drawable/btn_rounded6"/>
+            android:layout_weight="0.1"
+            android:background="@drawable/btn_rounded6"
+            android:text="Let's breathe"
+            android:textColor="#3F3F3F"
+            android:textSize="15dp" />
+
         <Button
             android:id="@+id/breathSettingCancelBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel"
-            android:textSize="15dp"
-            android:textColor="#3F3F3F"
+            android:layout_margin="20dp"
             android:layout_weight="0.1"
             android:background="@drawable/btn_rounded6"
-            android:layout_margin="20dp"/>
+            android:text="Cancel"
+            android:textColor="#3F3F3F"
+            android:textSize="15dp" />
 
 
     </LinearLayout>

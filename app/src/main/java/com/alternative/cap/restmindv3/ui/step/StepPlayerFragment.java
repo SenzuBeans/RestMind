@@ -225,6 +225,15 @@ public class StepPlayerFragment extends Fragment {
         });
     }
 
+    private void updateDataList(ArrayList<MediaItem> dataList) {
+        for (MediaItem item : dataList) {
+            stepMediaSource = new ProgressiveMediaSource.Factory(stepDataSourceFactory)
+                    .createMediaSource(Uri.parse(item.link_2));
+            stepConcatenatingMediaSource.addMediaSource(stepMediaSource);
+        }
+        stepPlayer.prepare(stepConcatenatingMediaSource);
+    }
+
     private void lockNextChapter(boolean condition) {
         if (condition) {
             exoNextBtn.setBackgroundResource(R.drawable.ic_action_next_lock);
@@ -250,7 +259,7 @@ public class StepPlayerFragment extends Fragment {
         stepPlayerArtist.setText(dataList.get(stepPlayer.getCurrentWindowIndex()).artist);
 
         Glide.with(cons)
-                .load(dataList.get(stepPlayer.getCurrentWindowIndex()).image_link)
+                .load(dataList.get(stepPlayer.getCurrentWindowIndex()).image_link_2)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(stepPlayerCover);
 
@@ -290,14 +299,6 @@ public class StepPlayerFragment extends Fragment {
         });
     }
 
-    private void updateDataList(ArrayList<MediaItem> dataList) {
-        for (MediaItem item : dataList) {
-            stepMediaSource = new ProgressiveMediaSource.Factory(stepDataSourceFactory)
-                    .createMediaSource(Uri.parse(item.link));
-            stepConcatenatingMediaSource.addMediaSource(stepMediaSource);
-        }
-        stepPlayer.prepare(stepConcatenatingMediaSource);
-    }
 
     @Override
     public void onStop() {
