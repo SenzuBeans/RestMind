@@ -1,6 +1,7 @@
 package com.alternative.cap.restmindv3.ui.background;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -441,6 +442,7 @@ public class BackgroundFragment extends Fragment
             player3.release();
         }
     }
+
 
     @Override
     public void onStop() {
