@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".view.tutorial.Page3Tutorial"
-    android:background="@drawable/tutorial3">
+    android:background="@drawable/tutorial3_1">
 
 
 </RelativeLayout>

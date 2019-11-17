@@ -21,7 +21,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Inhale"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:layout_marginLeft="8dp"/>
 
         <com.warkiz.widget.IndicatorSeekBar
             android:id="@+id/breathInhaleSeekBar"
@@ -62,7 +63,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:text="Hold"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:layout_marginLeft="8dp"/>
 
         <com.warkiz.widget.IndicatorSeekBar
             android:id="@+id/breathHoldSeekBar"
@@ -102,7 +104,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Exhale"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:layout_marginLeft="8dp"/>
 
         <com.warkiz.widget.IndicatorSeekBar
             android:id="@+id/breathExhaleSeekBar"
@@ -144,6 +147,8 @@
             android:gravity="center"
             android:orientation="vertical">
 
+
+
             <io.github.deweyreed.scrollhmspicker.ScrollHmsPicker
                 android:id="@+id/timePicker"
                 android:layout_width="match_parent"
@@ -165,6 +170,17 @@
             android:layout_height="150dp"
             android:layout_marginTop="3dp"
             android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="song"
+                android:textColor="#FFF"
+                android:textAlignment="textEnd"
+                android:layout_marginRight="10dp"
+                android:textSize="16dp">
+
+            </TextView>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/breathSongSelectRecyclerView"

@@ -54,7 +54,7 @@
 
         <LinearLayout
             android:layout_width="350dp"
-            android:layout_height="400dp"
+            android:layout_height="365dp"
             android:orientation="horizontal"
             android:weightSum="3"
             android:layout_gravity="center_horizontal">
@@ -63,20 +63,30 @@
                 android:id="@+id/bgRecyclerView1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:background="@drawable/sound1"
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_gravity="center_horizontal"/>
 
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/bgRecyclerView2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:background="@drawable/sound2"
+                android:layout_marginRight="5dp"
+                android:layout_gravity="center_horizontal"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/bgRecyclerView3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:background="@drawable/sound3"
+                android:layout_marginRight="5dp"
+                android:layout_gravity="center_horizontal"/>
         </LinearLayout>
     </LinearLayout>
 
