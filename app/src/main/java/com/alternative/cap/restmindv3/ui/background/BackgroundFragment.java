@@ -1,6 +1,7 @@
 package com.alternative.cap.restmindv3.ui.background;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -47,6 +48,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.takusemba.spotlight.target.SimpleTarget;
+import com.wooplr.spotlight.SpotlightView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -89,6 +91,7 @@ public class BackgroundFragment extends Fragment
 
     private Animation fadeIn;
     private Animation fadeOut;
+    private SpotlightView spotlightView;
 
     private FirebaseUser user;
     private FirebaseDatabase database;
@@ -179,6 +182,31 @@ public class BackgroundFragment extends Fragment
                 return true;
             }
         });
+
+        showSpotlight();
+    }
+
+    private void showSpotlight() {
+
+        spotlightView = new SpotlightView.Builder(getActivity())
+                .introAnimationDuration(400)
+                .enableRevealAnimation(true)
+                .performClick(true)
+                .fadeinTextDuration(400)
+                .headingTvColor(Color.parseColor("#eb273f"))
+                .headingTvSize(32)
+                .headingTvText("Love")
+                .subHeadingTvColor(Color.parseColor("#ffffff"))
+                .subHeadingTvSize(16)
+                .subHeadingTvText("Like the picture?\nLet others know.")
+                .maskColor(Color.parseColor("#dc000000"))
+                .target(volumeSettingBtn)
+                .lineAnimDuration(400)
+                .lineAndArcColor(Color.parseColor("#eb273f"))
+                .dismissOnTouch(true)
+                .dismissOnBackPress(true)
+                .enableDismissAfterShown(true)
+                .show();
     }
 
     private void updateVolume() {
