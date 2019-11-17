@@ -28,10 +28,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.eazegraph.lib.charts.PieChart;
-import org.eazegraph.lib.charts.StackedBarChart;
+import org.eazegraph.lib.charts.ValueLineChart;
 import org.eazegraph.lib.models.BarModel;
 import org.eazegraph.lib.models.PieModel;
 import org.eazegraph.lib.models.StackedBarModel;
+import org.eazegraph.lib.models.ValueLinePoint;
+import org.eazegraph.lib.models.ValueLineSeries;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -45,7 +47,7 @@ public class ProfileFragment extends Fragment {
     private ImageView profileImage;
     private TextView profileUserName;
     private TextView profileUserEmail;
-    private StackedBarChart stackedBarChart;
+    private ValueLineChart valueLineChart;
     private PieChart pieChart;
 //    private BarChart barChart;
 //    private TextView barResult;
@@ -57,8 +59,6 @@ public class ProfileFragment extends Fragment {
     private UserDetails userDetails;
 
     private ArrayList<BreathLogItem> log;
-//    private ArrayList<BarEntry> yVels;
-    private ArrayList<StackedBarModel> barModelList;
 
     Random random = new Random();
     int x = random.nextInt( 1000 );
@@ -86,7 +86,6 @@ public class ProfileFragment extends Fragment {
         databaseReference = FirebaseDatabase.getInstance().getReference();
         reference = databaseReference.child( "users" );
         user = FirebaseAuth.getInstance().getCurrentUser();
-        barModelList = new ArrayList<>();
     }
 
 
@@ -106,7 +105,7 @@ public class ProfileFragment extends Fragment {
         profileUserName = rootView.findViewById( R.id.profileUserName );
         profileUserEmail = rootView.findViewById( R.id.profileUserEmail );
 
-        stackedBarChart = rootView.findViewById(R.id.timeBarChart);
+        valueLineChart = rootView.findViewById(R.id.timeLineChart);
         pieChart = rootView.findViewById(R.id.pieChart);
 
     }
@@ -170,14 +169,16 @@ public class ProfileFragment extends Fragment {
 
     private void setChart() {
         if (log != null){
-            for (BreathLogItem bi : log){
-                StackedBarModel model = new StackedBarModel(bi.date);
-                model.addBar(new BarModel(Float.parseFloat(bi.totalTime), 0xFF56B7F1));
-                model.addBar(new BarModel(Float.parseFloat(bi.dismissTime), 0xFF873F56));
 
-                stackedBarChart.addBar(model);
+            ValueLineSeries series = new ValueLineSeries();
+            series.setColor(0xFF56B7F1);
+
+
+            for (BreathLogItem bi : log){
+                series.addPoint(new ValueLinePoint(bi.date, Float.parseFloat(bi.totalTime)));
             }
-            stackedBarChart.startAnimation();
+            valueLineChart.addSeries(series);
+            valueLineChart.startAnimation();
             Log.d("dodo", "setChart: " + log.size());
 
 
