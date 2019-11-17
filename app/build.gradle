@@ -76,10 +76,11 @@ dependencies {
     implementation 'com.github.DeweyReed:ScrollHmsPicker:2.0.1'
     implementation 'com.ultramegasoft.radarchart:radar-chart:0.1.5'
     implementation 'com.github.chahine:pageindicator:0.2.8'
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.github.takusemba:spotlight:1.8.0'
     implementation 'me.tankery.lib:circularSeekBar:1.2.0'
     implementation 'com.azoft.carousellayoutmanager:carousel:1.2.4'
+    implementation 'com.github.blackfizz:eazegraph:1.2.2@aar'
+    implementation 'com.nineoldandroids:library:2.4.0'
 
 
     implementation "androidx.multidex:multidex:2.0.1"

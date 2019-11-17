@@ -19,19 +19,6 @@ import com.alternative.cap.restmindv3.ui.setting.sub_setting.Profile.RankingActi
 import com.alternative.cap.restmindv3.util.BreathLogItem;
 import com.alternative.cap.restmindv3.util.SettingListener;
 import com.alternative.cap.restmindv3.util.UserDetails;
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -39,6 +26,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.eazegraph.lib.charts.PieChart;
+import org.eazegraph.lib.charts.StackedBarChart;
+import org.eazegraph.lib.models.BarModel;
+import org.eazegraph.lib.models.PieModel;
+import org.eazegraph.lib.models.StackedBarModel;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -52,9 +45,11 @@ public class ProfileFragment extends Fragment {
     private ImageView profileImage;
     private TextView profileUserName;
     private TextView profileUserEmail;
-    private BarChart barChart;
-    private TextView barResult;
+    private StackedBarChart stackedBarChart;
     private PieChart pieChart;
+//    private BarChart barChart;
+//    private TextView barResult;
+//    private PieChart pieChart;
 
     private DatabaseReference databaseReference;
     private DatabaseReference reference;
@@ -62,7 +57,8 @@ public class ProfileFragment extends Fragment {
     private UserDetails userDetails;
 
     private ArrayList<BreathLogItem> log;
-    private ArrayList<BarEntry> yVels;
+//    private ArrayList<BarEntry> yVels;
+    private ArrayList<StackedBarModel> barModelList;
 
     Random random = new Random();
     int x = random.nextInt( 1000 );
@@ -90,6 +86,7 @@ public class ProfileFragment extends Fragment {
         databaseReference = FirebaseDatabase.getInstance().getReference();
         reference = databaseReference.child( "users" );
         user = FirebaseAuth.getInstance().getCurrentUser();
+        barModelList = new ArrayList<>();
     }
 
 
@@ -109,13 +106,9 @@ public class ProfileFragment extends Fragment {
         profileUserName = rootView.findViewById( R.id.profileUserName );
         profileUserEmail = rootView.findViewById( R.id.profileUserEmail );
 
-        barChart = rootView.findViewById( R.id.barChart );
-        barResult = rootView.findViewById( R.id.barResult );
-
+        stackedBarChart = rootView.findViewById(R.id.timeBarChart);
         pieChart = rootView.findViewById(R.id.pieChart);
 
-        initBarChart();
-        initPieChart();
     }
 
     private void checkRegis(View rootView, Bundle savedInstanceState) {
@@ -159,12 +152,13 @@ public class ProfileFragment extends Fragment {
                     log = new ArrayList<>(  );
                 }
                 log = userDetails.breath_log;
-                setBarChartData();
+//                setBarChartData();
                 if (userDetails.totalTime == null){
                     userDetails.updateTotalTime(0);
                     userDetails.updateMissTime(0);
                 }
-                setPieChartData();
+//                setPieChartData();
+                setChart();
             }
 
             @Override
@@ -174,90 +168,26 @@ public class ProfileFragment extends Fragment {
         } );
     }
 
-    private void initBarChart() {
-        barChart.setNoDataText( "Tap to refresh information" );
-        barChart.setOnChartValueSelectedListener( new OnChartValueSelectedListener() {
-            @Override
-            public void onValueSelected(Entry e, Highlight h) {
-                barResult.setText( "เดือนนี้..วันที่ " + (int) e.getX() + " \nคุณได้ฝึกกำหนดลมหายใจ " + (int) e.getY() + " นาที" );
+    private void setChart() {
+        if (log != null){
+            for (BreathLogItem bi : log){
+                StackedBarModel model = new StackedBarModel(bi.date);
+                model.addBar(new BarModel(Float.parseFloat(bi.totalTime), 0xFF1FF4AC));
+                model.addBar(new BarModel(Float.parseFloat(bi.dismissTime), 0xFF873F56));
+
+                stackedBarChart.addBar(model);
             }
-
-            @Override
-            public void onNothingSelected() {
-
-            }
-        } );
-        barChart.getXAxis().setEnabled( true );
-        barChart.getAxisRight().setEnabled( false );
-        barChart.getAxisLeft().setEnabled( true );
-        barChart.getAxisLeft().setTextColor( Color.WHITE );
-        barChart.getXAxis().setTextColor( Color.WHITE );
-
-        barChart.setBackgroundColor( Color.BLACK );
-        barChart.setGridBackgroundColor( Color.DKGRAY );
-
-        barChart.setDrawGridBackground( true );
-
-        barChart.setDrawBorders( true );
-        barChart.getDescription().setEnabled( false );
-        barChart.setPinchZoom( false );
-        barChart.getLegend().setEnabled( false );
-
-        barChart.getXAxis().setLabelCount( 7, true );
-        barChart.setVisibleXRange(1,7);
-
-    }
-
-    private void initPieChart() {
-        pieChart.setBackgroundColor(Color.WHITE);
-    }
-
-    private void setBarChartData() {
-        if (log != null) {
-            yVels = new ArrayList<>();
-
-            for (int i = 0; i < log.size(); i++) {
-                yVels.add( new BarEntry( (float) (Integer.parseInt( log.get( i ).date )), (float) (Integer.parseInt( log.get( i ).totalTime )) ) );
-            }
-
-            Log.d( "dodo", "onDataChange: " + log.get( 0 ).date );
+            stackedBarChart.startAnimation();
+            Log.d("dodo", "setChart: " + log.size());
 
 
-            BarDataSet barDataSet = new BarDataSet( yVels, "" );
-            barDataSet.setAxisDependency( YAxis.AxisDependency.LEFT );
-            barDataSet.setColor( Color.YELLOW );
+            pieChart.addPieSlice(new PieModel("Success" , Float.parseFloat(userDetails.totalTime), Color.parseColor("#1FF4AC")));
+            pieChart.addPieSlice(new PieModel("Fail" , Float.parseFloat(userDetails.missTime), Color.parseColor("#873F56")));
 
-            BarData barData = new BarData( barDataSet );
-            barData.setDrawValues( false );
-
-            barChart.setScaleEnabled( false );
-            barChart.setData( barData );
-
-            barChart.notifyDataSetChanged();
-            barChart.invalidate();
+            pieChart.startAnimation();
         }
     }
 
-    private void setPieChartData(){
-        float total = Float.parseFloat(userDetails.totalTime);
-        float miss = Float.parseFloat(userDetails.missTime);
-        float overAll = total + miss;
-
-        float setMiss = (miss / overAll) *100;
-        float setTotal = (total / overAll) * 100;
-
-        ArrayList<PieEntry> summaryTime = new ArrayList<PieEntry>();
-        summaryTime.add(new PieEntry(setTotal , "%"));
-        summaryTime.add(new PieEntry(setMiss, "%"));
-
-        PieDataSet dataSet = new PieDataSet(summaryTime , "of summary time over all time");
-        dataSet.setValueTextColor(Color.WHITE);
-        PieData data = new PieData( dataSet);
-        pieChart.setData(data);
-        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-        pieChart.animateXY(100, 100);
-        pieChart.getDescription().setEnabled(false);
-    }
 
     private void backBtn(View rootView) {
         rootView.findViewById( R.id.settingProfileBackBtn ).setOnClickListener( new View.OnClickListener() {
