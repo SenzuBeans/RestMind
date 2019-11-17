@@ -172,7 +172,7 @@ public class ProfileFragment extends Fragment {
         if (log != null){
             for (BreathLogItem bi : log){
                 StackedBarModel model = new StackedBarModel(bi.date);
-                model.addBar(new BarModel(Float.parseFloat(bi.totalTime), 0xFF1FF4AC));
+                model.addBar(new BarModel(Float.parseFloat(bi.totalTime), 0xFF56B7F1));
                 model.addBar(new BarModel(Float.parseFloat(bi.dismissTime), 0xFF873F56));
 
                 stackedBarChart.addBar(model);
@@ -181,10 +181,11 @@ public class ProfileFragment extends Fragment {
             Log.d("dodo", "setChart: " + log.size());
 
 
-            pieChart.addPieSlice(new PieModel("Success" , Float.parseFloat(userDetails.totalTime), Color.parseColor("#1FF4AC")));
-            pieChart.addPieSlice(new PieModel("Fail" , Float.parseFloat(userDetails.missTime), Color.parseColor("#873F56")));
+            pieChart.addPieSlice(new PieModel("Success (Minutes)" , Float.parseFloat(userDetails.totalTime), Color.parseColor("#408DD2")));
+            pieChart.addPieSlice(new PieModel("Fail (Minutes)" , Float.parseFloat(userDetails.missTime), Color.parseColor("#FC3F4D")));
 
             pieChart.startAnimation();
+
         }
     }
 
