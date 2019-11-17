@@ -97,8 +97,8 @@
                         android:padding="5dp">
 
 
-                        <org.eazegraph.lib.charts.StackedBarChart
-                            android:id="@+id/timeBarChart"
+                        <org.eazegraph.lib.charts.ValueLineChart
+                            android:id="@+id/timeLineChart"
                             android:layout_width="match_parent"
                             android:layout_height="256dp"
                             android:padding="10dp"
