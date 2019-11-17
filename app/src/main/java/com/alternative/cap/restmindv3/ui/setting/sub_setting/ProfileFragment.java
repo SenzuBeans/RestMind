@@ -169,8 +169,10 @@ public class ProfileFragment extends Fragment {
 
     private void setChart() {
         if (log != null){
+
             ValueLineSeries series = new ValueLineSeries();
             series.setColor(0xFF56B7F1);
+
 
             for (BreathLogItem bi : log){
                 series.addPoint(new ValueLinePoint(bi.date, Float.parseFloat(bi.totalTime)));
@@ -180,10 +182,11 @@ public class ProfileFragment extends Fragment {
             Log.d("dodo", "setChart: " + log.size());
 
 
-            pieChart.addPieSlice(new PieModel("Success" , Float.parseFloat(userDetails.totalTime), Color.parseColor("#1FF4AC")));
-            pieChart.addPieSlice(new PieModel("Fail" , Float.parseFloat(userDetails.missTime), Color.parseColor("#873F56")));
+            pieChart.addPieSlice(new PieModel("Success (Minutes)" , Float.parseFloat(userDetails.totalTime), Color.parseColor("#408DD2")));
+            pieChart.addPieSlice(new PieModel("Fail (Minutes)" , Float.parseFloat(userDetails.missTime), Color.parseColor("#FC3F4D")));
 
             pieChart.startAnimation();
+
         }
     }
 

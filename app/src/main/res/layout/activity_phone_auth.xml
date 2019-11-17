@@ -49,10 +49,11 @@
         android:id="@+id/loginBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login"
-        android:textSize="20dp"
+        android:text="Continue"
+        android:textSize="18dp"
         android:textColor="#000"
-        android:background="@drawable/btn_rounded6"/>
+        android:background="@drawable/btn_rounded6"
+        android:padding="10dp"/>
 
     <TextView
         android:id="@+id/resentTextView"

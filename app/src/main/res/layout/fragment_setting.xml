@@ -98,7 +98,8 @@
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/btn_rounded3"
                 android:text="Notifications"
-                android:textColor="#fff" />
+                android:textColor="#fff"
+                android:visibility="gone"/>
 
             <Button
                 android:id="@+id/contactBtn"
