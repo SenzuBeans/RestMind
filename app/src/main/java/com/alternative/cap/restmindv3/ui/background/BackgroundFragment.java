@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.TextureView;
@@ -58,10 +59,6 @@ import java.util.Random;
 public class BackgroundFragment extends Fragment
         implements BackgroundAdapter.BackgroundAdapterListener {
 
-    private MediaPlayer player1;
-    private MediaPlayer player2;
-    private MediaPlayer player3;
-
     private ArrayList<MediaItem> mediaList1;
     private ArrayList<MediaItem> mediaList2;
     private ArrayList<MediaItem> mediaList3;
@@ -96,6 +93,25 @@ public class BackgroundFragment extends Fragment
     private FirebaseUser user;
     private FirebaseDatabase database;
 
+    private SimpleExoPlayer ExoPlayer1;
+    private MediaSource MediaSource1;
+    private ConcatenatingMediaSource ConcatenatingMediaSource1;
+    private DefaultDataSourceFactory DataSourceFactory1;
+
+    private SimpleExoPlayer ExoPlayer2;
+    private MediaSource MediaSource2;
+    private ConcatenatingMediaSource ConcatenatingMediaSource2;
+    private DefaultDataSourceFactory DataSourceFactory2;
+
+    private SimpleExoPlayer ExoPlayer3;
+    private MediaSource MediaSource3;
+    private ConcatenatingMediaSource ConcatenatingMediaSource3;
+    private DefaultDataSourceFactory DataSourceFactory3;
+
+    Thread x1;
+    Thread x2;
+    Thread x3;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,9 +121,6 @@ public class BackgroundFragment extends Fragment
     private void init(Bundle savedInstanceState) {
         user = FirebaseAuth.getInstance().getCurrentUser();
         database = FirebaseDatabase.getInstance();
-        mediaList1 = new ArrayList<>();
-        mediaList2 = new ArrayList<>();
-        mediaList3 = new ArrayList<>();
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -133,9 +146,9 @@ public class BackgroundFragment extends Fragment
         seekVolume2 = root.findViewById(R.id.seekVolumePlayer2);
         seekVolume3 = root.findViewById(R.id.seekVolumePlayer3);
 
-        playerText1 = root.findViewById( R.id.player1 );
-        playerText2 = root.findViewById( R.id.player2 );
-        playerText3 = root.findViewById( R.id.player3 );
+        playerText1 = root.findViewById(R.id.player1);
+        playerText2 = root.findViewById(R.id.player2);
+        playerText3 = root.findViewById(R.id.player3);
 
         fadeIn = new AlphaAnimation(0, 1);
         fadeIn.setInterpolator(new DecelerateInterpolator()); //add this
@@ -183,55 +196,56 @@ public class BackgroundFragment extends Fragment
             }
         });
 
-        showSpotlight();
+//        showSpotlight();
     }
-
-    private void showSpotlight() {
-
-        spotlightView = new SpotlightView.Builder(getActivity())
-                .introAnimationDuration(400)
-                .enableRevealAnimation(true)
-                .performClick(true)
-                .fadeinTextDuration(400)
-                .headingTvColor(Color.parseColor("#eb273f"))
-                .headingTvSize(32)
-                .headingTvText("Love")
-                .subHeadingTvColor(Color.parseColor("#ffffff"))
-                .subHeadingTvSize(16)
-                .subHeadingTvText("Like the picture?\nLet others know.")
-                .maskColor(Color.parseColor("#dc000000"))
-                .target(volumeSettingBtn)
-                .lineAnimDuration(400)
-                .lineAndArcColor(Color.parseColor("#eb273f"))
-                .dismissOnTouch(true)
-                .dismissOnBackPress(true)
-                .enableDismissAfterShown(true)
-                .show();
-    }
+//
+//    private void showSpotlight() {
+//
+//        spotlightView = new SpotlightView.Builder(getActivity())
+//                .introAnimationDuration(400)
+//                .enableRevealAnimation(true)
+//                .performClick(true)
+//                .fadeinTextDuration(400)
+//                .headingTvColor(Color.parseColor("#eb273f"))
+//                .headingTvSize(32)
+//                .headingTvText("Love")
+//                .subHeadingTvColor(Color.parseColor("#ffffff"))
+//                .subHeadingTvSize(16)
+//                .subHeadingTvText("Like the picture?\nLet others know.")
+//                .maskColor(Color.parseColor("#dc000000"))
+//                .target(volumeSettingBtn)
+//                .lineAnimDuration(400)
+//                .lineAndArcColor(Color.parseColor("#eb273f"))
+//                .dismissOnTouch(true)
+//                .dismissOnBackPress(true)
+//                .enableDismissAfterShown(true)
+//                .show();
+//    }
 
     private void updateVolume() {
 
-        if (mediaSelect1 >= 0){
-            playerText1.setText( mediaList1.get( mediaSelect1 ).name );
-        }else{
-            playerText1.setText( "no song" );
+        if (mediaSelect1 >= 0) {
+            playerText1.setText(mediaList1.get(mediaSelect1).name);
+        } else {
+            playerText1.setText("no song");
         }
-        if (mediaSelect2 >= 0){
-            playerText2.setText( mediaList2.get( mediaSelect2 ).name );
-        }else{
-            playerText2.setText( "no song" );
+        if (mediaSelect2 >= 0) {
+            playerText2.setText(mediaList2.get(mediaSelect2).name);
+        } else {
+            playerText2.setText("no song");
         }
-        if (mediaSelect3 >= 0){
-            playerText3.setText( mediaList3.get( mediaSelect3 ).name );
-        }else{
-            playerText3.setText( "no song" );
+        if (mediaSelect3 >= 0) {
+            playerText3.setText(mediaList3.get(mediaSelect3).name);
+        } else {
+            playerText3.setText("no song");
         }
+
         seekVolume1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 float volume = (float) (1 - (Math.log(MAX_VOLUME - progress) / Math.log(MAX_VOLUME)));
-                if (player1 != null)
-                    player1.setVolume(volume, volume);
+                if (ExoPlayer1 != null)
+                    ExoPlayer1.setVolume(volume);
             }
 
             @Override
@@ -248,8 +262,8 @@ public class BackgroundFragment extends Fragment
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 float volume = (float) (1 - (Math.log(MAX_VOLUME - progress) / Math.log(MAX_VOLUME)));
-                if (player2 != null)
-                    player2.setVolume(volume, volume);
+                if (ExoPlayer2 != null)
+                    ExoPlayer2.setVolume(volume);
             }
 
             @Override
@@ -266,8 +280,8 @@ public class BackgroundFragment extends Fragment
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 float volume = (float) (1 - (Math.log(MAX_VOLUME - progress) / Math.log(MAX_VOLUME)));
-                if (player3 != null)
-                    player3.setVolume(volume, volume);
+                if (ExoPlayer3 != null)
+                    ExoPlayer3.setVolume(volume);
             }
 
             @Override
@@ -326,6 +340,8 @@ public class BackgroundFragment extends Fragment
                 adapter3 = new BackgroundAdapter(getContext(), mediaList3, mediaSelect3, BackgroundFragment.this::onItemSelect, 3);
 
                 updateRecyclerAdapter();
+                updatePlayer();
+                updateListSong();
 
                 database.getReference().removeEventListener(this);
 
@@ -336,6 +352,64 @@ public class BackgroundFragment extends Fragment
 
             }
         });
+    }
+
+    private void updatePlayer() {
+        if (ExoPlayer1 == null) {
+            ExoPlayer1 = ExoPlayerFactory.newSimpleInstance(getContext(), new DefaultTrackSelector());
+
+            DataSourceFactory1 = new DefaultDataSourceFactory(getContext(), Util.getUserAgent(getContext()
+                    , "Player 1"));
+            if (ConcatenatingMediaSource1 == null)
+                ConcatenatingMediaSource1 = new ConcatenatingMediaSource();
+
+        }
+        if (ExoPlayer2 == null) {
+            ExoPlayer2 = ExoPlayerFactory.newSimpleInstance(getContext(), new DefaultTrackSelector());
+
+            DataSourceFactory2 = new DefaultDataSourceFactory(getContext(), Util.getUserAgent(getContext()
+                    , "Player 2"));
+            if (ConcatenatingMediaSource2 == null)
+                ConcatenatingMediaSource2 = new ConcatenatingMediaSource();
+
+        }
+
+        if (ExoPlayer3 == null) {
+            ExoPlayer3 = ExoPlayerFactory.newSimpleInstance(getContext(), new DefaultTrackSelector());
+
+            DataSourceFactory3 = new DefaultDataSourceFactory(getContext(), Util.getUserAgent(getContext()
+                    , "Player 3"));
+            if (ConcatenatingMediaSource3 == null)
+                ConcatenatingMediaSource3 = new ConcatenatingMediaSource();
+
+        }
+
+        updateListSong();
+
+
+    }
+
+    private void updateListSong() {
+        for (MediaItem item : mediaList1) {
+            MediaSource1 = new ProgressiveMediaSource.Factory(DataSourceFactory1)
+                    .createMediaSource(Uri.parse(item.link_2));
+            ConcatenatingMediaSource1.addMediaSource(MediaSource1);
+        }
+        ExoPlayer1.prepare(ConcatenatingMediaSource1);
+
+        for (MediaItem item : mediaList2) {
+            MediaSource2 = new ProgressiveMediaSource.Factory(DataSourceFactory2)
+                    .createMediaSource(Uri.parse(item.link_2));
+            ConcatenatingMediaSource2.addMediaSource(MediaSource2);
+        }
+        ExoPlayer2.prepare(ConcatenatingMediaSource2);
+
+        for (MediaItem item : mediaList3) {
+            MediaSource3 = new ProgressiveMediaSource.Factory(DataSourceFactory3)
+                    .createMediaSource(Uri.parse(item.link_2));
+            ConcatenatingMediaSource3.addMediaSource(MediaSource3);
+        }
+        ExoPlayer3.prepare(ConcatenatingMediaSource3);
     }
 
     private void updateRecyclerAdapter() {
@@ -375,99 +449,117 @@ public class BackgroundFragment extends Fragment
 
     @Override
     public void onItemSelect(int itemSelect, int path) {
-        if (path == 1)
+        if (path == 1) {
             mediaSelect1 = itemSelect;
-        else if (path == 2)
+            if (mediaSelect1 >= 0) {
+                x1 = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (ExoPlayer1 != null) {
+                            ExoPlayer1.seekTo(mediaSelect1, 0);
+                            ExoPlayer1.setPlayWhenReady(true);
+
+                        }
+                        ExoPlayer1.setRepeatMode(Player.REPEAT_MODE_ONE);
+                    }
+                });
+                x1.start();
+            } else {
+                x1 = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (ExoPlayer1 != null){
+                            ExoPlayer1.seekTo(0, 0);
+                            ExoPlayer1.setPlayWhenReady(false);
+                        }
+                    }
+                });
+                x1.start();
+                x1.interrupt();
+            }
+        } else if (path == 2) {
             mediaSelect2 = itemSelect;
-        else if (path == 3)
+            if (mediaSelect2 >= 0) {
+                x2 = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (ExoPlayer2 != null) {
+                            ExoPlayer2.seekTo(mediaSelect2, 0);
+                            ExoPlayer2.setPlayWhenReady(true);
+
+                        }
+                        ExoPlayer2.setRepeatMode(Player.REPEAT_MODE_ONE);
+                    }
+                });
+                x2.start();
+            } else {
+                x2 = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (ExoPlayer2 != null) {
+                            ExoPlayer2.seekTo(0, 0);
+                            ExoPlayer2.setPlayWhenReady(false);
+
+                        }
+                        ExoPlayer2.setRepeatMode(Player.REPEAT_MODE_ONE);
+                    }
+                });
+                x2.start();
+                x2.interrupt();
+
+            }
+
+        } else if (path == 3) {
             mediaSelect3 = itemSelect;
 
+            if (mediaSelect3 >= 0) {
+                x3 = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (ExoPlayer3 != null) {
+                            ExoPlayer3.seekTo(mediaSelect3, 0);
+                            ExoPlayer3.setPlayWhenReady(true);
+
+                        }
+                        ExoPlayer3.setRepeatMode(Player.REPEAT_MODE_ONE);
+                    }
+                });
+                x3.start();
+            } else {
+                x3 = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (ExoPlayer3 != null) {
+                            ExoPlayer3.seekTo(0, 0);
+                            ExoPlayer3.setPlayWhenReady(false);
+
+                        }
+                        ExoPlayer3.setRepeatMode(Player.REPEAT_MODE_ONE);
+                    }
+                });
+                x3.start();
+                x3.interrupt();
+
+            }
+
+        }
+
+
         updateRecyclerAdapter();
-        playerCheck();
         updateVolume();
     }
 
-    private void playerCheck() {
-        if (player1 == null)
-            player1 = new MediaPlayer();
-        if (player2 == null)
-            player2 = new MediaPlayer();
-        if (player3 == null)
-            player3 = new MediaPlayer();
-        try {
-
-            if (mediaSelect1 >= 0) {
-                if (player1.isPlaying()) {
-                    player1.pause();
-                    player1.release();
-                    player1 = new MediaPlayer();
-                }
-                player1.setDataSource(mediaList1.get(mediaSelect1).link_2);
-                player1.prepare();
-                player1.setLooping(true);
-                player1.start();
-                player1.setVolume(5f,5f);
-            } else {
-                player1.pause();
-                player1.release();
-                player1 = new MediaPlayer();
-            }
-
-            if (mediaSelect2 >= 0) {
-                if (player2.isPlaying()) {
-                    player2.pause();
-                    player2.release();
-                    player2 = new MediaPlayer();
-                }
-                player2.setDataSource(mediaList2.get(mediaSelect2).link_2);
-                player2.prepare();
-                player2.setLooping(true);
-                player2.start();
-                player2.setVolume(5f,5f);
-
-            } else {
-                player2.pause();
-                player2.release();
-                player2 = new MediaPlayer();
-            }
-
-            if (mediaSelect3 >= 0) {
-                if (player3.isPlaying()) {
-                    player3.pause();
-                    player3.release();
-                    player3 = new MediaPlayer();
-                }
-                player3.setDataSource(mediaList3.get(mediaSelect3).link_2);
-                player3.prepare();
-                player3.setLooping(true);
-                player3.start();
-                player3.setVolume(5f,5f);
-            } else {
-                player3.pause();
-                player3.release();
-                player3 = new MediaPlayer();
-            }
-
-            updateVolume();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
     private void stopPlayer() {
-        if (player1 != null) {
-            player1.pause();
-            player1.release();
+        if(ExoPlayer1 != null){
+            ExoPlayer1.stop(true);
         }
-        if (player1 != null) {
-            player2.pause();
-            player2.release();
+        if(ExoPlayer2 != null){
+            ExoPlayer2.stop(true);
         }
-        if (player1 != null) {
-            player3.pause();
-            player3.release();
+        if(ExoPlayer3 != null){
+            ExoPlayer3.stop(true);
         }
+
     }
 
 
