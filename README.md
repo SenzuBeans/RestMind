@@ -6,7 +6,7 @@
 
  The main IDE is android studio.
  
- The Exoplayer was used to as a base for the functions in the project.
+ The Exoplayer was used as a base for the functions of the project.
  
  This project may be used as reference by using git to clone and opening with android studio.
  
