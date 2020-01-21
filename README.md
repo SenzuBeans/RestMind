@@ -1,13 +1,13 @@
 # RestMind
 
- An application is base on Music Player application.
+ An application which is designed for playing music.
 
- this project is base on android application using Java programming to develop.
+ This project is created for android using Java programming for development.
 
- main IDE is android studio.
-
- we using Exoplayer to base function of our project.
+ The main IDE is android studio.
  
- you can use this project as reference by use git to clone and open with android studio.
+ The Exoplayer was used to as a base for the functions in the project.
  
- ...........
+ This project may be used as reference by using git to clone and opening with android studio.
+ 
+ ........P.S.  The database is no longer avaliable and must be created new.
